@@ -17,6 +17,10 @@ defmodule SpotumwiseWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/info", PageController, :info
+    get "/login", PageController, :login
+    get "/music", PageController, :music
+    get "/chat", PageController, :chat
   end
 
   # Other scopes may use custom stacks.
