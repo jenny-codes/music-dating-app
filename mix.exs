@@ -19,9 +19,8 @@ defmodule Spotumwise.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      applications: [:spotify_ex],
       mod: {Spotumwise.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :spotify_ex]
     ]
   end
 
