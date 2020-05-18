@@ -4,6 +4,9 @@
 # This configuration file is loaded before any dependency and
 # is restricted to this project.
 
+import "config.secret.exs"
+import "spotify.secret.exs"
+
 # General application configuration
 use Mix.Config
 
