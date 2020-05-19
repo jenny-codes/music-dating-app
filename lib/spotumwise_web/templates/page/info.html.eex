@@ -1,7 +1,7 @@
 <nav>
 	<div class='nav-container'>
 		<a href='info'> 
-			<div class='info-nav'>info</div></a>
+			<div class='info-nav active'>info</div></a>
 		<a href='music'>
 			<div class='music-nav'>music</div></a>
 		<a href='chat'>

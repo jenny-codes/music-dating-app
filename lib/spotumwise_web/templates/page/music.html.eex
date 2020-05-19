@@ -3,24 +3,26 @@
 		<a href='info'> 
 			<div class='info-nav'>info</div></a>
 		<a href='music'>
-			<div class='music-nav'>music</div></a>
+			<div class='music-nav active'>music</div></a>
 		<a href='chat'>
 			<div class='chat-nav'>chat</div></a>
 	</div>
 </nav>
 
 <div class='music-container'>
-	<div class='name-container'>
-		<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-		<div class='name'>Alex Chen</div>
-	</div>
-	<div class="album-section">
-		<div class='album-photos'>
-			<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
+	<div class='person-container'>
+		<div class='name-container'>
+			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
+			<div class='name'>Alex Chen, 27y</div>
 		</div>
-		<div class='album-name'>Starboy - the weeknd</div>
-		<div class='scroll-up'>
-			scroll-up
+		<div class="album-section">
+			<div class='album-photos'>
+				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
+			</div>
+			<div class='album-name'>Starboy - the weeknd</div>
+			<div class='scroll-up'>
+				scroll-up
+			</div>
 		</div>
 	</div>
 	<div class='play-section'>
