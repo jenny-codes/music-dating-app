@@ -1,6 +1,19 @@
 <h1> Your tops, <%= @name %>! </h1>
-<h3> (in the past year) </h3>
-<h3> (we will match you up with people based on this list (another surprise) 🤓) </h3>
+<h3> (in the past 6 months) </h3>
+
+<h2>Top 3 matches 😱</h2>
+
+<table class="table">
+  <tbody>
+<%= for {rank, name, _score} <- @top_matches do %>
+    <tr>
+      <td><%= rank %></td>
+      <td><%= name %></td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
 <div class="row">
   <div class="column">
     <h2>Top tracks</h2>

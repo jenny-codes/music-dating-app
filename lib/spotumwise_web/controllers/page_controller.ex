@@ -31,16 +31,15 @@ defmodule SpotumwiseWeb.PageController do
       )
 
     user = Repo.update!(changeset)
-    # user = case Repo.update!(changeset) do
-    #   {:ok, struct} -> struct
-    #   {:error, changeset} -> changeset
-    # end
+
+    top3_matches = User.build_user_connections(user)
 
     render(conn, "index.html",
       name: name,
       top_tracks: user.top_tracks,
       top_artists: user.top_artists,
-      top_genres: user.genres
+      top_genres: user.genres,
+      top_matches: top3_matches
     )
   end
 end
