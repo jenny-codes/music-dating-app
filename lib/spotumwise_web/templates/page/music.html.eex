@@ -10,13 +10,13 @@
 </nav>
 
 <div class='music-container'>
-	<div class='person-container active'>
+	<div class='person-container'>
 		<div class='name-container'>
 			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
 			<div class='name'>Alex Chen, 27y</div>
 		</div>
 		<div class="album-section">
-			<div class='album-photos active'>
+			<div class='album-photos'>
 				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
 				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
 				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
@@ -25,93 +25,14 @@
 			</div>
 			<div class='album-name'>Starboy - the weeknd</div>
 			<div class='scroll-up'>
-				scroll-up
+				More info
 			</div>
 			<div class='more-info'>
-				
-			</div>
-		</div>
-	</div>
-	
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
+				<img src="<%= Routes.static_path(@conn, "/images/bio.jpg") %>"/>
 			</div>
 		</div>
 	</div>
 
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
-			</div>
-		</div>
-	</div>
-
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
-			</div>
-		</div>
-	</div>
-
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
-			</div>
-		</div>
-	</div>
 
 	<div class='play-section'>
 		<div class='button-container'>

@@ -258,10 +258,16 @@ nav .nav-container div.active:after {
 	height: 300px;
 	transition: all 0.5s;
 }
+.person-container .more-info{
+	display: none
+}
 
 .person-container .album-section .album-photos.active{
-
 	height: 130px;
+}
+
+.person-container.active .more-info{
+	display: block
 }
 
 .person-container .album-section .album-photos img{
@@ -319,7 +325,6 @@ nav .nav-container div.active:after {
 }
 
 .scroll-up{
-	background: black;
 	display: block;
 }
 
