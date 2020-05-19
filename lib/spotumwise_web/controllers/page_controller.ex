@@ -42,4 +42,25 @@ defmodule SpotumwiseWeb.PageController do
       top_matches: top3_matches
     )
   end
+  
+  def info(conn, _params) do
+	render(conn, "info.html")
+  end
+
+  
+  def login(conn, _params) do
+	render(conn, "login.html")
+  end
+
+  
+  def music(conn, _params) do
+	render(conn, "music.html")
+  end
+
+  
+  def chat(conn, _params) do
+	render(conn, "chat.html")
+  end
+
+    
 end

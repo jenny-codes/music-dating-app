@@ -1,0 +1,9 @@
+
+
+<div id='login-container'>
+	<h1>Connect to Spotify</h1>
+	<div class='spotify'><img src="<%= Routes.static_path(@conn, "/images/spotify_logo.png") %>" /></div>
+    <a href='info'><div class='info'>info</div></a>
+	<a href='music'><div class='music'>music</div></a>
+	<a href='chat'><div class='chat'>chat</div></a>
+</div>

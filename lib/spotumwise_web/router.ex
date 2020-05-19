@@ -19,6 +19,10 @@ defmodule SpotumwiseWeb.Router do
     get "/", PageController, :index
     get "/authorize", UserController, :authorize
     get "/authenticate", UserController, :authenticate
+    get "/info", PageController, :info
+    get "/login", PageController, :login
+    get "/music", PageController, :music
+    get "/chat", PageController, :chat
   end
 
   # Other scopes may use custom stacks.
