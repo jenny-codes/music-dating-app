@@ -42,25 +42,26 @@ defmodule SpotumwiseWeb.PageController do
       top_matches: top3_matches
     )
   end
-  
+
   def info(conn, _params) do
-	render(conn, "info.html")
+    render(conn, "info.html")
   end
 
-  
   def login(conn, _params) do
-	render(conn, "login.html")
+    render(conn, "login.html")
   end
 
-  
   def music(conn, _params) do
-	render(conn, "music.html")
+    [id: id, name: _name] = SpotifyService.fetch_user_id_and_name(conn)
+
+    top3_matches =
+      Repo.get_by(User, spotify_id: id)
+      |> User.build_user_connections()
+
+    render(conn, "music.html", top_matches: top3_matches)
   end
 
-  
   def chat(conn, _params) do
-	render(conn, "chat.html")
+    render(conn, "chat.html")
   end
-
-    
 end

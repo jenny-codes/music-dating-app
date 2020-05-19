@@ -10,10 +10,12 @@
 </nav>
 
 <div class='music-container'>
+	
+<%= for {_rank, name, _score} <- @top_matches do %>
 	<div class='person-container active'>
 		<div class='name-container'>
 			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
+			<div class='name'><%= name %>, 27y</div>
 		</div>
 		<div class="album-section">
 			<div class='album-photos active'>
@@ -32,86 +34,7 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
-			</div>
-		</div>
-	</div>
-
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
-			</div>
-		</div>
-	</div>
-
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
-			</div>
-		</div>
-	</div>
-
-	<div class='person-container'>
-		<div class='name-container'>
-			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
-			<div class='name'>Alex Chen, 27y</div>
-		</div>
-		<div class="album-section">
-			<div class='album-photos active'>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
-			</div>
-			<div class='album-name'>Starboy - the weeknd</div>
-			<div class='scroll-up'>
-				scroll-up
-			</div>
-		</div>
-	</div>
+<% end %>
 
 	<div class='play-section'>
 		<div class='button-container'>
