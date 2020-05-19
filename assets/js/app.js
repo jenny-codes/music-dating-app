@@ -20,8 +20,10 @@ $('.next-button').click(function(){
 
 $('.scroll-up').click(function(){
 	if($('.album-photos').hasClass('active')){
-		$('.album-photos').removeClass('active')
+		$('.person-container').removeClass('active');
+		$('.album-photos').removeClass('active');
 	}else{
+		$('.person-container').addClass('active');
 		$('.album-photos').addClass('active')
 	}
 	console.log($(this).parents()[1])

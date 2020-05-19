@@ -12,13 +12,13 @@
 <div class='music-container'>
 	
 <%= for {_rank, name, _score} <- @top_matches do %>
-	<div class='person-container active'>
+	<div class='person-container'>
 		<div class='name-container'>
 			<img src="<%= Routes.static_path(@conn, "/images/head-photo.png") %>" />
 			<div class='name'><%= name %>, 27y</div>
 		</div>
 		<div class="album-section">
-			<div class='album-photos active'>
+			<div class='album-photos'>
 				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
 				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
 				<img src="<%= Routes.static_path(@conn, "/images/album-photo.png") %>"/>
@@ -27,10 +27,10 @@
 			</div>
 			<div class='album-name'>Starboy - the weeknd</div>
 			<div class='scroll-up'>
-				scroll-up
+				More info
 			</div>
 			<div class='more-info'>
-				
+				<img src="<%= Routes.static_path(@conn, "/images/bio.jpg") %>"/>
 			</div>
 		</div>
 	</div>
