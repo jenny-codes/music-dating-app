@@ -1,35 +1,43 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>A productive web framework that<br/>does not compromise speed or maintainability.</p>
-</section>
+<h1> Your tops, <%= @name %>! </h1>
+<h3> (in the past year) </h3>
+<h3> (we will match you up with people based on this list (another surprise) 🤓) </h3>
+<div class="row">
+  <div class="column">
+    <h2>Top tracks</h2>
 
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.4/CHANGELOG.md">v1.4 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-    </ul>
-  </article>
-</section>
+    <table class="table">
+      <tbody>
+    <%= for track <- @top_tracks do %>
+        <tr>
+          <td><%= track %></td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="column">
+  <h2>Top artists</h2>
+    <table class="table">
+      <tbody>
+    <%= for artist <- @top_artists do %>
+        <tr>
+          <td><%= artist %></td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="column">
+    <h2>Top genres</h2>
+
+    <table class="table">
+      <tbody>
+    <%= for genre <- @top_genres do %>
+        <tr>
+          <td><%= genre %></td>
+        </tr>
+    <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

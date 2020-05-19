@@ -5,7 +5,7 @@ defmodule Spotumwise.Repo.Migrations.CreateUsers do
     create table(:users) do
       add :name, :string
       add :bio, :string
-      add :spotify_id, :binary_id
+      add :spotify_id, :string
       add :fav_track, :string
       add :top_tracks, {:array, :string}
       add :top_artists, {:array, :string}
