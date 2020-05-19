@@ -15,8 +15,6 @@ defmodule Spotumwise.User do
     field :top_artists, {:array, :string}
     field :genres, {:array, :string}
 
-    has_many(:connections, Connection)
-
     timestamps()
   end
 
