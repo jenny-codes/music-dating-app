@@ -11,26 +11,36 @@ import css from "../css/app.css"
 //
 import "phoenix_html"
 let person_count = 1;
+
 $('.next-button').click(function(){
 	$(".person-container:nth-of-type("+person_count+")").css({'left':'-101.5%'});
 	$(".person-container:nth-of-type("+(person_count+1)+")").css({'left':'1.5%'});
 	person_count+=1;
 })
-$('.person-container').touchwipe({
-	 wipeLeft: function() {
-	 	$(".person-container:nth-of-type("+person_count+")").css({'left':'-101.5%'});
-		$(".person-container:nth-of-type("+(person_count+1)+")").css({'left':'1.5%'});
-		person_count+=1;},
-	 wipeRight: function() {
-	 	$(".person-container:nth-of-type("+person_count+")").css({'left':'1.5%'});
-		$(".person-container:nth-of-type("+(person_count+1)+")").css({'left':'101.5%'});
-		person_count-=1; }   
-});
-$('.person-container').swiperight(function(){
-	$(".person-container:nth-of-type("+person_count+")").css({'left':'1.5%'});
-		$(".person-container:nth-of-type("+(person_count+1)+")").css({'left':'101.5%'});
-		person_count-=1; 
+
+$('.scroll-up').click(function(){
+	if($('.album-photos').hasClass('active')){
+		$('.album-photos').removeClass('active')
+	}else{
+		$('.album-photos').addClass('active')
+	}
+	console.log($(this).parents()[1])
 })
+// $('.person-container').touchwipe({
+// 	 wipeLeft: function() {
+// 	 	$(".person-container:nth-of-type("+person_count+")").css({'left':'-101.5%'});
+// 		$(".person-container:nth-of-type("+(person_count+1)+")").css({'left':'1.5%'});
+// 		person_count+=1;},
+// 	 wipeRight: function() {
+// 	 	$(".person-container:nth-of-type("+person_count+")").css({'left':'1.5%'});
+// 		$(".person-container:nth-of-type("+(person_count+1)+")").css({'left':'101.5%'});
+// 		person_count-=1; }   
+// });
+// $('.person-container').swiperight(function(){
+// 	$(".person-container:nth-of-type("+person_count+")").css({'left':'1.5%'});
+// 		$(".person-container:nth-of-type("+(person_count+1)+")").css({'left':'101.5%'});
+// 		person_count-=1; 
+// })
 // Import local files
 //
 // Local files can be imported directly using relative paths, for example:
