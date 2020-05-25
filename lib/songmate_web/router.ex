@@ -1,5 +1,5 @@
-defmodule SpotumwiseWeb.Router do
-  use SpotumwiseWeb, :router
+defmodule SongmateWeb.Router do
+  use SongmateWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,7 +13,7 @@ defmodule SpotumwiseWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", SpotumwiseWeb do
+  scope "/", SongmateWeb do
     pipe_through :browser
 
     get "/", PageController, :index
@@ -26,7 +26,7 @@ defmodule SpotumwiseWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", SpotumwiseWeb do
+  # scope "/api", SongmateWeb do
   #   pipe_through :api
   # end
 end

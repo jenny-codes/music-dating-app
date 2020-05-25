@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :spotumwise,
-  ecto_repos: [Spotumwise.Repo]
+config :songmate,
+  ecto_repos: [Songmate.Repo]
 
 # Configures the endpoint
-config :spotumwise, SpotumwiseWeb.Endpoint,
+config :songmate, SongmateWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "dMQSUfyVJZ1LxrMmblOwdBWucdA+pJpztcC/FTQBbmAtgX0ABueTHGxr+dnj6zov",
-  render_errors: [view: SpotumwiseWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Spotumwise.PubSub, adapter: Phoenix.PubSub.PG2],
+  render_errors: [view: SongmateWeb.ErrorView, accepts: ~w(html json)],
+  pubsub: [name: Songmate.PubSub, adapter: Phoenix.PubSub.PG2],
   live_view: [signing_salt: "HPVqdshP"]
 
 # Configures Elixir's Logger

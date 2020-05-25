@@ -1,4 +1,4 @@
-defmodule Spotumwise.DataCase do
+defmodule Songmate.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Spotumwise.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Spotumwise.DataCase, async: true`, although
+  by setting `use Songmate.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,20 +18,20 @@ defmodule Spotumwise.DataCase do
 
   using do
     quote do
-      alias Spotumwise.Repo
+      alias Songmate.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Spotumwise.DataCase
+      import Songmate.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Spotumwise.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Songmate.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Spotumwise.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Songmate.Repo, {:shared, self()})
     end
 
     :ok

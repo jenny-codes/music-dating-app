@@ -1,6 +1,6 @@
-defmodule Spotumwise do
+defmodule Songmate do
   @moduledoc """
-  Spotumwise keeps the contexts that define your domain
+  Songmate keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

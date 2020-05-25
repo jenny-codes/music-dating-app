@@ -1,10 +1,9 @@
-defmodule Spotumwise.User do
+defmodule Songmate.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Spotumwise.Connection
-  alias Spotumwise.User
-  alias Spotumwise.Repo
+  alias Songmate.User
+  alias Songmate.Repo
 
   schema "users" do
     field :bio, :string

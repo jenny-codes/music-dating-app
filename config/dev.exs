@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :spotumwise, Spotumwise.Repo,
+config :songmate, Songmate.Repo,
   username: "postgres",
   password: "postgres",
   database: "spotumwise_dev",
@@ -15,7 +15,7 @@ config :spotumwise, Spotumwise.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :spotumwise, SpotumwiseWeb.Endpoint,
+config :songmate, SongmateWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -55,13 +55,13 @@ config :spotumwise, SpotumwiseWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :spotumwise, SpotumwiseWeb.Endpoint,
+config :songmate, SongmateWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/spotumwise_web/(live|views)/.*(ex)$",
-      ~r"lib/spotumwise_web/templates/.*(eex)$"
+      ~r"lib/songmate_web/(live|views)/.*(ex)$",
+      ~r"lib/songmate_web/templates/.*(eex)$"
     ]
   ]
 

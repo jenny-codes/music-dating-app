@@ -1,5 +1,5 @@
-defmodule SpotumwiseWeb.UserController do
-  use SpotumwiseWeb, :controller
+defmodule SongmateWeb.UserController do
+  use SongmateWeb, :controller
 
   def index(conn, _params) do
     render(conn, "index.html")

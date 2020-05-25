@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :spotumwise, Spotumwise.Repo,
+config :songmate, Songmate.Repo,
   username: "postgres",
   password: "postgres",
   database: "spotumwise_test",
@@ -10,7 +10,7 @@ config :spotumwise, Spotumwise.Repo,
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :spotumwise, SpotumwiseWeb.Endpoint,
+config :songmate, SongmateWeb.Endpoint,
   http: [port: 4002],
   server: false
 

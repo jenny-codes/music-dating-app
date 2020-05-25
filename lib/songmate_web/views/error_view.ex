@@ -1,5 +1,5 @@
-defmodule SpotumwiseWeb.ErrorView do
-  use SpotumwiseWeb, :view
+defmodule SongmateWeb.ErrorView do
+  use SongmateWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

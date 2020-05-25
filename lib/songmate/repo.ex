@@ -1,5 +1,5 @@
-defmodule Spotumwise.Repo do
+defmodule Songmate.Repo do
   use Ecto.Repo,
-    otp_app: :spotumwise,
+    otp_app: :songmate,
     adapter: Ecto.Adapters.Postgres
 end

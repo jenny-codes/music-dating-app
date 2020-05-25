@@ -1,4 +1,4 @@
-# SongMate - Find your soulmate through songs!
+# Songmate - Find your soulmate through songs!
 
 To start your Phoenix server:
 

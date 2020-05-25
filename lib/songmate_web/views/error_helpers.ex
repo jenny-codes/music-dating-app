@@ -1,4 +1,4 @@
-defmodule SpotumwiseWeb.ErrorHelpers do
+defmodule SongmateWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -39,9 +39,9 @@ defmodule SpotumwiseWeb.ErrorHelpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(SpotumwiseWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(SongmateWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(SpotumwiseWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(SongmateWeb.Gettext, "errors", msg, opts)
     end
   end
 end

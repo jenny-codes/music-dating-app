@@ -1,5 +1,5 @@
-defmodule SpotumwiseWeb.LayoutViewTest do
-  use SpotumwiseWeb.ConnCase, async: true
+defmodule SongmateWeb.LayoutViewTest do
+  use SongmateWeb.ConnCase, async: true
 
   # When testing helpers, you may want to import Phoenix.HTML and
   # use functions such as safe_to_string() to convert the helper

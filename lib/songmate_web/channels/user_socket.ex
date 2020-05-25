@@ -1,8 +1,8 @@
-defmodule SpotumwiseWeb.UserSocket do
+defmodule SongmateWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", SpotumwiseWeb.RoomChannel
+  # channel "room:*", SongmateWeb.RoomChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -26,7 +26,7 @@ defmodule SpotumwiseWeb.UserSocket do
   # Would allow you to broadcast a "disconnect" event and terminate
   # all active sockets and channels for a given user:
   #
-  #     SpotumwiseWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
+  #     SongmateWeb.Endpoint.broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
   def id(_socket), do: nil

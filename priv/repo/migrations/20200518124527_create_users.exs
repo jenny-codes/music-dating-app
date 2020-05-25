@@ -1,4 +1,4 @@
-defmodule Spotumwise.Repo.Migrations.CreateUsers do
+defmodule Songmate.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   def change do

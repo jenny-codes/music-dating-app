@@ -1,4 +1,4 @@
-defmodule SpotumwiseWeb.ChannelCase do
+defmodule SongmateWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule SpotumwiseWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use SpotumwiseWeb.ChannelCase, async: true`, although
+  by setting `use SongmateWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -23,15 +23,15 @@ defmodule SpotumwiseWeb.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint SpotumwiseWeb.Endpoint
+      @endpoint SongmateWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Spotumwise.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Songmate.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Spotumwise.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Songmate.Repo, {:shared, self()})
     end
 
     :ok

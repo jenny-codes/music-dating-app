@@ -1,7 +1,7 @@
-defmodule SpotumwiseWeb.PageController do
-  use SpotumwiseWeb, :controller
-  alias Spotumwise.Repo
-  alias Spotumwise.User
+defmodule SongmateWeb.PageController do
+  use SongmateWeb, :controller
+  alias Songmate.Repo
+  alias Songmate.User
 
   plug :check_tokens
 

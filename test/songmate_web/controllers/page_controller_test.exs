@@ -1,5 +1,5 @@
-defmodule SpotumwiseWeb.PageControllerTest do
-  use SpotumwiseWeb.ConnCase
+defmodule SongmateWeb.PageControllerTest do
+  use SongmateWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
