@@ -1,7 +1,7 @@
 defmodule SongmateWeb.PageController do
   use SongmateWeb, :controller
   alias Songmate.Repo
-  alias Songmate.User
+  alias Songmate.Accounts.User
 
   plug :check_tokens
 
