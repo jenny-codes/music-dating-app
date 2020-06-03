@@ -3,6 +3,7 @@ defmodule Songmate.Accounts.User do
   import Ecto.Changeset
 
   alias Songmate.Accounts.{User, Credential}
+  alias Songmate.MusicProfile
   alias Songmate.Repo
 
   schema "users" do
@@ -16,6 +17,7 @@ defmodule Songmate.Accounts.User do
     field :genres, {:array, :string}
 
     has_one :credential, Credential
+    has_one :music_profile, MusicProfile.User
 
     timestamps()
   end

@@ -4,8 +4,9 @@
 
 ### Database Schema Redesign
 - [ ] Design new schema.
-  - [ ] STI for credentials?
-  - [ ] indexes
+  - [x] STI for credentials?
+  - [x] indexes
+  - [ ] join table behavior (on delete)
 - [ ] Create new tables.
 - [ ] Adjust existing tables.
 - [ ] Migrate existing data.
