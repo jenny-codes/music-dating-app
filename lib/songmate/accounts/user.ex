@@ -2,8 +2,7 @@ defmodule Songmate.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Songmate.Accounts.User
-  alias Songmate.Accounts.Credential
+  alias Songmate.Accounts.{User, Credential}
   alias Songmate.Repo
 
   schema "users" do

@@ -64,18 +64,18 @@
   - name
   - many_to_many artists
 
-- Profile.MusicProfile
+- UserProfile.MusicProfile
   * belongs_to user
   * has_many track_preferences
   * has_many artist_preferences
   * has_many genre_preferences
   * many_to_many tracks, through track_preferences
   * many_to_many artists, through artists_preferences
-- Profile.TrackPreference
+- UserProfile.TrackPreference
   - rank
   * belongs_to user_profile
   * belongs_to track
-- Profile.ArtistPreference
+- UserProfile.ArtistPreference
   - rank
   * belongs_to user_profile
   * belongs_to artist
