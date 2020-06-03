@@ -4,8 +4,8 @@ defmodule Songmate.Repo.Migrations.CreateArtistPreferences do
   def change do
     create table(:artist_preferences) do
       add :rank, :integer
-      add :music_profile_id, references(:music_profiles, on_delete: :delete_all), null: false)
-      add :artist_id, references(:artists, on_delete: :delete_all), null: false)
+      add :music_profile_id, references(:music_profiles, on_delete: :delete_all, null: false)
+      add :artist_id, references(:artists, on_delete: :delete_all, null: false)
 
       timestamps()
     end
