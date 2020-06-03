@@ -20,13 +20,13 @@ defmodule Songmate.Repo.Migrations.CreateGenres do
     end
 
     create table(:artists_tracks) do
-      add :artist_id, references(:artists)
-      add :track_id, references(:tracks)
+      add :artist_id, references(:artists, on_delete: :delete_all, null: false)
+      add :track_id, references(:tracks, on_delete: :delete_all, null: false)
     end
 
     create table(:artists_genres) do
-      add :artist_id, references(:artists)
-      add :genre_id, references(:genres)
+      add :artist_id, references(:artists, on_delete: :delete_all, null: false)
+      add :genre_id, references(:genres, on_delete: :delete_all, null: false)
     end
 
     create unique_index(:artists, [:spotify_id])
