@@ -3,16 +3,21 @@
 ## Roadmap
 
 ### Database Schema Redesign
-- [ ] Design new schema.
+- [x] Design new schema.
   - [x] STI for credentials?
   - [x] indexes
-  - [ ] join table behavior (on delete)
-- [ ] Create new tables.
+- [x] Create new tables.
 - [ ] Adjust existing tables.
+  - [ ] fix join table behavior (on delete, artists, tracks, genres)
 - [ ] Migrate existing data.
 - [ ] App-layer logic
   - [ ] Adjust auth permissions.
   - [ ] Set up daily tasks.
+
+### Deploy
+- [ ] Update UI.
+- [ ] Set up GCP account.
+- [ ] Set up CI and code style check.
 
 ### Community Functionality
 - [ ] Chatroom
@@ -65,24 +70,25 @@
   - name
   - many_to_many artists
 
-- UserProfile.MusicProfile
-  * belongs_to user
+- MusicProfile.User
+  * belongs_to Accounts.user
   * has_many track_preferences
   * has_many artist_preferences
   * has_many genre_preferences
   * many_to_many tracks, through track_preferences
   * many_to_many artists, through artists_preferences
-- UserProfile.TrackPreference
+- MusicProfile.TrackPreference
   - rank
   * belongs_to user_profile
   * belongs_to track
-- UserProfile.ArtistPreference
+- MusicProfile.ArtistPreference
   - rank
   * belongs_to user_profile
   * belongs_to artist
 
-- Communities.Connection
+- Community.Connection
   - score
   - shared_artists
   - shared_tracks
+  - shared_genres
   * belongs_to users
