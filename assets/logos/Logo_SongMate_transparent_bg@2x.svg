@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="375px" height="384px" viewBox="0 0 375 384" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Logo_SongMate_transparent_bg@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="2.84217094e-14" y="0" width="220" height="220" rx="110"></rect>
+    </defs>
+    <g id="Logo_SongMate_transparent_bg" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(79.000000, 54.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <g id="Rectangle-Copy"></g>
+            <g id="Group-Copy" mask="url(#mask-2)">
+                <g transform="translate(-150.000000, -119.000000)">
+                    <ellipse id="Oval" stroke="#FFD500" stroke-width="60" fill="#FFD500" fill-rule="evenodd" cx="370.723684" cy="334.629046" rx="48.6011513" ry="48.5415573"></ellipse>
+                    <ellipse id="Oval-Copy" stroke="#FF5650" stroke-width="60" fill="#FF5650" fill-rule="evenodd" cx="149.86801" cy="145.617673" rx="44.7302632" ry="44.6754156"></ellipse>
+                    <ellipse id="Oval" stroke="#FFD500" stroke-width="30" fill="none" cx="368.573191" cy="333.769904" rx="108.814967" ry="108.68154"></ellipse>
+                    <ellipse id="Oval-Copy-2" stroke="#FF5650" stroke-width="30" fill="none" cx="147.932566" cy="144.75853" rx="110.965461" ry="110.829396"></ellipse>
+                    <ellipse id="Oval" stroke="#FFD500" stroke-width="15" fill="none" cx="370.426809" cy="335.230096" rx="160.426809" ry="160.230096"></ellipse>
+                    <ellipse id="Oval-Copy-3" stroke="#FF5650" stroke-width="15" fill="none" cx="152.254934" cy="152.068241" rx="152.254934" ry="152.068241"></ellipse>
+                </g>
+            </g>
+        </g>
+        <text id="SongMate" font-family="MyriadPro-Semibold, Myriad Pro" font-size="32" font-weight="500" line-spacing="28" letter-spacing="-0.4">
+            <tspan x="118" y="332" fill="#FFD500">Song</tspan>
+            <tspan x="187.888" y="332" fill="#FF5650">Mate</tspan>
+        </text>
+    </g>
+</svg>
