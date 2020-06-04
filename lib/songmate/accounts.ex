@@ -10,20 +10,20 @@ defmodule Songmate.Accounts do
   alias Songmate.Accounts.Credential
 
   def list_users do
-    Repo.all(User)
+    Repo.all(User) |> Repo.preload(:credential)
   end
 
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id), do: Repo.get!(User, id) |> Repo.preload(:credential)
 
-  def create_user!(attrs \\ %{}) do
+  def create_user(attrs \\ %{}) do
     %User{}
     |> User.changeset(attrs)
     |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
-    |> Repo.insert!()
+    |> Repo.insert()
   end
 
-  def update_user(attrs \\ %{}) do
-    %User{}
+  def update_user(%User{} = user, attrs \\ %{}) do
+    user
     |> User.changeset(attrs)
     |> Ecto.Changeset.cast_assoc(:credential, with: &Credential.changeset/2)
     |> Repo.update()
@@ -31,6 +31,10 @@ defmodule Songmate.Accounts do
 
   def delete_user(%User{} = user) do
     Repo.delete(user)
+  end
+
+  def change_user(%User{} = user) do
+    User.changeset(user, %{})
   end
 
   @doc """
@@ -43,7 +47,7 @@ defmodule Songmate.Accounts do
 
   """
   def list_credentials do
-    Repo.all(Credential)
+    Repo.all(Credential) |> Repo.preload(:user)
   end
 
   @doc """
@@ -60,7 +64,7 @@ defmodule Songmate.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_credential!(id), do: Repo.get!(Credential, id)
+  def get_credential!(id), do: Repo.get!(Credential, id) |> Repo.preload(:user)
 
   @doc """
   Creates a credential.
@@ -77,6 +81,7 @@ defmodule Songmate.Accounts do
   def create_credential(attrs \\ %{}) do
     %Credential{}
     |> Credential.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:user, with: &User.changeset/2)
     |> Repo.insert()
   end
 
@@ -95,6 +100,7 @@ defmodule Songmate.Accounts do
   def update_credential(%Credential{} = credential, attrs) do
     credential
     |> Credential.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:user, with: &User.changeset/2)
     |> Repo.update()
   end
 

@@ -15,13 +15,13 @@ alias Songmate.Music
 
 # --------------------------------------------------------
 # Accounts
-Accounts.create_user!(%{
+Accounts.create_user(%{
   name: "Spotify Rocks",
   bio: "blanking",
   credential: %{provider: :spotify, email: "fake-email", username: "fake-spotify-id"}
 })
 
-Accounts.create_user!(%{
+Accounts.create_user(%{
   name: "I Rocks More",
   bio: "ugh",
   credential: %{provider: :spotify, email: "fake-email-2", username: "fake-spotify-id-2"}
