@@ -2,20 +2,26 @@ defmodule Songmate.MusicTest do
   use Songmate.DataCase
 
   alias Songmate.Music
+  alias Songmate.Music.{Artist, Track, Genre}
 
   describe "tracks" do
-    alias Songmate.Music.Track
-
-    @valid_attrs %{name: "some name", popularity: 42, spotify_id: "some spotify_id"}
-    @update_attrs %{name: "some updated name", popularity: 43, spotify_id: "some updated spotify_id"}
-    @invalid_attrs %{name: nil, popularity: nil, spotify_id: nil}
+    @valid_attrs %{
+      isrc: "USMRG0467010",
+      name: "Rebellion (Lies)",
+      popularity: 65,
+      spotify_id: "0xOeB16JDbBJBJKSdHbElT"
+    }
+    @update_attrs %{
+      name: "updated Rebellion",
+      popularity: 90
+    }
+    @invalid_attrs %{name: nil, potify_id: nil}
 
     def track_fixture(attrs \\ %{}) do
       {:ok, track} =
         attrs
         |> Enum.into(@valid_attrs)
         |> Music.create_track()
-
       track
     end
 
@@ -31,9 +37,28 @@ defmodule Songmate.MusicTest do
 
     test "create_track/1 with valid data creates a track" do
       assert {:ok, %Track{} = track} = Music.create_track(@valid_attrs)
-      assert track.name == "some name"
-      assert track.popularity == 42
-      assert track.spotify_id == "some spotify_id"
+      assert track.isrc == "USMRG0467010"
+      assert track.name == "Rebellion (Lies)"
+      assert track.popularity == 65
+      assert track.spotify_id == "0xOeB16JDbBJBJKSdHbElT"
+    end
+
+    test "create_track/1 creates associated artists" do
+      track =
+        track_fixture(
+          %{
+            artists: [
+              %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
+            ]
+          }
+        )
+
+      track = Repo.preload(track, :artists)
+
+      [artist] = track.artists
+      assert artist.id
+      assert artist.name == "Arcade Fire"
+      assert artist.spotify_id == "3kjuyTCjPG1WMFCiyc5IuB"
     end
 
     test "create_track/1 with invalid data returns error changeset" do
@@ -43,9 +68,32 @@ defmodule Songmate.MusicTest do
     test "update_track/2 with valid data updates the track" do
       track = track_fixture()
       assert {:ok, %Track{} = track} = Music.update_track(track, @update_attrs)
-      assert track.name == "some updated name"
-      assert track.popularity == 43
-      assert track.spotify_id == "some updated spotify_id"
+      assert track.isrc == "USMRG0467010"
+      assert track.name == "updated Rebellion"
+      assert track.popularity == 90
+      assert track.spotify_id == "0xOeB16JDbBJBJKSdHbElT"
+    end
+
+    test "update_track/2 with artists updates the association" do
+      track =
+        track_fixture(
+          %{
+            artists: [
+              %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
+            ]
+          }
+        )
+      assert {:ok, %Track{artists: [artist]}} = Music.update_track(
+               track,
+               %{
+                 artists: [
+                   %{name: "Updated Artist", spotify_id: "updated-spotify-id"}
+                 ]
+               }
+             )
+      assert artist.id
+      assert artist.name == "Updated Artist"
+      assert artist.spotify_id == "updated-spotify-id"
     end
 
     test "update_track/2 with invalid data returns error changeset" do
@@ -60,6 +108,21 @@ defmodule Songmate.MusicTest do
       assert_raise Ecto.NoResultsError, fn -> Music.get_track!(track.id) end
     end
 
+    test "delete_track/1 does not delete associated artists" do
+      track = track_fixture(
+        %{
+          artists: [
+            %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
+          ]
+        }
+      )
+      artist = track.artists
+               |> List.first
+      Music.delete_track(track)
+
+      assert Music.get_artist!(artist.id)
+    end
+
     test "change_track/1 returns a track changeset" do
       track = track_fixture()
       assert %Ecto.Changeset{} = Music.change_track(track)
@@ -69,9 +132,13 @@ defmodule Songmate.MusicTest do
   describe "artists" do
     alias Songmate.Music.Artist
 
-    @valid_attrs %{name: "some name", popularity: 42, spotify_id: "some spotify_id"}
-    @update_attrs %{name: "some updated name", popularity: 43, spotify_id: "some updated spotify_id"}
-    @invalid_attrs %{name: nil, popularity: nil, spotify_id: nil}
+    @valid_attrs %{name: "9m88", popularity: 53, spotify_id: "4PjY2961rc0MHE9zHYWEnH"}
+    @update_attrs %{
+      name: "Updated 9m88",
+      popularity: 100,
+      spotify_id: "4PjY2961rc0MHE9zHYWEnH"
+    }
+    @invalid_attrs %{name: nil, spotify_id: nil}
 
     def artist_fixture(attrs \\ %{}) do
       {:ok, artist} =
@@ -94,9 +161,25 @@ defmodule Songmate.MusicTest do
 
     test "create_artist/1 with valid data creates a artist" do
       assert {:ok, %Artist{} = artist} = Music.create_artist(@valid_attrs)
-      assert artist.name == "some name"
-      assert artist.popularity == 42
-      assert artist.spotify_id == "some spotify_id"
+      assert artist.name == "9m88"
+      assert artist.popularity == 53
+      assert artist.spotify_id == "4PjY2961rc0MHE9zHYWEnH"
+    end
+
+    test "create_artist/1 creates associated genres" do
+      artist =
+        artist_fixture(
+          %{
+            genres: [
+              %{name: "Taiwanese Pop"}
+            ]
+          }
+        )
+
+      artist = Repo.preload(artist, :genres)
+
+      [genre] = artist.genres
+      assert genre.name == "Taiwanese Pop"
     end
 
     test "create_artist/1 with invalid data returns error changeset" do
@@ -106,9 +189,26 @@ defmodule Songmate.MusicTest do
     test "update_artist/2 with valid data updates the artist" do
       artist = artist_fixture()
       assert {:ok, %Artist{} = artist} = Music.update_artist(artist, @update_attrs)
-      assert artist.name == "some updated name"
-      assert artist.popularity == 43
-      assert artist.spotify_id == "some updated spotify_id"
+      assert artist.name == "Updated 9m88"
+      assert artist.popularity == 100
+      assert artist.spotify_id == "4PjY2961rc0MHE9zHYWEnH"
+    end
+
+    test "update_artist/2 updates the associated genres" do
+      artist =
+        artist_fixture(
+          %{
+            genres: [
+              %{name: "Taiwanese Pop"}
+            ]
+          }
+        )
+
+      {:ok, updated_artist} = Music.update_artist(artist, %{genres: [%{name: "Jazz"}]})
+
+      [genre] = updated_artist.genres
+      assert genre.name == "Jazz"
+      assert Repo.get_by(Genre, name: "Taiwanese Pop")
     end
 
     test "update_artist/2 with invalid data returns error changeset" do

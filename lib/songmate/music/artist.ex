@@ -23,6 +23,8 @@ defmodule Songmate.Music.Artist do
     |> unique_constraint(:spotify_id)
   end
 
+  def insert_and_get_all([]), do: []
+
   def insert_and_get_all(artists) do
     Repo.insert_all(Artist, artists, on_conflict: :nothing, conflict_target: :spotify_id)
     spotify_ids = Enum.map(artists, & &1.spotify_id)

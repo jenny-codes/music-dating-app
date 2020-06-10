@@ -20,10 +20,11 @@ defmodule Songmate.Music.Genre do
     |> unique_constraint(:name)
   end
 
-  def insert_and_get_all(genres) do
-    genre_struct = Enum.map(genres, &%{name: &1})
+  def insert_and_get_all([]), do: []
 
-    Repo.insert_all(Genre, genre_struct, on_conflict: :nothing)
-    Repo.all(from(g in Genre, where: g.name in ^genres))
+  def insert_and_get_all(genres) do
+    Repo.insert_all(Genre, genres, on_conflict: :nothing)
+    genre_names = Enum.map(genres, & &1.name)
+    Repo.all(from(g in Genre, where: g.name in ^genre_names))
   end
 end

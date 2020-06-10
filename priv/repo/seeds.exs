@@ -31,7 +31,7 @@ Accounts.create_user(%{
 # --------------------------------------------------------
 # Music.Artist
 
-Music.create_artist!(%{
+Music.create_artist(%{
   name: "fun.",
   popularity: 72,
   spotify_id: "5nCi3BB41mBaMH9gfr6Su0",
@@ -44,52 +44,52 @@ Music.create_artist!(%{
   ]
 })
 
-Music.create_artist!(%{
+Music.create_artist(%{
   name: "The National",
   popularity: 71,
   spotify_id: "2cCUtGK9sDU2EoElnk0GNB",
   genres: [
-    "chamber pop",
-    "indie rock",
-    "modern rock"
+    %{name: "chamber pop"},
+    %{name: "indie rock"},
+    %{name: "modern rock"}
   ]
 })
 
-Music.create_artist!(%{
+Music.create_artist(%{
   name: "Vampire Weekend",
   popularity: 73,
   spotify_id: "5BvJzeQpmsdsFp4HGUYUEx",
   genres: [
-    "baroque pop",
-    "indie pop",
-    "modern rock"
+    %{name: "baroque pop"},
+    %{name: "indie pop"},
+    %{name: "modern rock"}
   ]
 })
 
-Music.create_artist!(%{
+Music.create_artist(%{
   name: "Alt-J",
   popularity: 76,
   spotify_id: "3XHO7cRUPCLOr6jwp8vsx5",
   genres: [
-    "indie rock",
-    "modern rock"
+    %{name: "indie rock"},
+    %{name: "modern rock"}
   ]
 })
 
-Music.create_artist!(%{
+Music.create_artist(%{
   name: "Coldplay",
   popularity: 89,
   spotify_id: "4gzpq5DPGxSnKTe4SA8HAU",
   genres: [
-    "permanent wave",
-    "pop"
+    %{name: "permanent wave"},
+    %{name: "pop"}
   ]
 })
 
 # --------------------------------------------------------
 # Music.Track
 
-Music.create_track!(%{
+Music.create_track(%{
   isrc: "TWAE31801542",
   name: "小夜曲",
   popularity: 13,
@@ -99,7 +99,7 @@ Music.create_track!(%{
   ]
 })
 
-Music.create_track!(%{
+Music.create_track(%{
   isrc: "CNA791600507",
   name: "我们拥抱亲吻相爱的人",
   popularity: 12,
@@ -109,7 +109,7 @@ Music.create_track!(%{
   ]
 })
 
-Music.create_track!(%{
+Music.create_track(%{
   isrc: "USMRG0467010",
   name: "Rebellion (Lies)",
   popularity: 65,
@@ -119,7 +119,7 @@ Music.create_track!(%{
   ]
 })
 
-Music.create_track!(%{
+Music.create_track(%{
   isrc: "TWA471204005",
   name: "如何 - Through Our Lives",
   popularity: 33,
@@ -129,7 +129,7 @@ Music.create_track!(%{
   ]
 })
 
-Music.create_track!(%{
+Music.create_track(%{
   isrc: "GBAFL1000103",
   name: "England",
   popularity: 46,

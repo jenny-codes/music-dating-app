@@ -48,11 +48,16 @@ defmodule Songmate.Music do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_track!(attrs \\ %{}) do
-    %Track{}
-    |> Track.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:artists, Artist.insert_and_get_all(attrs[:artists]))
-    |> Repo.insert!()
+  def create_track(attrs \\ %{}) do
+    changeset = if attrs[:artists] do
+      %Track{}
+      |> Track.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:artists, Artist.insert_and_get_all(attrs[:artists]))
+    else
+      Track.changeset(%Track{}, attrs)
+    end
+
+    Repo.insert(changeset)
   end
 
   @doc """
@@ -68,9 +73,16 @@ defmodule Songmate.Music do
 
   """
   def update_track(%Track{} = track, attrs) do
-    track
-    |> Track.changeset(attrs)
-    |> Repo.update()
+    changeset = if attrs[:artists] do
+      track
+      |> Repo.preload(:artists)
+      |> Track.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:artists, Artist.insert_and_get_all(attrs[:artists]))
+    else
+      Track.changeset(track, attrs)
+    end
+
+    Repo.update(changeset)
   end
 
   @doc """
@@ -145,11 +157,16 @@ defmodule Songmate.Music do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_artist!(attrs \\ %{}) do
-    %Artist{}
-    |> Artist.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:genres, Genre.insert_and_get_all(attrs[:genres]))
-    |> Repo.insert!()
+  def create_artist(attrs \\ %{}) do
+    changeset = if attrs[:genres] do
+      %Artist{}
+      |> Artist.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:genres, Genre.insert_and_get_all(attrs[:genres]))
+    else
+      Artist.changeset(%Artist{}, attrs)
+    end
+
+    Repo.insert(changeset)
   end
 
   @doc """
@@ -165,9 +182,16 @@ defmodule Songmate.Music do
 
   """
   def update_artist(%Artist{} = artist, attrs) do
-    artist
-    |> Artist.changeset(attrs)
-    |> Repo.update()
+    changeset = if attrs[:genres] do
+      artist
+      |> Repo.preload(:genres)
+      |> Artist.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:genres, Genre.insert_and_get_all(attrs[:genres]))
+    else
+      Artist.changeset(artist, attrs)
+    end
+
+    Repo.update(changeset)
   end
 
   @doc """
