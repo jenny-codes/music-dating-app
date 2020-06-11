@@ -17,7 +17,7 @@ defmodule Songmate.Accounts.User do
     field :genres, {:array, :string}
 
     has_one :credential, Credential
-    has_one :music_profile, MusicProfile.User
+    has_one :music_profile, MusicProfile.Profile
 
     timestamps()
   end

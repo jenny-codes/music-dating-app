@@ -9,7 +9,7 @@ defmodule Songmate.Community.Connection do
     field(:shared_preferences, :map)
     field(:music_profile_id, :id)
 
-    many_to_many(:music_profiles, MusicProfile.User,
+    many_to_many(:music_profiles, MusicProfile.Profile,
       join_through: "connections_music_profiles",
       on_replace: :delete
     )

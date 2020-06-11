@@ -70,7 +70,7 @@
   - name
   - many_to_many artists
 
-- MusicProfile.User
+- MusicProfile.Profile
   * belongs_to Accounts.user
   * has_many track_preferences
   * has_many artist_preferences

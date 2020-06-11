@@ -1,4 +1,4 @@
-defmodule Songmate.MusicProfile.User do
+defmodule Songmate.MusicProfile.Profile do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -18,7 +18,7 @@ defmodule Songmate.MusicProfile.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [])
-    |> validate_required([])
+#    |> validate_required([:user])
     |> unique_constraint(:user_id)
   end
 end

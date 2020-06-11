@@ -8,7 +8,7 @@ defmodule Songmate.MusicProfile.ArtistPreference do
   schema "artist_preferences" do
     field(:rank, :integer)
 
-    belongs_to(:music_profile, MusicProfile.User)
+    belongs_to(:music_profile, MusicProfile.Profile)
     belongs_to(:artist, Music.Artist)
 
     timestamps()

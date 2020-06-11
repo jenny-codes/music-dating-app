@@ -6,7 +6,8 @@ defmodule Songmate.MusicProfile do
   import Ecto.Query, warn: false
   alias Songmate.Repo
 
-  alias Songmate.MusicProfile.User
+  alias Songmate.MusicProfile.Profile
+  alias Songmate.Accounts
 
   @doc """
   Returns the list of music_profiles.
@@ -18,88 +19,89 @@ defmodule Songmate.MusicProfile do
 
   """
   def list_music_profiles do
-    Repo.all(User)
+    Repo.all(Profile)
   end
 
   @doc """
-  Gets a single user.
+  Gets a single profile.
 
   Raises `Ecto.NoResultsError` if the User does not exist.
 
   ## Examples
 
-      iex> get_user!(123)
+      iex> get_profile!(123)
       %User{}
 
-      iex> get_user!(456)
+      iex> get_profile!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_profile!(id), do: Repo.get!(Profile, id)
 
   @doc """
-  Creates a user.
+  Creates a profile.
 
   ## Examples
 
-      iex> create_user(%{field: value})
+      iex> create_profile(%{field: value})
       {:ok, %User{}}
 
-      iex> create_user(%{field: bad_value})
+      iex> create_profile(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
+  def create_profile(attrs \\ %{}) do
+    %Profile{}
+    |> Profile.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:user, with: &Accounts.User.changeset/2)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a user.
+  Updates a profile.
 
   ## Examples
 
-      iex> update_user(user, %{field: new_value})
+      iex> update_profile(profile, %{field: new_value})
       {:ok, %User{}}
 
-      iex> update_user(user, %{field: bad_value})
+      iex> update_profile(profile, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_user(%User{} = user, attrs) do
-    user
-    |> User.changeset(attrs)
+  def update_profile(%Profile{} = profile, attrs) do
+    profile
+    |> Profile.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a user.
+  Deletes a profile.
 
   ## Examples
 
-      iex> delete_user(user)
+      iex> delete_profile(profile)
       {:ok, %User{}}
 
-      iex> delete_user(user)
+      iex> delete_profile(profile)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
+  def delete_profile(%Profile{} = profile) do
+    Repo.delete(profile)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking user changes.
+  Returns an `%Ecto.Changeset{}` for tracking profile changes.
 
   ## Examples
 
-      iex> change_user(user)
-      %Ecto.Changeset{source: %User{}}
+      iex> change_profile(profile)
+      %Ecto.Changeset{source: %Profile{}}
 
   """
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
+  def change_profile(%Profile{} = profile) do
+    Profile.changeset(profile, %{})
   end
 
   alias Songmate.MusicProfile.ArtistPreference
