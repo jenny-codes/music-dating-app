@@ -7,23 +7,28 @@
   - [x] STI for credentials?
   - [x] indexes
 - [x] Create new tables.
-- [x] Adjust existing tables.
-  - [x] fix join table behavior (on delete, artists, tracks, genres)
+- [x] Build new table relations.
+  - [x] Accounts
+  - [x] Music
+  - [x] MusicProfile
+  - [x] Community
+- [x] Build join table behaviors.
 - [ ] Migrate existing data.
-- [ ] App-layer logic
-  - [ ] Adjust auth permissions.
-  - [ ] Set up daily tasks.
+- [ ] Adjust auth permissions.
+- [ ] Set up tasks to do daily updates.
 
 ### Deploy
-- [ ] Update UI.
+- [x] Update UI.
 - [ ] Set up GCP account.
 - [ ] Set up CI and code style check.
 
 ### Community Functionality
+- [ ] Profile edit page
 - [ ] Chatroom
 
-### Matching Algorithm Redesign
+### Matching Algorithm
 - [ ] Reexamine existing weights on tracks, artists and genres.
+- [ ] New dimensions: popularity.
 - [ ] New dimensions: track & artist rank.
 - [ ] New dimensions: Spotify track audio features.
 
