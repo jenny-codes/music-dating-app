@@ -3,8 +3,8 @@
 @import "./phoenix.css";
 
 body{
-	background: black;
-	color: white;
+	background: #ffcc33;
+	color: black;
 	text-align: center;
 	padding: 0px;
 	margin: 0px;
@@ -33,7 +33,7 @@ a{
 	height: 150px;
 	background-color: transparent;
 	margin: 33px auto;
-	font-family: Helvetica;
+	font-family: "Source Code Pro", monospace;
 	color: #FFFFFF;
 }
 
@@ -58,7 +58,7 @@ a{
 
 	box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
 	border-radius: 20px;
-	font-family: Helvetica;
+	font-family: "Source Code Pro", monospace;
 	font-size: 14px;
 	font-weight: bold;
 	padding: 7px;
@@ -83,7 +83,7 @@ nav .nav-container a{
 	text-align: center;
 	color: white;
 	box-shadow: 0 0 4px 0 rgba(0,0,0,0.12), 0 4px 4px 0 rgba(0,0,0,0.24);
-	font-family: Helvetica;
+	font-family: "Source Code Pro", monospace;
 	font-size: 14px;
 	color: rgba(255,255,255,0.70);
 	letter-spacing: 0.5px;

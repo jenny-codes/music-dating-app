@@ -1,8 +1,6 @@
 <h1> Your tops, <%= @name %>! </h1>
 <h3> (in the past 6 months) </h3>
 
-<h2>Top 3 matches 😱</h2>
-
 <table class="table">
   <tbody>
 <%= for {rank, name, _score} <- @top_matches do %>
@@ -42,6 +40,7 @@
   </div>
   <div class="column">
     <h2>Top genres</h2>
+    <h4>(not in order)</h4>
 
     <table class="table">
       <tbody>

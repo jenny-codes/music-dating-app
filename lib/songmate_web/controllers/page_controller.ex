@@ -1,7 +1,6 @@
 defmodule SongmateWeb.PageController do
   use SongmateWeb, :controller
   alias Songmate.Repo
-  alias Songmate.Accounts.User
   alias Songmate.Accounts
   alias Songmate.MusicProfile
 
