@@ -46,10 +46,84 @@ defmodule Songmate.DataCase do
 
   """
   def errors_on(changeset) do
-    Ecto.Changeset.traverse_errors(changeset, fn {message, opts} ->
-      Regex.replace(~r"%{(\w+)}", message, fn _, key ->
-        opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
-      end)
-    end)
+    Ecto.Changeset.traverse_errors(
+      changeset,
+      fn {message, opts} ->
+        Regex.replace(
+          ~r"%{(\w+)}",
+          message,
+          fn _, key ->
+            opts
+            |> Keyword.get(String.to_existing_atom(key), key)
+            |> to_string()
+          end
+        )
+      end
+    )
+  end
+
+  # -----------------------------------------------------------------------
+  # Accounts
+
+  def valid_user_attrs do
+    %{
+      name: "Bass Wannabe",
+      bio: "Some nights I stay up cashing in my bad luck",
+      avatar: "some-link-to-an-image",
+      credential: %{
+        provider: :spotify,
+        email: "hi@songmate.co",
+        username: "hisongmate"
+      }
+    }
+  end
+
+  def valid_2nd_user_attrs do
+    %{
+      name: "Spotify Rocks",
+      bio: "ugh",
+      credential: %{
+        provider: :spotify,
+        email: "spotify@rocks",
+        username: "spotify-rocks"
+      }
+    }
+  end
+
+  # -----------------------------------------------------------------------
+  # Music
+
+  def valid_track_attrs do
+    %{
+      isrc: "USMRG0467010",
+      name: "Rebellion (Lies)",
+      popularity: 65,
+      spotify_id: "0xOeB16JDbBJBJKSdHbElT"
+    }
+  end
+
+  def valid_artist_attrs do
+    %{
+      name: "9m88",
+      popularity: 53,
+      spotify_id: "4PjY2961rc0MHE9zHYWEnH"
+    }
+  end
+
+  def valid_genre_attrs do
+    %{name: "Modern Rock"}
+  end
+
+  # -----------------------------------------------------------------------
+  # MusicProfile
+
+  def valid_music_profile_attrs do
+    %{
+      user: valid_user_attrs(),
+      artist_preferences: [%{
+        rank: 1,
+        artist: valid_artist_attrs()
+      }]
+    }
   end
 end

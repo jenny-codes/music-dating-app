@@ -7,8 +7,8 @@
   - [x] STI for credentials?
   - [x] indexes
 - [x] Create new tables.
-- [ ] Adjust existing tables.
-  - [ ] fix join table behavior (on delete, artists, tracks, genres)
+- [x] Adjust existing tables.
+  - [x] fix join table behavior (on delete, artists, tracks, genres)
 - [ ] Migrate existing data.
 - [ ] App-layer logic
   - [ ] Adjust auth permissions.
@@ -70,7 +70,7 @@
   - name
   - many_to_many artists
 
-- MusicProfile.User
+- MusicProfile.Profile
   * belongs_to Accounts.user
   * has_many track_preferences
   * has_many artist_preferences

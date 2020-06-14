@@ -38,3 +38,4 @@ npm-debug.log
 formatter.*
 
 .DS_Store
+.idea

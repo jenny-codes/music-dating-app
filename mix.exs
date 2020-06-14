@@ -43,7 +43,8 @@ defmodule Songmate.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:spotify_ex, "~> 2.0.9"}
+      {:spotify_ex, "~> 2.0.9"},
+      {:ecto_enum, "~> 1.4"},
     ]
   end
 

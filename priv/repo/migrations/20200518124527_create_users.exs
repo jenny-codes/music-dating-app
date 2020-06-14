@@ -4,7 +4,8 @@ defmodule Songmate.Repo.Migrations.CreateUsers do
   def change do
     create table(:users) do
       add :name, :string
-      add :bio, :string
+      add :bio, :text
+      add :avatar, :string
       add :spotify_id, :string
       add :fav_track, :string
       add :top_tracks, {:array, :string}
