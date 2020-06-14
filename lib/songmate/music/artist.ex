@@ -32,6 +32,6 @@ defmodule Songmate.Music.Artist do
   end
 
   def get_or_create_by!(attr_name, attrs) do
-    Repo.get_by(Artist, [{attr_name, attrs[attr_name]}]) || Repo.insert!(Artist.changeset(%Artist{}, attrs))
+    Repo.get_by(Artist, [{attr_name, Map.get(attrs, attr_name)}]) || Repo.insert!(Artist.changeset(%Artist{}, attrs))
   end
 end

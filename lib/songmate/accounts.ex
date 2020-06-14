@@ -10,10 +10,20 @@ defmodule Songmate.Accounts do
   alias Songmate.Accounts.Credential
 
   def list_users do
-    Repo.all(User) |> Repo.preload(:credential)
+    Repo.all(User)
+    |> Repo.preload(:credential)
   end
 
-  def get_user!(id), do: Repo.get!(User, id) |> Repo.preload(:credential)
+  def get_user!(id),
+      do: Repo.get!(User, id)
+          |> Repo.preload(:credential)
+
+  def get_user_by_username(value) do
+    case Repo.get_by(Credential, [provider: :spotify, username: value]) do
+      nil -> nil
+      credential -> Repo.preload(credential, :user).user
+    end
+  end
 
   def create_user(attrs \\ %{}) do
     %User{}
@@ -47,7 +57,8 @@ defmodule Songmate.Accounts do
 
   """
   def list_credentials do
-    Repo.all(Credential) |> Repo.preload(:user)
+    Repo.all(Credential)
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -64,7 +75,9 @@ defmodule Songmate.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_credential!(id), do: Repo.get!(Credential, id) |> Repo.preload(:user)
+  def get_credential!(id),
+      do: Repo.get!(Credential, id)
+          |> Repo.preload(:user)
 
   @doc """
   Creates a credential.

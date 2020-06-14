@@ -7,6 +7,30 @@ defmodule Songmate.Music do
   alias Songmate.Repo
   alias Songmate.Music.{Track, Genre, Artist}
 
+  def find_or_create_by(:artist, attr, attrs) do
+    case Repo.get_by(Artist, attr, attrs[attr]) do
+      nil -> {:ok, artist} = create_artist(attrs)
+             artist
+      artist -> artist
+    end
+  end
+
+  def find_or_create_by(:track, attr, attrs) do
+    case Repo.get_by(Track, attr, attrs[attr]) do
+      nil -> {:ok, track} = create_track(attrs)
+             track
+      track -> track
+    end
+  end
+
+  def find_or_create_by(:genre, attr, attrs) do
+    case Repo.get_by(Genre, attr, attrs[attr]) do
+      nil -> {:ok, genre} = create_genre(attrs)
+             genre
+      genre -> genre
+    end
+  end
+
   @doc """
   Returns the list of tracks.
 

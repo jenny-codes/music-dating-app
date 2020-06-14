@@ -63,6 +63,26 @@ defmodule Songmate.MusicProfile do
     profile
   end
 
+  def create_or_update_profile(attrs \\ %{}) do
+    profile = case Repo.preload(attrs[:user], :music_profile).music_profile do
+      nil ->
+        {:ok, profile} = %Profile{}
+                         |> Profile.changeset(attrs)
+                         |> Ecto.Changeset.put_assoc(:user, attrs[:user])
+                         |> Repo.insert(
+                              on_conflict: :replace_all,
+                              conflict_target: [{:music_profile_id, :artist_id}, {:music_profile_id, :rank}]
+                            )
+        profile
+      profile -> profile
+    end
+
+    create_artist_preferences_for_profile(profile, attrs[:artist_preferences])
+    create_track_preferences_for_profile(profile, attrs[:track_preferences])
+    create_genre_preferences_for_profile(profile, attrs[:genre_preferences])
+    profile
+  end
+
   @doc """
   Updates a profile.
 
@@ -158,7 +178,7 @@ defmodule Songmate.MusicProfile do
     |> ArtistPreference.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:music_profile, attrs[:music_profile])
     |> Ecto.Changeset.put_assoc(:artist, attrs[:artist])
-    |> Repo.insert!()
+    |> Repo.insert!(on_conflict: :replace_all, conflict_target: [:music_profile_id, :artist_id])
   end
 
   def create_artist_preferences_for_profile(profile, nil), do: profile
@@ -273,7 +293,7 @@ defmodule Songmate.MusicProfile do
     |> TrackPreference.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:music_profile, attrs[:music_profile])
     |> Ecto.Changeset.put_assoc(:track, attrs[:track])
-    |> Repo.insert!()
+    |> Repo.insert!(on_conflict: :replace_all, conflict_target: [:music_profile_id, :track_id])
   end
 
   def create_track_preferences_for_profile(profile, nil), do: profile
@@ -388,7 +408,7 @@ defmodule Songmate.MusicProfile do
     |> GenrePreference.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:music_profile, attrs[:music_profile])
     |> Ecto.Changeset.put_assoc(:genre, attrs[:genre])
-    |> Repo.insert!()
+    |> Repo.insert!(on_conflict: :replace_all, conflict_target: [:music_profile_id, :genre_id])
   end
 
   def create_genre_preferences_for_profile(profile, nil), do: profile
