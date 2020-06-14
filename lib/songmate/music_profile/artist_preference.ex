@@ -2,7 +2,6 @@ defmodule Songmate.MusicProfile.ArtistPreference do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Songmate.Repo
   alias Songmate.Music.Artist
   alias Songmate.MusicProfile.Profile
 
