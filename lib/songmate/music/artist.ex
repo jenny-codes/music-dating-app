@@ -30,4 +30,8 @@ defmodule Songmate.Music.Artist do
     spotify_ids = Enum.map(artists, & &1.spotify_id)
     Repo.all(from(a in Artist, where: a.spotify_id in ^spotify_ids))
   end
+
+  def get_or_create_by!(attr_name, attrs) do
+    Repo.get_by(Artist, [{attr_name, attrs[attr_name]}]) || Repo.insert!(Artist.changeset(%Artist{}, attrs))
+  end
 end

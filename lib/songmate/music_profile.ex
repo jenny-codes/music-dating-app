@@ -6,7 +6,8 @@ defmodule Songmate.MusicProfile do
   import Ecto.Query, warn: false
   alias Songmate.Repo
 
-  alias Songmate.MusicProfile.Profile
+  alias Songmate.MusicProfile.{Profile, ArtistPreference, TrackPreference, GenrePreference}
+  alias Songmate.Music.{Artist, Track, Genre}
   alias Songmate.Accounts
 
   @doc """
@@ -51,10 +52,15 @@ defmodule Songmate.MusicProfile do
 
   """
   def create_profile(attrs \\ %{}) do
-    %Profile{}
-    |> Profile.changeset(attrs)
-    |> Ecto.Changeset.cast_assoc(:user, with: &Accounts.User.changeset/2)
-    |> Repo.insert()
+    {:ok, profile} = %Profile{}
+                     |> Profile.changeset(attrs)
+                     |> Ecto.Changeset.cast_assoc(:user, with: &Accounts.User.changeset/2)
+                     |> Repo.insert()
+
+    create_artist_preferences_for_profile(profile, attrs[:artist_preferences])
+    create_track_preferences_for_profile(profile, attrs[:track_preferences])
+    create_genre_preferences_for_profile(profile, attrs[:genre_preferences])
+    profile
   end
 
   @doc """
@@ -147,10 +153,29 @@ defmodule Songmate.MusicProfile do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_artist_preference(attrs \\ %{}) do
+  def create_artist_preference!(attrs \\ %{}) do
     %ArtistPreference{}
     |> ArtistPreference.changeset(attrs)
-    |> Repo.insert()
+    |> Ecto.Changeset.put_assoc(:music_profile, attrs[:music_profile])
+    |> Ecto.Changeset.put_assoc(:artist, attrs[:artist])
+    |> Repo.insert!()
+  end
+
+  def create_artist_preferences_for_profile(profile, nil), do: profile
+  def create_artist_preferences_for_profile(profile, []), do: profile
+  def create_artist_preferences_for_profile(profile, prefs) do
+    build_artist_attr = fn pref ->
+      %{pref | artist: Artist.get_or_create_by!(:spotify_id, pref[:artist])}
+    end
+
+    add_profile_attr = fn pref ->
+      Map.put(pref, :music_profile, profile)
+    end
+
+    prefs
+    |> Enum.map(build_artist_attr)
+    |> Enum.map(add_profile_attr)
+    |> Enum.map(&create_artist_preference!/1)
   end
 
   @doc """
@@ -243,10 +268,29 @@ defmodule Songmate.MusicProfile do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_track_preference(attrs \\ %{}) do
+  def create_track_preference!(attrs \\ %{}) do
     %TrackPreference{}
     |> TrackPreference.changeset(attrs)
-    |> Repo.insert()
+    |> Ecto.Changeset.put_assoc(:music_profile, attrs[:music_profile])
+    |> Ecto.Changeset.put_assoc(:track, attrs[:track])
+    |> Repo.insert!()
+  end
+
+  def create_track_preferences_for_profile(profile, nil), do: profile
+  def create_track_preferences_for_profile(profile, []), do: profile
+  def create_track_preferences_for_profile(profile, prefs) do
+    build_track_attr = fn pref ->
+      %{pref | track: Track.get_or_create_by!(:spotify_id, pref[:track])}
+    end
+
+    add_profile_attr = fn pref ->
+      Map.put(pref, :music_profile, profile)
+    end
+
+    prefs
+    |> Enum.map(build_track_attr)
+    |> Enum.map(add_profile_attr)
+    |> Enum.map(&create_track_preference!/1)
   end
 
   @doc """
@@ -339,10 +383,30 @@ defmodule Songmate.MusicProfile do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_genre_preference(attrs \\ %{}) do
+  def create_genre_preference!(attrs \\ %{}) do
     %GenrePreference{}
     |> GenrePreference.changeset(attrs)
-    |> Repo.insert()
+    |> Ecto.Changeset.put_assoc(:music_profile, attrs[:music_profile])
+    |> Ecto.Changeset.put_assoc(:genre, attrs[:genre])
+    |> Repo.insert!()
+  end
+
+  def create_genre_preferences_for_profile(profile, nil), do: profile
+  def create_genre_preferences_for_profile(profile, []), do: profile
+  def create_genre_preferences_for_profile(profile, prefs) do
+    build_genre_attr = fn pref ->
+      %{pref | genre: Genre.get_or_create_by!(:name, pref[:genre])}
+    end
+
+    add_profile_attr = fn pref ->
+      Map.put(pref, :music_profile, profile)
+    end
+
+    prefs
+    |> Enum.map(build_genre_attr)
+    |> Enum.map(add_profile_attr)
+    |> Enum.map(&create_genre_preference!/1)
+
   end
 
   @doc """

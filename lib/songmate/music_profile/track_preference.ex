@@ -2,14 +2,15 @@ defmodule Songmate.MusicProfile.TrackPreference do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Songmate.MusicProfile
-  alias Songmate.Music
+  alias Songmate.Repo
+  alias Songmate.MusicProfile.Profile
+  alias Songmate.Music.Track
 
   schema "track_preferences" do
     field(:rank, :integer)
 
-    belongs_to(:music_profile, MusicProfile.Profile)
-    belongs_to(:track, Music.Track)
+    belongs_to(:music_profile, Profile)
+    belongs_to(:track, Track)
 
     timestamps()
   end
@@ -19,5 +20,7 @@ defmodule Songmate.MusicProfile.TrackPreference do
     track_preference
     |> cast(attrs, [:rank])
     |> validate_required([:rank])
+    |> unique_constraint([:music_profile_id, :track_id])
+    |> unique_constraint([:music_profile_id, :rank])
   end
 end
