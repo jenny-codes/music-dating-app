@@ -6,12 +6,6 @@ defmodule Songmate.AccountsTest do
   alias Songmate.Accounts.{User, Credential}
 
   describe "users" do
-    @valid_attrs %{
-      bio: "Some nights I stay up cashing in my bad luck",
-      name: "Bass Wannabe",
-      avatar: "some-link-to-an-image",
-      credential: %{provider: :spotify, email: "hi@songmate.co", username: "hisongmate"}
-    }
     @update_attrs %{
       bio: "Some nights I call it a draw",
       name: "Alto Wannabe",
@@ -22,7 +16,7 @@ defmodule Songmate.AccountsTest do
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(valid_user_attrs())
         |> Accounts.create_user()
 
       Repo.preload(user, :credential)
@@ -39,7 +33,7 @@ defmodule Songmate.AccountsTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
+      assert {:ok, %User{} = user} = Accounts.create_user(valid_user_attrs())
       assert user.bio == "Some nights I stay up cashing in my bad luck"
       assert user.name == "Bass Wannabe"
       assert user.avatar == "some-link-to-an-image"

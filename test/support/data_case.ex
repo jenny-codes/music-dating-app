@@ -46,10 +46,59 @@ defmodule Songmate.DataCase do
 
   """
   def errors_on(changeset) do
-    Ecto.Changeset.traverse_errors(changeset, fn {message, opts} ->
-      Regex.replace(~r"%{(\w+)}", message, fn _, key ->
-        opts |> Keyword.get(String.to_existing_atom(key), key) |> to_string()
-      end)
-    end)
+    Ecto.Changeset.traverse_errors(
+      changeset,
+      fn {message, opts} ->
+        Regex.replace(
+          ~r"%{(\w+)}",
+          message,
+          fn _, key ->
+            opts
+            |> Keyword.get(String.to_existing_atom(key), key)
+            |> to_string()
+          end
+        )
+      end
+    )
+  end
+
+  # -----------------------------------------------------------------------
+  # Accounts
+
+  def valid_user_attrs do
+    %{
+      bio: "Some nights I stay up cashing in my bad luck",
+      name: "Bass Wannabe",
+      avatar: "some-link-to-an-image",
+      credential: %{
+        provider: :spotify,
+        email: "hi@songmate.co",
+        username: "hisongmate"
+      }
+    }
+  end
+
+  # -----------------------------------------------------------------------
+  # Music
+
+  def valid_track_attrs do
+    %{
+      isrc: "USMRG0467010",
+      name: "Rebellion (Lies)",
+      popularity: 65,
+      spotify_id: "0xOeB16JDbBJBJKSdHbElT"
+    }
+  end
+
+  def valid_artist_attrs do
+    %{
+      name: "9m88",
+      popularity: 53,
+      spotify_id: "4PjY2961rc0MHE9zHYWEnH"
+    }
+  end
+
+  def valid_genre_attrs do
+    %{name: "Modern Rock"}
   end
 end

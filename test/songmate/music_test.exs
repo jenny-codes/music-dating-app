@@ -5,12 +5,6 @@ defmodule Songmate.MusicTest do
   alias Songmate.Music.{Artist, Track, Genre}
 
   describe "tracks" do
-    @valid_attrs %{
-      isrc: "USMRG0467010",
-      name: "Rebellion (Lies)",
-      popularity: 65,
-      spotify_id: "0xOeB16JDbBJBJKSdHbElT"
-    }
     @update_attrs %{
       name: "updated Rebellion",
       popularity: 90
@@ -20,7 +14,7 @@ defmodule Songmate.MusicTest do
     def track_fixture(attrs \\ %{}) do
       {:ok, track} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(valid_track_attrs())
         |> Music.create_track()
       track
     end
@@ -36,7 +30,7 @@ defmodule Songmate.MusicTest do
     end
 
     test "create_track/1 with valid data creates a track" do
-      assert {:ok, %Track{} = track} = Music.create_track(@valid_attrs)
+      assert {:ok, %Track{} = track} = Music.create_track(valid_track_attrs())
       assert track.isrc == "USMRG0467010"
       assert track.name == "Rebellion (Lies)"
       assert track.popularity == 65
@@ -130,9 +124,6 @@ defmodule Songmate.MusicTest do
   end
 
   describe "artists" do
-    alias Songmate.Music.Artist
-
-    @valid_attrs %{name: "9m88", popularity: 53, spotify_id: "4PjY2961rc0MHE9zHYWEnH"}
     @update_attrs %{
       name: "Updated 9m88",
       popularity: 100,
@@ -143,7 +134,7 @@ defmodule Songmate.MusicTest do
     def artist_fixture(attrs \\ %{}) do
       {:ok, artist} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(valid_artist_attrs())
         |> Music.create_artist()
 
       artist
@@ -160,7 +151,7 @@ defmodule Songmate.MusicTest do
     end
 
     test "create_artist/1 with valid data creates a artist" do
-      assert {:ok, %Artist{} = artist} = Music.create_artist(@valid_attrs)
+      assert {:ok, %Artist{} = artist} = Music.create_artist(valid_artist_attrs())
       assert artist.name == "9m88"
       assert artist.popularity == 53
       assert artist.spotify_id == "4PjY2961rc0MHE9zHYWEnH"
@@ -230,16 +221,13 @@ defmodule Songmate.MusicTest do
   end
 
   describe "genres" do
-    alias Songmate.Music.Genre
-
-    @valid_attrs %{name: "some name"}
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
 
     def genre_fixture(attrs \\ %{}) do
       {:ok, genre} =
         attrs
-        |> Enum.into(@valid_attrs)
+        |> Enum.into(valid_genre_attrs())
         |> Music.create_genre()
 
       genre
@@ -256,8 +244,8 @@ defmodule Songmate.MusicTest do
     end
 
     test "create_genre/1 with valid data creates a genre" do
-      assert {:ok, %Genre{} = genre} = Music.create_genre(@valid_attrs)
-      assert genre.name == "some name"
+      assert {:ok, %Genre{} = genre} = Music.create_genre(valid_genre_attrs())
+      assert genre.name == "Modern Rock"
     end
 
     test "create_genre/1 with invalid data returns error changeset" do
