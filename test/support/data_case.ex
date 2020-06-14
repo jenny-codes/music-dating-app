@@ -67,13 +67,25 @@ defmodule Songmate.DataCase do
 
   def valid_user_attrs do
     %{
-      bio: "Some nights I stay up cashing in my bad luck",
       name: "Bass Wannabe",
+      bio: "Some nights I stay up cashing in my bad luck",
       avatar: "some-link-to-an-image",
       credential: %{
         provider: :spotify,
         email: "hi@songmate.co",
         username: "hisongmate"
+      }
+    }
+  end
+
+  def valid_2nd_user_attrs do
+    %{
+      name: "Spotify Rocks",
+      bio: "ugh",
+      credential: %{
+        provider: :spotify,
+        email: "spotify@rocks",
+        username: "spotify-rocks"
       }
     }
   end
@@ -100,5 +112,18 @@ defmodule Songmate.DataCase do
 
   def valid_genre_attrs do
     %{name: "Modern Rock"}
+  end
+
+  # -----------------------------------------------------------------------
+  # MusicProfile
+
+  def valid_music_profile_attrs do
+    %{
+      user: valid_user_attrs(),
+      artist_preferences: [%{
+        rank: 1,
+        artist: valid_artist_attrs()
+      }]
+    }
   end
 end

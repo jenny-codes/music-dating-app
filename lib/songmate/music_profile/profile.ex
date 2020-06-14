@@ -46,8 +46,8 @@ defmodule Songmate.MusicProfile.Profile do
   end
 
   @doc false
-  def changeset(user, attrs) do
-    user
+  def changeset(profile, attrs) do
+    profile
     |> cast(attrs, [])
     |> unique_constraint(:user_id)
   end

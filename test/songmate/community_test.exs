@@ -30,9 +30,17 @@ defmodule Songmate.CommunityTest do
     end
 
     test "create_connection/1 with valid data creates a connection" do
-      assert {:ok, %Connection{} = connection} = Community.create_connection(@valid_attrs)
-      assert connection.score == 42
-      assert connection.shared_preferences == %{}
+      attrs = %{
+        score: 100,
+        music_profiles: [
+          %{user: valid_user_attrs()},
+          %{user: valid_2nd_user_attrs()}
+        ]
+      }
+      assert {:ok, %Connection{} = connection} = Community.create_connection(attrs)
+      connection = Repo.preload(connection, music_profiles: [:user])
+      assert connection.score == 100
+      assert length(connection.music_profiles) == 2
     end
 
     test "create_connection/1 with invalid data returns error changeset" do

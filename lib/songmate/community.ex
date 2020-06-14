@@ -7,6 +7,7 @@ defmodule Songmate.Community do
   alias Songmate.Repo
 
   alias Songmate.Community.Connection
+  alias Songmate.MusicProfile.Profile
 
   @doc """
   Returns the list of connections.
@@ -52,6 +53,7 @@ defmodule Songmate.Community do
   def create_connection(attrs \\ %{}) do
     %Connection{}
     |> Connection.changeset(attrs)
+    |> Ecto.Changeset.cast_assoc(:music_profiles, with: &Profile.changeset/2)
     |> Repo.insert()
   end
 
