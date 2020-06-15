@@ -8,7 +8,7 @@
 // from the params if you are not using authentication.
 import {Socket} from "phoenix"
 
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+let socket = new Socket("/socket");
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -55,9 +55,36 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("topic:subtopic", {})
+let channel = socket.channel('room:lobby', {});
+let chatInput = document.querySelector('#chat-input');
+let messageContainer = document.querySelector('#messages');
+
+chatInput.addEventListener('keypress', event => {
+  if (event.key === 'Enter') {
+    channel.push('new_msg', { body: chatInput.value });
+    chatInput.value = '';
+  }
+});
+
+channel.on('new_msg', payload => {
+  let messageItem = document.createElement("p");
+  messageItem.innerText = `${time_formatted(new Date)} ${payload.body}`;
+  messageContainer.appendChild(messageItem);
+});
+
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
-  .receive("error", resp => { console.log("Unable to join", resp) })
+  .receive("ok", resp => {
+    console.log("Joined successfully", resp)
+  })
+  .receive("error", resp => {
+    console.log("Unable to join", resp)
+  });
+
+function time_formatted(date) {
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+
+  return `${hour}:${minute}`
+}
 
 export default socket
