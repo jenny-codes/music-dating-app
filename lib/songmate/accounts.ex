@@ -21,7 +21,23 @@ defmodule Songmate.Accounts do
   def get_user_by_username(value) do
     case Repo.get_by(Credential, [provider: :spotify, username: value]) do
       nil -> nil
-      credential -> Repo.preload(credential, :user).user
+      credential ->
+        credential
+        |> Repo.preload(:user)
+        |> fn credential -> credential.user end.()
+        |> Repo.preload(:credential)
+    end
+  end
+
+  def get_user_by_token(token) do
+    case Repo.get_by(Credential, [provider: :spotify, token: token]) do
+      nil ->
+        nil
+      credential ->
+        credential
+        |> Repo.preload(:user)
+        |> fn credential -> credential.user end.()
+        |> Repo.preload(:credential)
     end
   end
 

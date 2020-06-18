@@ -8,7 +8,9 @@
 // from the params if you are not using authentication.
 import {Socket} from "phoenix"
 
-let socket = new Socket("/socket");
+const token = window.userToken;
+const userName = window.userName.split(' ')[0];
+let socket = new Socket("/socket", {params: {token: token}});
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -68,7 +70,7 @@ chatInput.addEventListener('keypress', event => {
 
 channel.on('new_msg', payload => {
   let messageItem = document.createElement("p");
-  messageItem.innerText = `${time_formatted(new Date)} ${payload.body}`;
+  messageItem.innerHTML = `<b>${userName}</b> ${payload.body}`;
   messageContainer.appendChild(messageItem);
 });
 
@@ -80,11 +82,5 @@ channel.join()
     console.log("Unable to join", resp)
   });
 
-function time_formatted(date) {
-  let hour = date.getHours();
-  let minute = date.getMinutes();
-
-  return `${hour}:${minute}`
-}
 
 export default socket

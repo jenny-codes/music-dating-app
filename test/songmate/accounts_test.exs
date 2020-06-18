@@ -32,6 +32,22 @@ defmodule Songmate.AccountsTest do
       assert Accounts.get_user!(user.id) == user
     end
 
+    test "get_user_by_token/1 with existing token returns existing user" do
+      user_fixture(
+        credential: %{
+          provider: :spotify,
+          email: "hi@songmate.co",
+          username: "hisongmate",
+          token: "existing token"
+        }
+      )
+      user = Accounts.get_user_by_token("existing token")
+
+      assert length(Repo.all(Accounts.Credential)) == 1
+      assert length(Repo.all(Accounts.User)) == 1
+      assert user.credential.token == "existing token"
+    end
+
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(valid_user_attrs())
       assert user.bio == "Some nights I stay up cashing in my bad luck"

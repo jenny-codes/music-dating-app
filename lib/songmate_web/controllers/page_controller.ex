@@ -4,25 +4,14 @@ defmodule SongmateWeb.PageController do
   alias Songmate.Accounts
   alias Songmate.MusicProfile
 
-  plug :check_tokens
-
-  def check_tokens(conn, _params) do
-    if Spotify.Authentication.tokens_present?(conn) do
-      {:ok, conn} = Spotify.Authentication.refresh(conn)
-
-      conn
-    else
-      redirect(conn, to: "/authorize")
-    end
-  end
-
   def index(conn, _params) do
-    {user, profile} = build_current_profile(conn)
+    user = conn.assigns.current_user
+    profile = build_current_profile(conn, user)
 
     user_prefs = %{
-      top_tracks: profile.track_preferences |> Enum.map(&(&1.track.name)),
-      top_artists: profile.artist_preferences |> Enum.map(&(&1.artist.name)),
-      top_genres: profile.genre_preferences |> Enum.map(&(&1.genre.name)),
+      top_tracks: profile.track_preferences |> Enum.map(& &1.track.name),
+      top_artists: profile.artist_preferences |> Enum.map(& &1.artist.name),
+      top_genres: profile.genre_preferences |> Enum.map(& &1.genre.name)
     }
 
     Accounts.update_user(user, %{
@@ -41,37 +30,21 @@ defmodule SongmateWeb.PageController do
     )
   end
 
-  defp build_current_profile(conn) do
-    profile_attrs = SpotifyService.fetch_user_info(conn)
-
-    user = case Accounts.get_user_by_username(profile_attrs[:username]) do
-      nil ->
-        {:ok, user} = Accounts.create_user(
-          %{
-            name: profile_attrs[:display_name],
-            avatar: profile_attrs[:avatar_url],
-            credential: %{
-              email: profile_attrs[:email],
-              username: profile_attrs[:username],
-              provider: :spotify
-            }
-          }
-        )
-        user
-      user -> user
-    end
-
+  defp build_current_profile(conn, user) do
     tops = SpotifyService.fetch_tops(conn)
 
-    profile = MusicProfile.create_or_update_profile(
-                %{
-                  user: user,
-                  artist_preferences: build_preferences(:artist, tops[:artists]),
-                  track_preferences: build_preferences(:track, tops[:tracks]),
-                  genre_preferences: build_preferences(:genre, tops[:genres])
-                }
-              )
-              |> Repo.preload([[artist_preferences: :artist], [track_preferences: [track: :artists]], [genre_preferences: :genre]])
+    profile =
+      MusicProfile.create_or_update_profile(%{
+        user: user,
+        artist_preferences: build_preferences(:artist, tops[:artists]),
+        track_preferences: build_preferences(:track, tops[:tracks]),
+        genre_preferences: build_preferences(:genre, tops[:genres])
+      })
+      |> Repo.preload([
+        [artist_preferences: :artist],
+        [track_preferences: [track: :artists]],
+        [genre_preferences: :genre]
+      ])
 
     {user, profile}
   end
