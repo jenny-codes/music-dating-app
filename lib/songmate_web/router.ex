@@ -15,6 +15,7 @@ defmodule SongmateWeb.Router do
 
   defp check_provider_token(conn, _params) do
     if Spotify.Authentication.tokens_present?(conn) do
+      {:ok, conn} = Spotify.Authentication.refresh(conn)
       conn
     else
       redirect(conn, to: "/authorize")
@@ -22,46 +23,31 @@ defmodule SongmateWeb.Router do
   end
 
   defp put_current_user(conn, _params) do
-    user = case Accounts.get_user_by_token(conn.cookies["spotify_access_token"]) do
-      nil ->
-        {:ok, conn} = Spotify.Authentication.refresh(conn)
-        user_attrs = SpotifyService.fetch_user_info(conn)
-
-        case Accounts.get_user_by_username(user_attrs[:username]) do
-          nil ->
-            IO.puts("[DEBUG] new token: #{conn.cookies["spotify_access_token"]}}")
-            {:ok, user} = Accounts.create_user(
-              %{
-                name: user_attrs[:display_name],
-                avatar: user_attrs[:avatar_url],
-                credential: %{
-                  token: conn.cookies["spotify_access_token"],
-                  email: user_attrs[:email],
-                  username: user_attrs[:username],
-                  provider: :spotify
-                }
-              }
-            )
-            user
-          user ->
-            IO.puts("[DEBUG] valid through username, token: #{user.credential.token}}")
-            {:ok, _} = Accounts.update_credential(
-              user.credential,
-              %{token: conn.cookies["spotify_access_token"]}
-            )
-            user
-        end
-      user ->
-        {:ok, conn} = Spotify.Authentication.refresh(conn)
-        {:ok, _} = Accounts.update_credential(
-          user.credential,
-          %{token: conn.cookies["spotify_access_token"]}
+    user_attrs = SpotifyService.fetch_user_info(conn)
+    current_user = conn.assigns[:current_user]
+    # if current user and matches that from API, then do nothing
+    # else if credential exists in DB, assign existing user to current user
+    # else if new attributes, create record and assign to current user
+    cond do
+      current_user && current_user.credential.username == user_attrs[:username] ->
+        conn
+      user = Accounts.get_user_by_username(user_attrs[:username]) ->
+        assign(conn, :current_user, user)
+      true ->
+        {:ok, user} = Accounts.create_user(
+          %{
+            name: user_attrs[:display_name],
+            avatar: user_attrs[:avatar_url],
+            credential: %{
+              token: conn.cookies["spotify_access_token"],
+              email: user_attrs[:email],
+              username: user_attrs[:username],
+              provider: :spotify
+            }
+          }
         )
-        IO.puts("[DEBUG] valid through token: #{user.credential.token}}")
-        user
+        assign(conn, :current_user, user)
     end
-
-    assign(conn, :current_user, user)
   end
 
   defp put_user_token(conn, _params) do
