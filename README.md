@@ -1,5 +1,19 @@
 # Songmate - Find your soulmate through songs!
 
+## Setup
+
+* Create `config/secret.exs` with following content
+
+```elixir
+use Mix.Config
+```
+
+* Install depedencies
+
+```bash
+$ mix deps.get
+```
+
 ## Roadmap
 
 ### Database Schema Redesign

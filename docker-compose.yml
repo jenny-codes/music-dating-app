@@ -1,0 +1,25 @@
+---
+version: "3.8"
+services:
+  app:
+    build:
+      context:
+        .
+    environment:
+      DATABASE_URL: postgresql
+    volumes:
+      - .:/app
+    command: /bin/sh -c "mix phx.server"
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:12.3
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      MYSQL_DATABASE: spotumwise_dev
+    ports:
+      - 5432:5432
