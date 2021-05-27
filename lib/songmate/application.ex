@@ -10,6 +10,8 @@ defmodule Songmate.Application do
     children = [
       # Start the Ecto repository
       Songmate.Repo,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: Songmate.PubSub},
       # Start the endpoint when the application starts
       SongmateWeb.Endpoint
       # Starts a worker by calling: Songmate.Worker.start_link(arg)

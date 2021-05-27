@@ -15,7 +15,7 @@ config :songmate, SongmateWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "dMQSUfyVJZ1LxrMmblOwdBWucdA+pJpztcC/FTQBbmAtgX0ABueTHGxr+dnj6zov",
   render_errors: [view: SongmateWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Songmate.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: Songmate.PubSub,
   live_view: [signing_salt: "HPVqdshP"]
 
 # Configures Elixir's Logger
