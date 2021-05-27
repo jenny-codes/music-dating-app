@@ -12,7 +12,6 @@ config :songmate,
 
 # Configures the endpoint
 config :songmate, SongmateWeb.Endpoint,
-  url: [host: "localhost"],
   secret_key_base: "dMQSUfyVJZ1LxrMmblOwdBWucdA+pJpztcC/FTQBbmAtgX0ABueTHGxr+dnj6zov",
   render_errors: [view: SongmateWeb.ErrorView, accepts: ~w(html json)],
   pubsub_server: Songmate.PubSub,
