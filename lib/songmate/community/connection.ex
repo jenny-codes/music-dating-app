@@ -12,7 +12,7 @@ defmodule Songmate.Community.Connection do
     many_to_many(:music_profiles, MusicProfile.Profile,
       join_through: ConnectionMusicProfile,
       join_keys: [connection_id: :id, music_profile_id: :id],
-      on_replace: :delete,
+      on_replace: :delete
     )
 
     timestamps()

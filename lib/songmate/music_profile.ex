@@ -69,10 +69,7 @@ defmodule Songmate.MusicProfile do
         {:ok, profile} = %Profile{}
                          |> Profile.changeset(attrs)
                          |> Ecto.Changeset.put_assoc(:user, attrs[:user])
-                         |> Repo.insert(
-                              on_conflict: :replace_all,
-                              conflict_target: [{:music_profile_id, :artist_id}, {:music_profile_id, :rank}]
-                            )
+                         |> Repo.insert()
         profile
       profile -> profile
     end

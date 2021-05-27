@@ -3,7 +3,8 @@
 @import "./phoenix.css";
 
 body{
-	background: lightyellow;
+	/* background: lightyellow; */
+	background: lightcoral;
 	color: black;
 	text-align: center;
 	padding: 0px;

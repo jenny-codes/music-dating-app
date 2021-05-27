@@ -5,7 +5,7 @@
   <tbody>
 <%= for {rank, name, _score} <- @top_matches do %>
     <tr>
-      <td><%= rank %></td>
+      <td><%= rank - 1 %></td>
       <td><%= name %></td>
     </tr>
 <% end %>

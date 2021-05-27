@@ -19,17 +19,25 @@ defmodule SongmateWeb.PageController do
   def index(conn, _params) do
     {user, profile} = build_current_profile(conn)
 
+    user_prefs = %{
+      top_tracks: profile.track_preferences |> Enum.map(&(&1.track.name)),
+      top_artists: profile.artist_preferences |> Enum.map(&(&1.artist.name)),
+      top_genres: profile.genre_preferences |> Enum.map(&(&1.genre.name)),
+    }
+
+    Accounts.update_user(user, %{
+      top_tracks: user_prefs[:top_tracks],
+      top_artists: user_prefs[:top_artists]
+    })
+
     render(
       conn,
       "index.html",
       name: user.name,
-      top_tracks: profile.track_preferences
-                  |> Enum.map(&(&1.track.name)),
-      top_artists: profile.artist_preferences
-                   |> Enum.map(&(&1.artist.name)),
-      top_genres: profile.genre_preferences
-                  |> Enum.map(&(&1.genre.name)),
-      top_matches: []
+      top_tracks: user_prefs[:top_tracks],
+      top_artists: user_prefs[:top_artists],
+      top_genres: user_prefs[:top_genres],
+      top_matches: Accounts.User.build_user_connections(user_prefs)
     )
   end
 
@@ -63,7 +71,7 @@ defmodule SongmateWeb.PageController do
                   genre_preferences: build_preferences(:genre, tops[:genres])
                 }
               )
-              |> Repo.preload([[artist_preferences: :artist], [track_preferences: :track], [genre_preferences: :genre]])
+              |> Repo.preload([[artist_preferences: :artist], [track_preferences: [track: :artists]], [genre_preferences: :genre]])
 
     {user, profile}
   end

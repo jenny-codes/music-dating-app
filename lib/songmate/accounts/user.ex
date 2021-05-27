@@ -34,22 +34,20 @@ defmodule Songmate.Accounts.User do
   @artist_score 5
   @genre_score 2
 
-  def match_score(user1, user2) do
-    user1_tops = [
-      tracks: user1.top_tracks |> MapSet.new(),
-      artists: user1.top_artists |> MapSet.new(),
-      genres: user1.genres |> MapSet.new()
-    ]
+  def match_score(user1_prefs, user2) do
+    legacy_top_tracks = (user2.top_tracks || [])
+      |> Enum.map(fn t -> Regex.run(~r/.*(?= by )/, t) || [t] |> Enum.at(0) end)
+
 
     user2_tops = [
-      tracks: user2.top_tracks |> MapSet.new(),
-      artists: user2.top_artists |> MapSet.new(),
-      genres: user2.genres |> MapSet.new()
+      tracks: legacy_top_tracks |> MapSet.new(),
+      artists: (user2.top_artists || []) |> MapSet.new(),
+      genres: (user2.genres || []) |> MapSet.new()
     ]
 
-    shared_tracks = MapSet.intersection(user1_tops[:tracks], user2_tops[:tracks])
-    shared_artists = MapSet.intersection(user1_tops[:artists], user2_tops[:artists])
-    shared_genres = MapSet.intersection(user1_tops[:genres], user2_tops[:genres])
+    shared_tracks = MapSet.intersection(user1_prefs[:top_tracks] |> MapSet.new(), user2_tops[:tracks])
+    shared_artists = MapSet.intersection(user1_prefs[:top_artists] |> MapSet.new(), user2_tops[:artists])
+    shared_genres = MapSet.intersection(user1_prefs[:top_genres] |> MapSet.new(), user2_tops[:genres])
 
     Enum.count(shared_tracks) * @track_score +
       Enum.count(shared_artists) * @artist_score +
@@ -63,15 +61,12 @@ defmodule Songmate.Accounts.User do
 
     Repo.all(User)
     |> Enum.map(fn user2 ->
-      case user2 do
-        ^user -> nil
-        user2 -> {user2.name, match_score(user, user2)}
-      end
+        {user2.name, match_score(user, user2)}
     end)
     |> Enum.reject(&is_nil(&1))
     |> Enum.sort_by(&elem(&1, 1), &>=/2)
     |> Enum.with_index(1)
-    |> Enum.take(3)
+    |> Enum.slice(1..3)
     |> Enum.map(format_result)
   end
 end
