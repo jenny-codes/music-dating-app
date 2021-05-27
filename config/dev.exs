@@ -4,7 +4,7 @@ use Mix.Config
 config :songmate, Songmate.Repo,
   username: "postgres",
   password: "postgres",
-  database: "spotumwise_dev",
+  database: "songmate_dev",
   hostname: System.get_env("DATABASE_URL") || "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

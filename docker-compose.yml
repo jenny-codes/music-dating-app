@@ -20,6 +20,6 @@ services:
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: postgres
-      MYSQL_DATABASE: spotumwise_dev
+      MYSQL_DATABASE: songmate_dev
     ports:
       - 5432:5432

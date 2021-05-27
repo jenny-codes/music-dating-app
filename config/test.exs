@@ -4,7 +4,7 @@ use Mix.Config
 config :songmate, Songmate.Repo,
   username: "postgres",
   password: "postgres",
-  database: "spotumwise_test",
+  database: "songmate_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
