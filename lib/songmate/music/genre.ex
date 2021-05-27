@@ -27,8 +27,4 @@ defmodule Songmate.Music.Genre do
     genre_names = Enum.map(genres, & &1.name)
     Repo.all(from(g in Genre, where: g.name in ^genre_names))
   end
-
-  def get_or_create_by!(attr_name, attrs) do
-    Repo.get_by(Genre, [{attr_name, attrs[attr_name]}]) || Repo.insert!(Genre.changeset(%Genre{}, attrs))
-  end
 end

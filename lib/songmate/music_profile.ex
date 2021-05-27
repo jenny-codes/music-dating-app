@@ -185,7 +185,7 @@ defmodule Songmate.MusicProfile do
   def create_artist_preferences_for_profile(profile, []), do: profile
   def create_artist_preferences_for_profile(profile, prefs) do
     build_artist_attr = fn pref ->
-      %{pref | artist: Artist.get_or_create_by!(:spotify_id, pref[:artist])}
+      %{pref | artist: Repo.get_or_create_by!(Artist, :spotify_id, pref[:artist])}
     end
 
     add_profile_attr = fn pref ->
@@ -300,7 +300,7 @@ defmodule Songmate.MusicProfile do
   def create_track_preferences_for_profile(profile, []), do: profile
   def create_track_preferences_for_profile(profile, prefs) do
     build_track_attr = fn pref ->
-      %{pref | track: Track.get_or_create_by!(:spotify_id, pref[:track])}
+      %{pref | track: Repo.get_or_create_by!(Track, [:isrc, :spotify_id], pref[:track])}
     end
 
     add_profile_attr = fn pref ->
@@ -415,7 +415,7 @@ defmodule Songmate.MusicProfile do
   def create_genre_preferences_for_profile(profile, []), do: profile
   def create_genre_preferences_for_profile(profile, prefs) do
     build_genre_attr = fn pref ->
-      %{pref | genre: Genre.get_or_create_by!(:name, pref[:genre])}
+      %{pref | genre: Repo.get_or_create_by!(Genre, :name, pref[:genre])}
     end
 
     add_profile_attr = fn pref ->

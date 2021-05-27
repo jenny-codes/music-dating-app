@@ -2,8 +2,7 @@ defmodule Songmate.Music.Track do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Songmate.Music.{Artist, Track}
-  alias Songmate.Repo
+  alias Songmate.Music.Artist
 
   schema "tracks" do
     field :isrc, :string
@@ -21,9 +20,5 @@ defmodule Songmate.Music.Track do
     |> validate_required([:spotify_id, :name])
     |> unique_constraint(:spotify_id)
     |> unique_constraint(:isrc)
-  end
-
-  def get_or_create_by!(attr_name, attrs) do
-    Repo.get_by(Track, [{attr_name, attrs[attr_name]}]) || Repo.insert!(Track.changeset(%Track{}, attrs))
   end
 end
