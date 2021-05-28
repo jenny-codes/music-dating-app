@@ -4,7 +4,7 @@ defmodule Songmate.Accounts.User do
 
   alias Songmate.Accounts.{User, Credential}
   alias Songmate.Music.{Artist, Track, Genre}
-  alias Songmate.MusicProfile.{ArtistPreference, TrackPreference, GenrePreference}
+  alias Songmate.MusicPreferences.{ArtistPreference, TrackPreference, GenrePreference}
   alias Songmate.Repo
 
   schema "users" do

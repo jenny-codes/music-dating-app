@@ -1,4 +1,4 @@
-defmodule Songmate.MusicProfile.ArtistPreference do
+defmodule Songmate.MusicPreferences.ArtistPreference do
   use Ecto.Schema
   import Ecto.Changeset
 

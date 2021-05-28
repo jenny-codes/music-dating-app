@@ -2,10 +2,10 @@ defmodule SongmateWeb.PageController do
   use SongmateWeb, :controller
   alias Songmate.Repo
   alias Songmate.Accounts
-  alias Songmate.MusicProfile
+  alias Songmate.MusicPreferences
 
   def index(conn, _params) do
-    user = conn.assigns.current_user |> build_music_profile(conn)
+    user = conn.assigns.current_user |> build_music_preference(conn)
 
     user_prefs = %{
       top_tracks: user.track_preferences |> Enum.map(& &1.track.name),
@@ -30,10 +30,10 @@ defmodule SongmateWeb.PageController do
   # 2. artists & tracks & genres
   # 3. artists & tracks & genres preferences
   # """
-  defp build_music_profile(user, conn) do
+  defp build_music_preference(user, conn) do
     tops = SpotifyService.fetch_tops(conn)
 
-    MusicProfile.create_music_profile(user, %{
+    MusicPreferences.create_music_preference(user, %{
       artist_preferences: build_preferences(:artist, tops[:artists]),
       track_preferences: build_preferences(:track, tops[:tracks]),
       genre_preferences: build_preferences(:genre, tops[:genres])

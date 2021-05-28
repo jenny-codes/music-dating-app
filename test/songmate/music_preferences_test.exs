@@ -1,8 +1,8 @@
-defmodule Songmate.MusicProfileTest do
+defmodule Songmate.MusicPreferencesTest do
   use Songmate.DataCase
 
-  alias Songmate.MusicProfile
-  alias Songmate.MusicProfile.{ArtistPreference, TrackPreference, GenrePreference}
+  alias Songmate.MusicPreferences
+  alias Songmate.MusicPreferences.{ArtistPreference, TrackPreference, GenrePreference}
   alias Songmate.Music.{Artist, Track, Genre}
 
   def user_fixture(attrs \\ %{}) do
@@ -14,19 +14,20 @@ defmodule Songmate.MusicProfileTest do
     Repo.preload(user, :credential)
   end
 
-  describe "create_music_profile/1 " do
+  describe "create_music_preference/1 " do
     test "nothing happens with no preferences given" do
       user = user_fixture()
+      expected_result = %{artist_preferences: [], genre_preferences: [], track_preferences: []}
 
-      result_user = MusicProfile.create_music_profile(user, %{})
+      result_prefs = MusicPreferences.create_music_preference(user, %{})
 
-      assert result_user == user
+      assert result_prefs == expected_result
     end
 
     test "with artists preference associations creates associations" do
       user = user_fixture()
 
-      MusicProfile.create_music_profile(user, %{
+      MusicPreferences.create_music_preference(user, %{
         artist_preferences: [
           %{
             rank: 1,
@@ -47,7 +48,7 @@ defmodule Songmate.MusicProfileTest do
     test "with track preference associations creates associations" do
       user = user_fixture()
 
-      MusicProfile.create_music_profile(user, %{
+      MusicPreferences.create_music_preference(user, %{
         track_preferences: [
           %{
             rank: 1,
@@ -68,7 +69,7 @@ defmodule Songmate.MusicProfileTest do
     test "with genre preference associations creates associations" do
       user = user_fixture()
 
-      MusicProfile.create_music_profile(user, %{
+      MusicPreferences.create_music_preference(user, %{
         genre_preferences: [
           %{
             rank: 1,
@@ -91,7 +92,7 @@ defmodule Songmate.MusicProfileTest do
     test "delete User deletes associated preferences" do
       user = user_fixture()
 
-      MusicPreference.create_music_preference(user, %{
+      MusicPreferences.create_music_preference(user, %{
         artist_preferences: [
           %{
             rank: 1,
@@ -123,7 +124,7 @@ defmodule Songmate.MusicProfileTest do
       user = user_fixture()
 
       prefs =
-        MusicPreference.create_music_preference(user, %{
+        MusicPreferences.create_music_preference(user, %{
           artist_preferences: [
             %{
               rank: 1,

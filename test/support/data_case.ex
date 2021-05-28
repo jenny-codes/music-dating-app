@@ -115,7 +115,7 @@ defmodule Songmate.DataCase do
   end
 
   # -----------------------------------------------------------------------
-  # MusicProfile
+  # MusicPreferences
 
   def valid_artist_preference_attrs do
     %{

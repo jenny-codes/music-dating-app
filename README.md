@@ -24,7 +24,7 @@ $ mix deps.get
 - [x] Build new table relations.
   - [x] Accounts
   - [x] Music
-  - [x] MusicProfile
+  - [x] MusicPreferences
   - [x] Community
 - [x] Build join table behaviors.
 - [ ] Migrate existing data.
@@ -82,11 +82,11 @@ $ mix deps.get
   - name
   - many_to_many artists
 
-- MusicProfile.TrackPreference
+- MusicPreference.TrackPreference
   - rank
   * belongs_to user_profile
   * belongs_to track
-- MusicProfile.ArtistPreference
+- MusicPreferences.ArtistPreference
   - rank
   * belongs_to user_profile
   * belongs_to artist

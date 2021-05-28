@@ -140,9 +140,9 @@ Music.create_track(%{
 })
 
 # --------------------------------------------------------
-# MusicProfile
+# MusicPreferences
 user = Songmate.Repo.all(Songmate.Accounts.User) |> List.first
-Songmate.MusicProfile.create_music_profile(user, %{
+Songmate.MusicPreferences.create_music_preference(user, %{
   artist_preferences: [
     %{artist: %{spotify_id: "5BvJzeQpmsdsFp4HGUYUEx", name: "Vampire Weekend"}, rank: 1},
     %{artist: %{spotify_id: "5nCi3BB41mBaMH9gfr6Su0", name: "fun."}, rank: 3}

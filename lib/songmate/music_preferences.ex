@@ -1,24 +1,25 @@
-defmodule Songmate.MusicProfile do
+defmodule Songmate.MusicPreferences do
   @moduledoc """
-  The MusicProfile context.
+  The MusicPreferences context.
   """
 
   import Ecto.Query, warn: false
   alias Songmate.Repo
 
-  alias Songmate.MusicProfile.{ArtistPreference, TrackPreference, GenrePreference}
+  alias Songmate.MusicPreferences.{ArtistPreference, TrackPreference, GenrePreference}
   alias Songmate.Music.{Artist, Track, Genre}
   alias Songmate.Accounts.User
 
-  def create_music_profile(user, attrs \\ %{}) do
-    batch_create_artist_preferences!(user, attrs[:artist_preferences])
-    batch_create_track_preferences!(user, attrs[:track_preferences])
-    batch_create_genre_preferences!(user, attrs[:genre_preferences])
+  def create_music_preference(user, attrs \\ %{}) do
+    %{
+      artist_preferences: batch_create_artist_preferences!(user, attrs[:artist_preferences]),
+      track_preferences: batch_create_track_preferences!(user, attrs[:track_preferences]),
+      genre_preferences: batch_create_genre_preferences!(user, attrs[:genre_preferences])
+    }
   end
 
-  @spec batch_create_artist_preferences!(User.t(), []) :: any
-  def batch_create_artist_preferences!(user, nil), do: user
-  def batch_create_artist_preferences!(user, []), do: user
+  @spec batch_create_artist_preferences!(User.t(), [] | nil) :: any
+  def batch_create_artist_preferences!(_user, nil), do: []
 
   def batch_create_artist_preferences!(user, prefs) do
     build_artist_attr = fn pref ->
@@ -36,8 +37,7 @@ defmodule Songmate.MusicProfile do
     |> Enum.map(&create_artist_preference!/1)
   end
 
-  def batch_create_track_preferences!(user, nil), do: user
-  def batch_create_track_preferences!(user, []), do: user
+  def batch_create_track_preferences!(_user, nil), do: []
 
   def batch_create_track_preferences!(user, prefs) do
     build_track_attr = fn pref ->
@@ -61,8 +61,7 @@ defmodule Songmate.MusicProfile do
     |> Enum.map(&create_track_preference!/1)
   end
 
-  def batch_create_genre_preferences!(user, nil), do: user
-  def batch_create_genre_preferences!(user, []), do: user
+  def batch_create_genre_preferences!(_user, nil), do: []
 
   def batch_create_genre_preferences!(user, prefs) do
     build_genre_attr = fn pref ->
@@ -78,10 +77,6 @@ defmodule Songmate.MusicProfile do
     |> Enum.map(build_genre_attr)
     |> Enum.map(add_user_attr)
     |> Enum.map(&create_genre_preference!/1)
-  end
-
-  def delete_artist_preference(%ArtistPreference{} = artist_preference) do
-    Repo.delete(artist_preference)
   end
 
   def create_artist_preference!(attrs \\ %{}) do
