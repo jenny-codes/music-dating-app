@@ -1,2 +1,2 @@
 import EctoEnum
-defenum CredentialProviderEnum, :provider, [:spotify]
+defenum(CredentialProviderEnum, :provider, [:spotify])

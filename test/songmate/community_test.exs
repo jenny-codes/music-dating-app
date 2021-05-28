@@ -37,6 +37,7 @@ defmodule Songmate.CommunityTest do
           %{user: valid_2nd_user_attrs()}
         ]
       }
+
       assert {:ok, %Connection{} = connection} = Community.create_connection(attrs)
       connection = Repo.preload(connection, music_profiles: [:user])
       assert connection.score == 100
@@ -49,7 +50,10 @@ defmodule Songmate.CommunityTest do
 
     test "update_connection/2 with valid data updates the connection" do
       connection = connection_fixture()
-      assert {:ok, %Connection{} = connection} = Community.update_connection(connection, @update_attrs)
+
+      assert {:ok, %Connection{} = connection} =
+               Community.update_connection(connection, @update_attrs)
+
       assert connection.score == 43
       assert connection.shared_preferences == %{}
     end

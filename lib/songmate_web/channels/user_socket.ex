@@ -2,7 +2,7 @@ defmodule SongmateWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-   channel "room:*", SongmateWeb.RoomChannel
+  channel("room:*", SongmateWeb.RoomChannel)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
@@ -18,9 +18,10 @@ defmodule SongmateWeb.UserSocket do
 
   def connect(%{"token" => token}, socket, _connect_info) do
     # 1209600 seconds is two weeks
-    case Phoenix.Token.verify(socket, "user socket", token, max_age: 1209600) do
+    case Phoenix.Token.verify(socket, "user socket", token, max_age: 1_209_600) do
       {:ok, user_id} ->
         {:ok, assign(socket, :user_id, user_id)}
+
       {:error, reason} ->
         :error
     end

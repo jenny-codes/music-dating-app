@@ -3,14 +3,14 @@ defmodule SongmateWeb.Router do
   alias Songmate.Accounts
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :check_provider_token
-    plug :put_current_user
-    plug :put_user_token
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:check_provider_token)
+    plug(:put_current_user)
+    plug(:put_user_token)
   end
 
   defp check_provider_token(conn, _params) do
@@ -31,11 +31,13 @@ defmodule SongmateWeb.Router do
     cond do
       current_user && current_user.credential.username == user_attrs[:username] ->
         conn
+
       user = Accounts.get_user_by_username(user_attrs[:username]) ->
         assign(conn, :current_user, user)
+
       true ->
-        {:ok, user} = Accounts.create_user(
-          %{
+        {:ok, user} =
+          Accounts.create_user(%{
             name: user_attrs[:display_name],
             avatar: user_attrs[:avatar_url],
             credential: %{
@@ -44,8 +46,8 @@ defmodule SongmateWeb.Router do
               username: user_attrs[:username],
               provider: :spotify
             }
-          }
-        )
+          })
+
         assign(conn, :current_user, user)
     end
   end
@@ -60,19 +62,19 @@ defmodule SongmateWeb.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", SongmateWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :index
-    get "/authorize", UserController, :authorize
-    get "/authenticate", UserController, :authenticate
-    get "/info", PageController, :info
-    get "/login", PageController, :login
-    get "/music", PageController, :music
-    get "/chat", PageController, :chat
+    get("/", PageController, :index)
+    get("/authorize", UserController, :authorize)
+    get("/authenticate", UserController, :authenticate)
+    get("/info", PageController, :info)
+    get("/login", PageController, :login)
+    get("/music", PageController, :music)
+    get("/chat", PageController, :chat)
   end
 
   # Other scopes may use custom stacks.

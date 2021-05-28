@@ -16,6 +16,7 @@ defmodule Songmate.MusicTest do
         attrs
         |> Enum.into(valid_track_attrs())
         |> Music.create_track()
+
       track
     end
 
@@ -39,13 +40,11 @@ defmodule Songmate.MusicTest do
 
     test "create_track/1 creates associated artists" do
       track =
-        track_fixture(
-          %{
-            artists: [
-              %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
-            ]
-          }
-        )
+        track_fixture(%{
+          artists: [
+            %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
+          ]
+        })
 
       track = Repo.preload(track, :artists)
 
@@ -70,21 +69,22 @@ defmodule Songmate.MusicTest do
 
     test "update_track/2 with artists updates the association" do
       track =
-        track_fixture(
-          %{
-            artists: [
-              %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
-            ]
-          }
-        )
-      assert {:ok, %Track{artists: [artist]}} = Music.update_track(
-               track,
-               %{
-                 artists: [
-                   %{name: "Updated Artist", spotify_id: "updated-spotify-id"}
-                 ]
-               }
-             )
+        track_fixture(%{
+          artists: [
+            %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
+          ]
+        })
+
+      assert {:ok, %Track{artists: [artist]}} =
+               Music.update_track(
+                 track,
+                 %{
+                   artists: [
+                     %{name: "Updated Artist", spotify_id: "updated-spotify-id"}
+                   ]
+                 }
+               )
+
       assert artist.id
       assert artist.name == "Updated Artist"
       assert artist.spotify_id == "updated-spotify-id"
@@ -103,15 +103,17 @@ defmodule Songmate.MusicTest do
     end
 
     test "delete_track/1 does not delete associated artists" do
-      track = track_fixture(
-        %{
+      track =
+        track_fixture(%{
           artists: [
             %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
           ]
-        }
-      )
-      artist = track.artists
-               |> List.first
+        })
+
+      artist =
+        track.artists
+        |> List.first()
+
       Music.delete_track(track)
 
       assert Music.get_artist!(artist.id)
@@ -159,13 +161,11 @@ defmodule Songmate.MusicTest do
 
     test "create_artist/1 creates associated genres" do
       artist =
-        artist_fixture(
-          %{
-            genres: [
-              %{name: "Taiwanese Pop"}
-            ]
-          }
-        )
+        artist_fixture(%{
+          genres: [
+            %{name: "Taiwanese Pop"}
+          ]
+        })
 
       artist = Repo.preload(artist, :genres)
 
@@ -187,13 +187,11 @@ defmodule Songmate.MusicTest do
 
     test "update_artist/2 updates the associated genres" do
       artist =
-        artist_fixture(
-          %{
-            genres: [
-              %{name: "Taiwanese Pop"}
-            ]
-          }
-        )
+        artist_fixture(%{
+          genres: [
+            %{name: "Taiwanese Pop"}
+          ]
+        })
 
       {:ok, updated_artist} = Music.update_artist(artist, %{genres: [%{name: "Jazz"}]})
 

@@ -44,12 +44,15 @@ defmodule SpotifyService do
       isrc: track.external_ids["isrc"],
       spotify_id: track.id,
       popularity: track.popularity,
-      artists: track.artists
-               |> Enum.map(fn artist -> %{name: artist["name"], spotify_id: artist["spotify_id"]} end)
+      artists:
+        track.artists
+        |> Enum.map(fn artist -> %{name: artist["name"], spotify_id: artist["spotify_id"]} end)
     }
   end
 
-  @spec fetch_top_artists(%{__struct__: Plug.Conn | Spotify.Credentials}) :: [Songmate.Music.Artist]
+  @spec fetch_top_artists(%{__struct__: Plug.Conn | Spotify.Credentials}) :: [
+          Songmate.Music.Artist
+        ]
   def fetch_top_artists(conn) do
     {:ok, %{items: artists}} =
       Spotify.Personalization.top_artists(conn, limit: 50, time_range: "medium_term")
@@ -62,8 +65,9 @@ defmodule SpotifyService do
       name: artist.name,
       spotify_id: artist.id,
       popularity: artist.popularity,
-      genres: artist.genres
-              |> Enum.map(&format_genre_attrs/1)
+      genres:
+        artist.genres
+        |> Enum.map(&format_genre_attrs/1)
     }
   end
 

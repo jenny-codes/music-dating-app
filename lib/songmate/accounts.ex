@@ -15,28 +15,32 @@ defmodule Songmate.Accounts do
   end
 
   def get_user!(id),
-      do: Repo.get!(User, id)
-          |> Repo.preload(:credential)
+    do:
+      Repo.get!(User, id)
+      |> Repo.preload(:credential)
 
   def get_user_by_username(value) do
-    case Repo.get_by(Credential, [provider: :spotify, username: value]) do
-      nil -> nil
+    case Repo.get_by(Credential, provider: :spotify, username: value) do
+      nil ->
+        nil
+
       credential ->
         credential
         |> Repo.preload(:user)
-        |> fn credential -> credential.user end.()
+        |> (fn credential -> credential.user end).()
         |> Repo.preload(:credential)
     end
   end
 
   def get_user_by_token(token) do
-    case Repo.get_by(Credential, [provider: :spotify, token: token]) do
+    case Repo.get_by(Credential, provider: :spotify, token: token) do
       nil ->
         nil
+
       credential ->
         credential
         |> Repo.preload(:user)
-        |> fn credential -> credential.user end.()
+        |> (fn credential -> credential.user end).()
         |> Repo.preload(:credential)
     end
   end
@@ -92,8 +96,9 @@ defmodule Songmate.Accounts do
 
   """
   def get_credential!(id),
-      do: Repo.get!(Credential, id)
-          |> Repo.preload(:user)
+    do:
+      Repo.get!(Credential, id)
+      |> Repo.preload(:user)
 
   @doc """
   Creates a credential.

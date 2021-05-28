@@ -9,25 +9,34 @@ defmodule Songmate.Music do
 
   def find_or_create_by(:artist, attr, attrs) do
     case Repo.get_by(Artist, attr, attrs[attr]) do
-      nil -> {:ok, artist} = create_artist(attrs)
-             artist
-      artist -> artist
+      nil ->
+        {:ok, artist} = create_artist(attrs)
+        artist
+
+      artist ->
+        artist
     end
   end
 
   def find_or_create_by(:track, attr, attrs) do
     case Repo.get_by(Track, attr, attrs[attr]) do
-      nil -> {:ok, track} = create_track(attrs)
-             track
-      track -> track
+      nil ->
+        {:ok, track} = create_track(attrs)
+        track
+
+      track ->
+        track
     end
   end
 
   def find_or_create_by(:genre, attr, attrs) do
     case Repo.get_by(Genre, attr, attrs[attr]) do
-      nil -> {:ok, genre} = create_genre(attrs)
-             genre
-      genre -> genre
+      nil ->
+        {:ok, genre} = create_genre(attrs)
+        genre
+
+      genre ->
+        genre
     end
   end
 
@@ -73,13 +82,14 @@ defmodule Songmate.Music do
 
   """
   def create_track(attrs \\ %{}) do
-    changeset = if attrs[:artists] do
-      %Track{}
-      |> Track.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:artists, Artist.insert_and_get_all(attrs[:artists]))
-    else
-      Track.changeset(%Track{}, attrs)
-    end
+    changeset =
+      if attrs[:artists] do
+        %Track{}
+        |> Track.changeset(attrs)
+        |> Ecto.Changeset.put_assoc(:artists, Artist.insert_and_get_all(attrs[:artists]))
+      else
+        Track.changeset(%Track{}, attrs)
+      end
 
     Repo.insert(changeset)
   end
@@ -97,14 +107,15 @@ defmodule Songmate.Music do
 
   """
   def update_track(%Track{} = track, attrs) do
-    changeset = if attrs[:artists] do
-      track
-      |> Repo.preload(:artists)
-      |> Track.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:artists, Artist.insert_and_get_all(attrs[:artists]))
-    else
-      Track.changeset(track, attrs)
-    end
+    changeset =
+      if attrs[:artists] do
+        track
+        |> Repo.preload(:artists)
+        |> Track.changeset(attrs)
+        |> Ecto.Changeset.put_assoc(:artists, Artist.insert_and_get_all(attrs[:artists]))
+      else
+        Track.changeset(track, attrs)
+      end
 
     Repo.update(changeset)
   end
@@ -182,13 +193,14 @@ defmodule Songmate.Music do
 
   """
   def create_artist(attrs \\ %{}) do
-    changeset = if attrs[:genres] do
-      %Artist{}
-      |> Artist.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:genres, Genre.insert_and_get_all(attrs[:genres]))
-    else
-      Artist.changeset(%Artist{}, attrs)
-    end
+    changeset =
+      if attrs[:genres] do
+        %Artist{}
+        |> Artist.changeset(attrs)
+        |> Ecto.Changeset.put_assoc(:genres, Genre.insert_and_get_all(attrs[:genres]))
+      else
+        Artist.changeset(%Artist{}, attrs)
+      end
 
     Repo.insert(changeset)
   end
@@ -206,14 +218,15 @@ defmodule Songmate.Music do
 
   """
   def update_artist(%Artist{} = artist, attrs) do
-    changeset = if attrs[:genres] do
-      artist
-      |> Repo.preload(:genres)
-      |> Artist.changeset(attrs)
-      |> Ecto.Changeset.put_assoc(:genres, Genre.insert_and_get_all(attrs[:genres]))
-    else
-      Artist.changeset(artist, attrs)
-    end
+    changeset =
+      if attrs[:genres] do
+        artist
+        |> Repo.preload(:genres)
+        |> Artist.changeset(attrs)
+        |> Ecto.Changeset.put_assoc(:genres, Genre.insert_and_get_all(attrs[:genres]))
+      else
+        Artist.changeset(artist, attrs)
+      end
 
     Repo.update(changeset)
   end

@@ -41,6 +41,7 @@ defmodule Songmate.AccountsTest do
           token: "existing token"
         }
       )
+
       user = Accounts.get_user_by_token("existing token")
 
       assert length(Repo.all(Accounts.Credential)) == 1

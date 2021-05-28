@@ -5,11 +5,11 @@ defmodule Songmate.Accounts.Credential do
   alias Songmate.Accounts.User
 
   schema "credentials" do
-    field :provider, CredentialProviderEnum
-    field :email, :string
-    field :expires_at, :utc_datetime
-    field :token, :string
-    field :username, :string
+    field(:provider, CredentialProviderEnum)
+    field(:email, :string)
+    field(:expires_at, :utc_datetime)
+    field(:token, :string)
+    field(:username, :string)
 
     belongs_to(:user, User)
 

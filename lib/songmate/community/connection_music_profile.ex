@@ -6,8 +6,8 @@ defmodule Songmate.Community.ConnectionMusicProfile do
   alias Songmate.MusicProfile.Profile
 
   schema "connections_music_profiles" do
-    belongs_to :connection, Connection
-    belongs_to :music_profile, Profile
+    belongs_to(:connection, Connection)
+    belongs_to(:music_profile, Profile)
 
     timestamps()
   end
