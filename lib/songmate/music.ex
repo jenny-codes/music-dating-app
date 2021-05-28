@@ -7,6 +7,9 @@ defmodule Songmate.Music do
   alias Songmate.Repo
   alias Songmate.Music.{Track, Genre, Artist}
 
+  def batch_get_or_insert_artists(attrs) do
+  end
+
   def find_or_create_by(:artist, attr, attrs) do
     case Repo.get_by(Artist, attr, attrs[attr]) do
       nil ->

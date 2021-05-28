@@ -3,7 +3,8 @@ defmodule Songmate.Accounts.User do
   import Ecto.Changeset
 
   alias Songmate.Accounts.{User, Credential}
-  alias Songmate.MusicProfile
+  alias Songmate.Music.{Artist, Track, Genre}
+  alias Songmate.MusicProfile.{ArtistPreference, TrackPreference, GenrePreference}
   alias Songmate.Repo
 
   schema "users" do
@@ -11,13 +12,41 @@ defmodule Songmate.Accounts.User do
     field(:name, :string)
     field(:avatar, :string)
     field(:spotify_id, :string)
-    field(:fav_track, :string)
-    field(:top_tracks, {:array, :string})
-    field(:top_artists, {:array, :string})
-    field(:genres, {:array, :string})
 
     has_one(:credential, Credential)
-    has_one(:music_profile, MusicProfile.Profile)
+    has_many(:artist_preferences, ArtistPreference, foreign_key: :user_id)
+    has_many(:track_preferences, TrackPreference, foreign_key: :user_id)
+    has_many(:genre_preferences, GenrePreference, foreign_key: :user_id)
+
+    many_to_many(
+      :liked_artists,
+      Artist,
+      join_through: "artist_preferences",
+      join_keys: [
+        users_id: :id,
+        artist_id: :id
+      ]
+    )
+
+    many_to_many(
+      :liked_tracks,
+      Track,
+      join_through: "track_preferences",
+      join_keys: [
+        user_id: :id,
+        track_id: :id
+      ]
+    )
+
+    many_to_many(
+      :liked_genres,
+      Genre,
+      join_through: "genre_preferences",
+      join_keys: [
+        user_id: :id,
+        genre_id: :id
+      ]
+    )
 
     timestamps()
   end
@@ -29,11 +58,7 @@ defmodule Songmate.Accounts.User do
       :name,
       :bio,
       :avatar,
-      :spotify_id,
-      :fav_track,
-      :top_tracks,
-      :top_artists,
-      :genres
+      :spotify_id
     ])
     |> validate_required([:name])
     |> unique_constraint(:spotify_id)

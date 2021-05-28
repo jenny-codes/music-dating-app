@@ -3,12 +3,12 @@ defmodule Songmate.MusicProfile.ArtistPreference do
   import Ecto.Changeset
 
   alias Songmate.Music.Artist
-  alias Songmate.MusicProfile.Profile
+  alias Songmate.Accounts.User
 
   schema "artist_preferences" do
     field(:rank, :integer)
 
-    belongs_to(:music_profile, Profile)
+    belongs_to(:user, User)
     belongs_to(:artist, Artist)
 
     timestamps()
@@ -19,7 +19,7 @@ defmodule Songmate.MusicProfile.ArtistPreference do
     artist_preference
     |> cast(attrs, [:rank])
     |> validate_required([:rank])
-    |> unique_constraint([:music_profile_id, :artist_id])
-    |> unique_constraint([:music_profile_id, :rank])
+    |> unique_constraint([:user_id, :artist_id])
+    |> unique_constraint([:user_id, :rank])
   end
 end

@@ -12,7 +12,6 @@
 
 alias Songmate.Accounts
 alias Songmate.Music
-alias Songmate.MusicProfile
 
 # --------------------------------------------------------
 # Accounts
@@ -142,8 +141,8 @@ Music.create_track(%{
 
 # --------------------------------------------------------
 # MusicProfile
-MusicProfile.create_profile(%{
-  user: %{name: "Spotify Rocks"},
+user = Songmate.Repo.all(Songmate.Accounts.User) |> List.first
+Songmate.MusicProfile.create_music_profile(user, %{
   artist_preferences: [
     %{artist: %{spotify_id: "5BvJzeQpmsdsFp4HGUYUEx", name: "Vampire Weekend"}, rank: 1},
     %{artist: %{spotify_id: "5nCi3BB41mBaMH9gfr6Su0", name: "fun."}, rank: 3}

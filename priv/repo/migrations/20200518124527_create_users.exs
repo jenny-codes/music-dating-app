@@ -7,10 +7,6 @@ defmodule Songmate.Repo.Migrations.CreateUsers do
       add :bio, :text
       add :avatar, :string
       add :spotify_id, :string
-      add :fav_track, :string
-      add :top_tracks, {:array, :string}
-      add :top_artists, {:array, :string}
-      add :genres, {:array, :string}
 
       timestamps()
     end

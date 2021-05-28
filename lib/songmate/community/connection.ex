@@ -2,16 +2,16 @@ defmodule Songmate.Community.Connection do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Songmate.MusicProfile
-  alias Songmate.Community.ConnectionMusicProfile
+  alias Songmate.Accounts.User
+  alias Songmate.Community.UserConnection
 
   schema "connections" do
     field(:score, :integer)
     field(:shared_preferences, :map)
 
-    many_to_many(:music_profiles, MusicProfile.Profile,
-      join_through: ConnectionMusicProfile,
-      join_keys: [connection_id: :id, music_profile_id: :id],
+    many_to_many(:users, User,
+      join_through: UserConnection,
+      join_keys: [connection_id: :id, user_id: :id],
       on_replace: :delete
     )
 

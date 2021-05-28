@@ -41,28 +41,21 @@ $ mix deps.get
 - [ ] Chatroom
 
 ### Matching Algorithm
-- [ ] Reexamine existing weights on tracks, artists and genres.
+- [ ] Modulize
 - [ ] New dimensions: popularity.
 - [ ] New dimensions: track & artist rank.
 - [ ] New dimensions: Spotify track audio features.
 
 ## DB Schema
-### Legacy
-- User
-  - name
-  - bio
-  - top_matches
-  - top_tracks
-  - top_artists
-  - top_genres
-
-### New
 - Accounts.User
   - name:string
   - bio:text
   - avatar:string(of url)
   * has_one credential
-  * has_many connections
+  * many_to_many connections, through usersconnections
+  * many_to_many tracks, through track_preferences
+  * many_to_many artists, through artist_preferences
+  * many_to_many genres, through genre_preferences
 - Accounts.Crendential
   - provider:enum
   - email:string:unique
@@ -89,13 +82,6 @@ $ mix deps.get
   - name
   - many_to_many artists
 
-- MusicProfile.Profile
-  * belongs_to Accounts.user
-  * has_many track_preferences
-  * has_many artist_preferences
-  * has_many genre_preferences
-  * many_to_many tracks, through track_preferences
-  * many_to_many artists, through artists_preferences
 - MusicProfile.TrackPreference
   - rank
   * belongs_to user_profile

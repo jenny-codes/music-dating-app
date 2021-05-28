@@ -9,13 +9,13 @@ defmodule Songmate.Repo.Migrations.CreateConnections do
       timestamps()
     end
 
-    create table(:connections_music_profiles) do
+    create table(:users_connections) do
       add(:connection_id, references(:connections, on_delete: :delete_all, null: false))
-      add(:music_profile_id, references(:music_profiles, on_delete: :delete_all, null: false))
+      add(:user_id, references(:users, on_delete: :delete_all, null: false))
 
       timestamps()
     end
 
-    create(unique_index(:connections_music_profiles, [:connection_id, :music_profile_id]))
+    create(unique_index(:users_connections, [:connection_id, :user_id]))
   end
 end

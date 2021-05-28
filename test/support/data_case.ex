@@ -117,15 +117,24 @@ defmodule Songmate.DataCase do
   # -----------------------------------------------------------------------
   # MusicProfile
 
-  def valid_music_profile_attrs do
+  def valid_artist_preference_attrs do
     %{
-      user: valid_user_attrs(),
-      artist_preferences: [
-        %{
-          rank: 1,
-          artist: valid_artist_attrs()
-        }
-      ]
+      rank: 1,
+      artist: valid_artist_attrs()
+    }
+  end
+
+  def valid_track_preference_attrs do
+    %{
+      rank: 2,
+      artist: valid_track_attrs()
+    }
+  end
+
+  def valid_genre_preference_attrs do
+    %{
+      rank: 3,
+      artist: valid_genre_attrs()
     }
   end
 end
