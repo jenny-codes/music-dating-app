@@ -21,9 +21,9 @@ defmodule Songmate.MusicProfile do
       |> Ecto.Changeset.cast_assoc(:user, with: &Accounts.User.changeset/2)
       |> Repo.insert()
 
-    create_artist_preferences_for_profile(profile, attrs[:artist_preferences])
-    create_track_preferences_for_profile(profile, attrs[:track_preferences])
-    create_genre_preferences_for_profile(profile, attrs[:genre_preferences])
+    batch_create_artist_preferences!(profile, attrs[:artist_preferences])
+    batch_create_track_preferences!(profile, attrs[:track_preferences])
+    batch_create_genre_preferences!(profile, attrs[:genre_preferences])
     profile
   end
 
@@ -43,9 +43,9 @@ defmodule Songmate.MusicProfile do
           profile
       end
 
-    create_artist_preferences_for_profile(profile, attrs[:artist_preferences])
-    create_track_preferences_for_profile(profile, attrs[:track_preferences])
-    create_genre_preferences_for_profile(profile, attrs[:genre_preferences])
+    batch_create_artist_preferences!(profile, attrs[:artist_preferences])
+    batch_create_track_preferences!(profile, attrs[:track_preferences])
+    batch_create_genre_preferences!(profile, attrs[:genre_preferences])
     profile
   end
 
@@ -67,12 +67,13 @@ defmodule Songmate.MusicProfile do
     |> Repo.insert!(on_conflict: :replace_all, conflict_target: [:music_profile_id, :artist_id])
   end
 
-  def create_artist_preferences_for_profile(profile, nil), do: profile
-  def create_artist_preferences_for_profile(profile, []), do: profile
+  def batch_create_artist_preferences!(profile, nil), do: profile
+  def batch_create_artist_preferences!(profile, []), do: profile
 
-  def create_artist_preferences_for_profile(profile, prefs) do
+  def batch_create_artist_preferences!(profile, prefs) do
     build_artist_attr = fn pref ->
-      %{pref | artist: Repo.get_or_create_by!(Artist, :spotify_id, pref[:artist])}
+      params = [spotify_id: pref[:artist][:spotify_id]]
+      %{pref | artist: Repo.get_or_insert_by!(Artist, params, pref[:artist])}
     end
 
     add_profile_attr = fn pref ->
@@ -97,12 +98,19 @@ defmodule Songmate.MusicProfile do
     |> Repo.insert!(on_conflict: :replace_all, conflict_target: [:music_profile_id, :track_id])
   end
 
-  def create_track_preferences_for_profile(profile, nil), do: profile
-  def create_track_preferences_for_profile(profile, []), do: profile
+  def batch_create_track_preferences!(profile, nil), do: profile
+  def batch_create_track_preferences!(profile, []), do: profile
 
-  def create_track_preferences_for_profile(profile, prefs) do
+  def batch_create_track_preferences!(profile, prefs) do
     build_track_attr = fn pref ->
-      %{pref | track: Repo.get_or_create_by!(Track, [:isrc, :spotify_id], pref[:track])}
+      params =
+        if pref[:track][:isrc] do
+          [isrc: pref[:track][:isrc]]
+        else
+          [spotify_id: pref[:track][:spotify_id]]
+        end
+
+      %{pref | track: Repo.get_or_insert_by!(Track, params, pref[:track])}
     end
 
     add_profile_attr = fn pref ->
@@ -123,12 +131,13 @@ defmodule Songmate.MusicProfile do
     |> Repo.insert!(on_conflict: :replace_all, conflict_target: [:music_profile_id, :genre_id])
   end
 
-  def create_genre_preferences_for_profile(profile, nil), do: profile
-  def create_genre_preferences_for_profile(profile, []), do: profile
+  def batch_create_genre_preferences!(profile, nil), do: profile
+  def batch_create_genre_preferences!(profile, []), do: profile
 
-  def create_genre_preferences_for_profile(profile, prefs) do
+  def batch_create_genre_preferences!(profile, prefs) do
     build_genre_attr = fn pref ->
-      %{pref | genre: Repo.get_or_create_by!(Genre, :name, pref[:genre])}
+      params = [name: pref[:genre][:name]]
+      %{pref | genre: Repo.get_or_insert_by!(Genre, params, pref[:genre])}
     end
 
     add_profile_attr = fn pref ->
