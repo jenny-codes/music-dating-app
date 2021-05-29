@@ -1,4 +1,4 @@
-<h1> Your tops, <%= @name %>! </h1>
+<h1> Your tops, <%= @current_user.name %>! </h1>
 <h3> (in the past 6 months) </h3>
 
 <table class="table">

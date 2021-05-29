@@ -52,10 +52,8 @@ defmodule SongmateWeb.Router do
   scope "/", SongmateWeb do
     pipe_through(:browser)
 
-    get("/", PageController, :index)
-    get("/info", PageController, :info)
-    get("/music", PageController, :music)
-    get("/chat", PageController, :chat)
+    get("/", UserController, :index)
+    get("/chat", UserController, :chat)
   end
 
   scope "/", SongmateWeb do
