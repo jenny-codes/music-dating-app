@@ -5,7 +5,7 @@
 * Create `config/secret.exs` with following content
 
 ```elixir
-use Mix.Config
+import Config
 ```
 
 * Install depedencies
