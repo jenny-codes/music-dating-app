@@ -3,155 +3,147 @@ defmodule Songmate.MusicPreferencesTest do
 
   alias Songmate.MusicPreferences
   alias Songmate.MusicPreferences.{ArtistPreference, TrackPreference, GenrePreference}
-  alias Songmate.Music.{Artist, Track, Genre}
 
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
+  def artist_fixure(attrs \\ %{}) do
+    {:ok, artist} =
       attrs
-      |> Enum.into(valid_user_attrs())
-      |> Songmate.Accounts.create_user()
+      |> Enum.into(valid_artist_attrs())
+      |> Songmate.Music.create_artist()
 
-    Repo.preload(user, :credential)
+    artist
   end
 
-  describe "create_music_preference/1 " do
-    test "nothing happens with no preferences given" do
+  def track_fixure(attrs \\ %{}) do
+    {:ok, track} =
+      attrs
+      |> Enum.into(valid_track_attrs())
+      |> Songmate.Music.create_track()
+
+    track
+  end
+
+  def genre_fixure(attrs \\ %{}) do
+    {:ok, genre} =
+      attrs
+      |> Enum.into(valid_genre_attrs())
+      |> Songmate.Music.create_genre()
+
+    genre
+  end
+
+  describe "batch_create_artist_preferences/2" do
+    test "creates preferences with artists and user" do
       user = user_fixture()
-      expected_result = %{artist_preferences: [], genre_preferences: [], track_preferences: []}
+      artist = artist_fixure()
 
-      result_prefs = MusicPreferences.create_music_preference(user, %{})
+      MusicPreferences.batch_create_artist_preferences([artist], user)
 
-      assert result_prefs == expected_result
+      assert Repo.get_by(ArtistPreference, user_id: user.id, artist_id: artist.id)
     end
 
-    test "with artists preference associations creates associations" do
+    test "creates preferences using original order as rank" do
       user = user_fixture()
+      artist1 = artist_fixure(%{spotify_id: "123"})
+      artist2 = artist_fixure(%{spotify_id: "456"})
 
-      MusicPreferences.create_music_preference(user, %{
-        artist_preferences: [
-          %{
-            rank: 1,
-            artist: valid_artist_attrs()
-          }
-        ]
-      })
+      MusicPreferences.batch_create_artist_preferences([artist1, artist2], user)
 
-      result_artist_pref =
-        ArtistPreference
-        |> Repo.get_by(user_id: user.id)
-        |> Repo.preload(:artist)
+      assert Repo.get_by(ArtistPreference,
+               user_id: user.id,
+               artist_id: artist1.id,
+               rank: 1
+             )
 
-      assert result_artist_pref
-      assert result_artist_pref.rank == 1
+      assert Repo.get_by(ArtistPreference,
+               user_id: user.id,
+               artist_id: artist2.id,
+               rank: 2
+             )
+    end
+  end
+
+  describe "batch_create_track_preferences/2" do
+    test "creates preferences with tracks and user" do
+      user = user_fixture()
+      track = track_fixure()
+
+      MusicPreferences.batch_create_track_preferences([track], user)
+
+      assert Repo.get_by(TrackPreference, user_id: user.id, track_id: track.id)
     end
 
-    test "with track preference associations creates associations" do
+    test "creates preferences using original order as rank" do
       user = user_fixture()
+      track1 = track_fixure(%{spotify_id: "123", isrc: "123"})
+      track2 = track_fixure(%{spotify_id: "456", isrc: "456"})
 
-      MusicPreferences.create_music_preference(user, %{
-        track_preferences: [
-          %{
-            rank: 1,
-            track: valid_track_attrs()
-          }
-        ]
-      })
+      MusicPreferences.batch_create_track_preferences([track1, track2], user)
 
-      result_track_pref =
-        TrackPreference
-        |> Repo.get_by(user_id: user.id)
-        |> Repo.preload(:track)
+      assert Repo.get_by(TrackPreference,
+               user_id: user.id,
+               track_id: track1.id,
+               rank: 1
+             )
 
-      assert result_track_pref
-      assert result_track_pref.rank == 1
+      assert Repo.get_by(TrackPreference,
+               user_id: user.id,
+               track_id: track2.id,
+               rank: 2
+             )
+    end
+  end
+
+  describe "batch_create_genre_preferences/2" do
+    test "creates preferences with genres and user" do
+      user = user_fixture()
+      genre = genre_fixure()
+
+      MusicPreferences.batch_create_genre_preferences([genre], user)
+
+      assert Repo.get_by(GenrePreference, user_id: user.id, genre_id: genre.id)
     end
 
-    test "with genre preference associations creates associations" do
+    test "creates preferences using original order as rank" do
       user = user_fixture()
+      genre1 = genre_fixure(%{name: "123"})
+      genre2 = genre_fixure(%{name: "456"})
 
-      MusicPreferences.create_music_preference(user, %{
-        genre_preferences: [
-          %{
-            rank: 1,
-            genre: valid_genre_attrs()
-          }
-        ]
-      })
+      MusicPreferences.batch_create_genre_preferences([genre1, genre2], user)
 
-      result_genre_pref =
-        GenrePreference
-        |> Repo.get_by(user_id: user.id)
-        |> Repo.preload(:genre)
+      assert Repo.get_by(GenrePreference,
+               user_id: user.id,
+               genre_id: genre1.id,
+               rank: 1
+             )
 
-      assert result_genre_pref
-      assert result_genre_pref.rank == 1
+      assert Repo.get_by(GenrePreference,
+               user_id: user.id,
+               genre_id: genre2.id,
+               rank: 2
+             )
     end
   end
 
   describe "delete situation" do
     test "delete User deletes associated preferences" do
       user = user_fixture()
-
-      MusicPreferences.create_music_preference(user, %{
-        artist_preferences: [
-          %{
-            rank: 1,
-            artist: valid_artist_attrs()
-          }
-        ],
-        track_preferences: [
-          %{
-            rank: 1,
-            track: valid_track_attrs()
-          }
-        ],
-        genre_preferences: [
-          %{
-            rank: 1,
-            genre: valid_genre_attrs()
-          }
-        ]
-      })
+      artist = artist_fixure()
+      MusicPreferences.batch_create_artist_preferences([artist], user)
 
       {:ok, _} = Repo.delete(user)
 
       refute Repo.exists?(from(pref in ArtistPreference, where: pref.user_id == ^user.id))
-      refute Repo.exists?(from(pref in TrackPreference, where: pref.user_id == ^user.id))
-      refute Repo.exists?(from(pref in GenrePreference, where: pref.user_id == ^user.id))
     end
 
-    test "delete Preferences does not delete associated user or music types" do
+    test "delete preferences does not delete associated user or music types" do
       user = user_fixture()
+      artist = artist_fixure()
+      MusicPreferences.batch_create_artist_preferences([artist], user)
 
-      prefs =
-        MusicPreferences.create_music_preference(user, %{
-          artist_preferences: [
-            %{
-              rank: 1,
-              artist: valid_artist_attrs()
-            }
-          ],
-          track_preferences: [
-            %{
-              rank: 1,
-              track: valid_track_attrs()
-            }
-          ],
-          genre_preferences: [
-            %{
-              rank: 1,
-              genre: valid_genre_attrs()
-            }
-          ]
-        })
+      Repo.delete_all(ArtistPreference)
 
-      prefs
-      |> Enum.flat_map(fn {_k, v} -> v end)
-      |> Enum.each(&Repo.delete/1)
-
-      assert Repo.exists?(Artist)
-      assert Repo.exists?(Track)
-      assert Repo.exists?(Genre)
+      assert Repo.exists?(Songmate.Accounts.User)
+      assert Repo.exists?(Songmate.Music.Artist)
     end
   end
 end

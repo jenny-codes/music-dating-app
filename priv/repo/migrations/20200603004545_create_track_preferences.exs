@@ -10,6 +10,6 @@ defmodule Songmate.Repo.Migrations.CreateTrackPreferences do
       timestamps()
     end
 
-    create unique_index(:track_preferences, [:user_id, :track_id])
+    create unique_index(:track_preferences, [:user_id, :track_id, :rank])
   end
 end

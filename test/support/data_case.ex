@@ -65,6 +65,15 @@ defmodule Songmate.DataCase do
   # -----------------------------------------------------------------------
   # Accounts
 
+  def user_fixture(attrs \\ %{}) do
+    {:ok, user} =
+      attrs
+      |> Enum.into(valid_user_attrs())
+      |> Songmate.Accounts.create_user()
+
+    user
+  end
+
   def valid_user_attrs do
     %{
       name: "Bass Wannabe",

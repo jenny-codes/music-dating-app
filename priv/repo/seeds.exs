@@ -138,21 +138,3 @@ Music.create_track(%{
     %{name: "The National", spotify_id: "2cCUtGK9sDU2EoElnk0GNB"}
   ]
 })
-
-# --------------------------------------------------------
-# MusicPreferences
-user = Songmate.Repo.all(Songmate.Accounts.User) |> List.first
-Songmate.MusicPreferences.create_music_preference(user, %{
-  artist_preferences: [
-    %{artist: %{spotify_id: "5BvJzeQpmsdsFp4HGUYUEx", name: "Vampire Weekend"}, rank: 1},
-    %{artist: %{spotify_id: "5nCi3BB41mBaMH9gfr6Su0", name: "fun."}, rank: 3}
-  ],
-  track_preferences: [
-    %{track: %{spotify_id: "68KlkUNTX8gRp7TrM1Ut5u", name: "England"}, rank: 1},
-    %{track: %{spotify_id: "4wg3QfnD1S87eTRQ7K4yc9", name: "如何 - Through Our Lives"}, rank: 2}
-  ],
-  genre_preferences: [
-    %{genre: %{name: "modern rock"}, rank: 1},
-    %{genre: %{name: "indie pop"}, rank: 2}
-  ]
-})

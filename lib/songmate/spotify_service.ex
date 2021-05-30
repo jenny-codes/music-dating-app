@@ -101,7 +101,10 @@ defmodule Songmate.SpotifyService do
     genre_records =
       artists
       |> Enum.flat_map(& &1.genres)
-      |> Enum.uniq()
+      |> Enum.frequencies()
+      |> Enum.sort_by(&elem(&1, 1), :desc)
+      |> Enum.take(30)
+      |> Enum.map(&elem(&1, 0))
       |> Enum.map(fn genre ->
         %{
           name: genre

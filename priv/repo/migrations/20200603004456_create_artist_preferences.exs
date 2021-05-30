@@ -10,6 +10,6 @@ defmodule Songmate.Repo.Migrations.CreateArtistPreferences do
       timestamps()
     end
 
-    create unique_index(:artist_preferences, [:user_id, :artist_id])
+    create unique_index(:artist_preferences, [:user_id, :artist_id, :rank])
   end
 end

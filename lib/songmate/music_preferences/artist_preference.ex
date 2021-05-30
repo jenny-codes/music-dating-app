@@ -17,9 +17,8 @@ defmodule Songmate.MusicPreferences.ArtistPreference do
   @doc false
   def changeset(artist_preference, attrs) do
     artist_preference
-    |> cast(attrs, [:rank])
-    |> validate_required([:rank])
-    |> unique_constraint([:user_id, :artist_id])
-    |> unique_constraint([:user_id, :rank])
+    |> cast(attrs, [:rank, :user_id, :artist_id])
+    |> validate_required([:rank, :user_id, :artist_id])
+    |> unique_constraint([:rank, :user_id, :artist_id])
   end
 end
