@@ -1,8 +1,7 @@
 defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
-  alias Songmate.MusicPreferences
   alias Songmate.SpotifyService
-  alias Songmate.Music
+  alias Songmate.Workers.UpdateUserMusicPreferences
 
   def index(conn, _params) do
     conn = validate_token(conn)
@@ -11,20 +10,7 @@ defmodule SongmateWeb.UserController do
     [artists: artists, tracks: tracks, genres: genres] =
       SpotifyService.fetch_listening_history(conn)
 
-    artists
-    |> Music.batch_get_or_create_artists(order: true)
-    |> Enum.reject(&is_nil/1)
-    |> MusicPreferences.batch_create_artist_preferences(user)
-
-    tracks
-    |> Music.batch_get_or_create_tracks(order: true)
-    |> Enum.reject(&is_nil/1)
-    |> MusicPreferences.batch_create_track_preferences(user)
-
-    genres
-    |> Music.batch_get_or_create_genres(order: true)
-    |> Enum.reject(&is_nil/1)
-    |> MusicPreferences.batch_create_genre_preferences(user)
+    UpdateUserMusicPreferences.call(user, artists: artists, tracks: tracks, genres: genres)
 
     render(
       conn,

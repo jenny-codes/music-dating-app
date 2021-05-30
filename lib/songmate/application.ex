@@ -6,14 +6,11 @@ defmodule Songmate.Application do
   use Application
 
   def start(_type, _args) do
-    # List all child processes to be supervised
     children = [
-      # Start the Ecto repository
       Songmate.Repo,
-      # Start the PubSub system
       {Phoenix.PubSub, name: Songmate.PubSub},
-      # Start the endpoint when the application starts
-      SongmateWeb.Endpoint
+      SongmateWeb.Endpoint,
+      {Task.Supervisor, name: Songmate.TaskSupervisor}
       # Starts a worker by calling: Songmate.Worker.start_link(arg)
       # {Songmate.Worker, arg},
     ]
