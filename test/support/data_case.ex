@@ -82,7 +82,7 @@ defmodule Songmate.DataCase do
       credential: %{
         provider: :spotify,
         email: "hi@songmate.co",
-        username: "hisongmate"
+        provider_uid: "hisongmate"
       }
     }
   end
@@ -94,7 +94,7 @@ defmodule Songmate.DataCase do
       credential: %{
         provider: :spotify,
         email: "spotify@rocks",
-        username: "spotify-rocks"
+        provider_uid: "spotify-rocks"
       }
     }
   end

@@ -11,7 +11,8 @@ defmodule Songmate.Accounts.User do
     field(:bio, :string)
     field(:name, :string)
     field(:avatar, :string)
-    field(:spotify_id, :string)
+    field(:username, :string)
+    field(:preferences_updated_at, :naive_datetime)
 
     has_one(:credential, Credential)
     has_many(:artist_preferences, ArtistPreference, foreign_key: :user_id)
@@ -58,10 +59,11 @@ defmodule Songmate.Accounts.User do
       :name,
       :bio,
       :avatar,
-      :spotify_id
+      :username,
+      :preferences_updated_at
     ])
     |> validate_required([:name])
-    |> unique_constraint(:spotify_id)
+    |> unique_constraint(:username)
   end
 
   @track_score 10

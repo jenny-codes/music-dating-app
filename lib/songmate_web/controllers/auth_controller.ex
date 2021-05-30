@@ -14,7 +14,7 @@ defmodule SongmateWeb.AuthController do
         conn
         |> SpotifyService.fetch_user_info()
         |> normalize_to_user_attrs()
-        |> then(&Accounts.get_or_create_user([username: &1.credential.username], &1))
+        |> Accounts.get_or_create_user()
 
       conn
       |> put_session(:login_dest, nil)
@@ -51,9 +51,10 @@ defmodule SongmateWeb.AuthController do
     %{
       name: user_info[:display_name],
       avatar: user_info[:avatar_url],
+      username: user_info[:username],
       credential: %{
         email: user_info[:email],
-        username: user_info[:username],
+        provider_uid: user_info[:username],
         provider: :spotify
       }
     }

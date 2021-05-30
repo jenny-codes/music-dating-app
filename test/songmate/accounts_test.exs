@@ -18,7 +18,7 @@ defmodule Songmate.AccountsTest do
       assert user.bio == "Some nights I stay up cashing in my bad luck"
       assert user.name == "Bass Wannabe"
       assert user.avatar == "some-link-to-an-image"
-      assert user.credential.username == "hisongmate"
+      assert user.credential.provider_uid == "hisongmate"
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -32,7 +32,7 @@ defmodule Songmate.AccountsTest do
       assert user.bio == "Some nights I call it a draw"
       assert user.name == "Alto Wannabe"
       assert user.avatar == "another-link-to-an-image"
-      assert user.credential.username == "hisongmate"
+      assert user.credential.provider_uid == "hisongmate"
     end
 
     test "update_user/2 with invalid data returns error changeset" do
@@ -61,18 +61,14 @@ defmodule Songmate.AccountsTest do
     @valid_attrs %{
       provider: :spotify,
       email: "hi@songmate.co",
-      username: "songmate",
-      expires_at: "2010-04-17T14:00:00Z",
-      token: "sometoken",
+      provider_uid: "songmate",
       user: %{name: "Hi Songmate"}
     }
     @update_attrs %{
       email: "updated@songmate.co",
-      expires_at: "2011-05-18T15:01:01Z",
-      token: "yetanothertoken",
-      username: "songmate"
+      provider_uid: "songmate"
     }
-    @invalid_attrs %{provider: nil, email: nil, username: nil}
+    @invalid_attrs %{provider: nil, email: nil, provider_uid: nil}
 
     def credential_fixture(attrs \\ %{}) do
       {:ok, credential} =
@@ -87,9 +83,7 @@ defmodule Songmate.AccountsTest do
       assert {:ok, %Credential{} = credential} = Accounts.create_credential(@valid_attrs)
       assert credential.provider == :spotify
       assert credential.email == "hi@songmate.co"
-      assert credential.expires_at == DateTime.from_naive!(~N[2010-04-17T14:00:00Z], "Etc/UTC")
-      assert credential.token == "sometoken"
-      assert credential.username == "songmate"
+      assert credential.provider_uid == "songmate"
       assert credential.user.name == "Hi Songmate"
     end
 
@@ -104,9 +98,7 @@ defmodule Songmate.AccountsTest do
                Accounts.update_credential(credential, @update_attrs)
 
       assert credential.email == "updated@songmate.co"
-      assert credential.expires_at == DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
-      assert credential.token == "yetanothertoken"
-      assert credential.username == "songmate"
+      assert credential.provider_uid == "songmate"
     end
 
     test "update_credential/2 with invalid data returns error changeset" do

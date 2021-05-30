@@ -6,7 +6,7 @@ defmodule Songmate.Repo.Migrations.CreateUsers do
       add :name, :string
       add :bio, :text
       add :avatar, :string
-      add :spotify_id, :string
+      add :username, :string
 
       timestamps()
     end

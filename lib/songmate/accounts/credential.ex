@@ -6,10 +6,8 @@ defmodule Songmate.Accounts.Credential do
 
   schema "credentials" do
     field(:provider, CredentialProviderEnum)
+    field(:provider_uid, :string)
     field(:email, :string)
-    field(:expires_at, :utc_datetime)
-    field(:token, :string)
-    field(:username, :string)
 
     belongs_to(:user, User)
 
@@ -19,9 +17,9 @@ defmodule Songmate.Accounts.Credential do
   @doc false
   def changeset(credential, attrs) do
     credential
-    |> cast(attrs, [:provider, :email, :username, :token, :expires_at])
-    |> validate_required([:provider, :email, :username])
+    |> cast(attrs, [:provider, :email, :provider_uid])
+    |> validate_required([:provider, :email, :provider_uid])
     |> unique_constraint(:email)
-    |> unique_constraint(:username)
+    |> unique_constraint([:provider, :provider_uid])
   end
 end

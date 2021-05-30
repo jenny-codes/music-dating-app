@@ -9,8 +9,8 @@ defmodule Songmate.Accounts do
   alias Songmate.Accounts.User
   alias Songmate.Accounts.Credential
 
-  def get_or_create_user([username: username], user_attrs) do
-    case Repo.get_by(Credential, provider: :spotify, username: username) do
+  def get_or_create_user(user_attrs) do
+    case Repo.get_by(Credential, user_attrs[:credential]) do
       nil ->
         create_user(user_attrs)
 
