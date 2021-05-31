@@ -13,6 +13,22 @@ defmodule Songmate.AccountsTest do
     }
     @invalid_attrs %{name: nil}
 
+    test "list_users/0 returns all users" do
+      user = user_fixture()
+
+      result = Accounts.list_users() |> Repo.preload(:credential)
+
+      assert result == [user]
+    end
+
+    test "list_users/1 returns all users excluding user ids in :except flag" do
+      user = user_fixture()
+
+      result = Accounts.list_users(except: [user.id])
+
+      assert result == []
+    end
+
     test "get_or_create_user/1 creates a user if credential is new" do
       {:ok, user} = Accounts.get_or_create_user(valid_user_attrs())
 

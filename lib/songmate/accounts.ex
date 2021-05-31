@@ -9,6 +9,15 @@ defmodule Songmate.Accounts do
   alias Songmate.Accounts.User
   alias Songmate.Accounts.Credential
 
+  @spec list_users(except: [non_neg_integer] | nil) :: [%User{}]
+  def list_users() do
+    Repo.all(User)
+  end
+
+  def list_users(except: except) do
+    Repo.all(from(u in User, where: u.id not in ^except))
+  end
+
   def get_or_create_user(user_attrs) do
     case Repo.get_by(Credential, user_attrs[:credential]) do
       nil ->
