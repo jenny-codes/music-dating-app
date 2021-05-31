@@ -1,5 +1,5 @@
 defmodule Songmate.AccountsTest do
-  use Songmate.DataCase
+  use Songmate.DataCase, async: true
 
   alias Songmate.Repo
   alias Songmate.Accounts
@@ -12,6 +12,23 @@ defmodule Songmate.AccountsTest do
       avatar: "another-link-to-an-image"
     }
     @invalid_attrs %{name: nil}
+
+    test "get_or_create_user/1 creates a user if credential is new" do
+      {:ok, user} = Accounts.get_or_create_user(valid_user_attrs())
+
+      assert %User{} = user
+      assert user.bio == "Some nights I stay up cashing in my bad luck"
+      assert user.name == "Bass Wannabe"
+      assert user.avatar == "some-link-to-an-image"
+      assert user.credential.provider_uid == "hisongmate"
+    end
+
+    test "get_or_create_user/1 returns existing user if credential matches" do
+      Accounts.get_or_create_user(valid_user_attrs())
+      Accounts.get_or_create_user(valid_user_attrs())
+
+      assert Repo.aggregate(User, :count) == 1
+    end
 
     test "create_user/1 with valid data creates a user" do
       assert {:ok, %User{} = user} = Accounts.create_user(valid_user_attrs())

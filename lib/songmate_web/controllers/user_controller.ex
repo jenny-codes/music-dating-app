@@ -10,7 +10,7 @@ defmodule SongmateWeb.UserController do
     [artists: artists, tracks: tracks, genres: genres] =
       SpotifyService.fetch_listening_history(conn)
 
-    UpdateUserMusicPreferences.call(user, artists: artists, tracks: tracks, genres: genres)
+    UpdateUserMusicPreferences.call(user, %{artists: artists, tracks: tracks, genres: genres})
 
     render(
       conn,

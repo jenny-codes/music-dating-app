@@ -114,15 +114,6 @@ defmodule Songmate.MusicTest do
     }
     @invalid_attrs %{name: nil, potify_id: nil}
 
-    def track_fixture(attrs \\ %{}) do
-      {:ok, track} =
-        attrs
-        |> Enum.into(valid_track_attrs())
-        |> Music.create_track()
-
-      track
-    end
-
     test "create_track/1 with valid data creates a track" do
       assert {:ok, %Track{} = track} = Music.create_track(valid_track_attrs())
       assert track.isrc == "USMRG0467010"
@@ -190,20 +181,12 @@ defmodule Songmate.MusicTest do
   end
 
   describe "artists" do
-    def artist_fixture(attrs \\ %{}) do
-      {:ok, artist} =
-        attrs
-        |> Enum.into(valid_artist_attrs())
-        |> Music.create_artist()
-
-      artist
-    end
-
     @update_attrs %{
       name: "Updated 9m88",
       popularity: 100,
       spotify_id: "4PjY2961rc0MHE9zHYWEnH"
     }
+
     @invalid_attrs %{name: nil, spotify_id: nil}
 
     test "create_artist/1 with valid data creates a artist" do
@@ -263,15 +246,6 @@ defmodule Songmate.MusicTest do
   describe "genres" do
     @update_attrs %{name: "some updated name"}
     @invalid_attrs %{name: nil}
-
-    def genre_fixture(attrs \\ %{}) do
-      {:ok, genre} =
-        attrs
-        |> Enum.into(valid_genre_attrs())
-        |> Music.create_genre()
-
-      genre
-    end
 
     test "create_genre/1 with valid data creates a genre" do
       assert {:ok, %Genre{} = genre} = Music.create_genre(valid_genre_attrs())

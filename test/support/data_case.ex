@@ -102,6 +102,33 @@ defmodule Songmate.DataCase do
   # -----------------------------------------------------------------------
   # Music
 
+  def artist_fixture(attrs \\ %{}) do
+    {:ok, artist} =
+      attrs
+      |> Enum.into(valid_artist_attrs())
+      |> Songmate.Music.create_artist()
+
+    artist
+  end
+
+  def track_fixture(attrs \\ %{}) do
+    {:ok, track} =
+      attrs
+      |> Enum.into(valid_track_attrs())
+      |> Songmate.Music.create_track()
+
+    track
+  end
+
+  def genre_fixture(attrs \\ %{}) do
+    {:ok, genre} =
+      attrs
+      |> Enum.into(valid_genre_attrs())
+      |> Songmate.Music.create_genre()
+
+    genre
+  end
+
   def valid_track_attrs do
     %{
       isrc: "USMRG0467010",

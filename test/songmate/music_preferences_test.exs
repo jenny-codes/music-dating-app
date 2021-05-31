@@ -1,40 +1,13 @@
 defmodule Songmate.MusicPreferencesTest do
-  use Songmate.DataCase
+  use Songmate.DataCase, async: true
 
   alias Songmate.MusicPreferences
   alias Songmate.MusicPreferences.{ArtistPreference, TrackPreference, GenrePreference}
 
-  def artist_fixure(attrs \\ %{}) do
-    {:ok, artist} =
-      attrs
-      |> Enum.into(valid_artist_attrs())
-      |> Songmate.Music.create_artist()
-
-    artist
-  end
-
-  def track_fixure(attrs \\ %{}) do
-    {:ok, track} =
-      attrs
-      |> Enum.into(valid_track_attrs())
-      |> Songmate.Music.create_track()
-
-    track
-  end
-
-  def genre_fixure(attrs \\ %{}) do
-    {:ok, genre} =
-      attrs
-      |> Enum.into(valid_genre_attrs())
-      |> Songmate.Music.create_genre()
-
-    genre
-  end
-
   describe "batch_create_artist_preferences/2" do
     test "creates preferences with artists and user" do
       user = user_fixture()
-      artist = artist_fixure()
+      artist = artist_fixture()
 
       MusicPreferences.batch_create_artist_preferences([artist], user)
 
@@ -43,8 +16,8 @@ defmodule Songmate.MusicPreferencesTest do
 
     test "creates preferences using original order as rank" do
       user = user_fixture()
-      artist1 = artist_fixure(%{spotify_id: "123"})
-      artist2 = artist_fixure(%{spotify_id: "456"})
+      artist1 = artist_fixture(%{spotify_id: "123"})
+      artist2 = artist_fixture(%{spotify_id: "456"})
 
       MusicPreferences.batch_create_artist_preferences([artist1, artist2], user)
 
@@ -65,7 +38,7 @@ defmodule Songmate.MusicPreferencesTest do
   describe "batch_create_track_preferences/2" do
     test "creates preferences with tracks and user" do
       user = user_fixture()
-      track = track_fixure()
+      track = track_fixture()
 
       MusicPreferences.batch_create_track_preferences([track], user)
 
@@ -74,8 +47,8 @@ defmodule Songmate.MusicPreferencesTest do
 
     test "creates preferences using original order as rank" do
       user = user_fixture()
-      track1 = track_fixure(%{spotify_id: "123", isrc: "123"})
-      track2 = track_fixure(%{spotify_id: "456", isrc: "456"})
+      track1 = track_fixture(%{spotify_id: "123", isrc: "123"})
+      track2 = track_fixture(%{spotify_id: "456", isrc: "456"})
 
       MusicPreferences.batch_create_track_preferences([track1, track2], user)
 
@@ -96,7 +69,7 @@ defmodule Songmate.MusicPreferencesTest do
   describe "batch_create_genre_preferences/2" do
     test "creates preferences with genres and user" do
       user = user_fixture()
-      genre = genre_fixure()
+      genre = genre_fixture()
 
       MusicPreferences.batch_create_genre_preferences([genre], user)
 
@@ -105,8 +78,8 @@ defmodule Songmate.MusicPreferencesTest do
 
     test "creates preferences using original order as rank" do
       user = user_fixture()
-      genre1 = genre_fixure(%{name: "123"})
-      genre2 = genre_fixure(%{name: "456"})
+      genre1 = genre_fixture(%{name: "123"})
+      genre2 = genre_fixture(%{name: "456"})
 
       MusicPreferences.batch_create_genre_preferences([genre1, genre2], user)
 
@@ -127,7 +100,7 @@ defmodule Songmate.MusicPreferencesTest do
   describe "delete situation" do
     test "delete User deletes associated preferences" do
       user = user_fixture()
-      artist = artist_fixure()
+      artist = artist_fixture()
       MusicPreferences.batch_create_artist_preferences([artist], user)
 
       {:ok, _} = Repo.delete(user)
@@ -137,7 +110,7 @@ defmodule Songmate.MusicPreferencesTest do
 
     test "delete preferences does not delete associated user or music types" do
       user = user_fixture()
-      artist = artist_fixure()
+      artist = artist_fixture()
       MusicPreferences.batch_create_artist_preferences([artist], user)
 
       Repo.delete_all(ArtistPreference)

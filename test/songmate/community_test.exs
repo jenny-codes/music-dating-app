@@ -1,5 +1,5 @@
 defmodule Songmate.CommunityTest do
-  use Songmate.DataCase
+  use Songmate.DataCase, async: true
 
   alias Songmate.Community
 
