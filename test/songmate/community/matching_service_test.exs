@@ -18,6 +18,17 @@ defmodule Songmate.Community.MatchingServiceTest do
     end
   end
 
+  describe "generate_match_data/2" do
+    test "returns the match data between two users" do
+      result = MatchingService.generate_match_data(1, 2, FakeProfile)
+
+      assert result == %{
+               shared: %{tracks: [], artists: ["Coldplay"], genres: []},
+               score: 5
+             }
+    end
+  end
+
   describe "get_shared_preferences/2" do
     test "returns shared music types between two users" do
       result = MatchingService.get_shared_preferences(1, 2, FakeProfile)
