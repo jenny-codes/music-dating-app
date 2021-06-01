@@ -9,15 +9,17 @@ defmodule Songmate.Community.MatchingService do
           genres: [%Songmate.Music.Genre{}]
         }
 
-  @spec get_shared_preferences(%User{}, %User{}) :: music_type()
-  def get_shared_preferences(user1, user2) do
+  @spec get_shared_preferences(integer(), integer(), any) :: music_type()
+  def get_shared_preferences(user_id1, user_id2, profile_mod \\ MusicPreferences) do
     calculate = fn type ->
       shared_list =
         type
-        |> MusicPreferences.list_preferences(user_ids: [user1.id, user2.id])
+        |> profile_mod.list_preferences(user_ids: [user_id1, user_id2])
         |> Enum.map(&Map.get(&1, type))
 
-      (shared_list -- Enum.uniq(shared_list)) |> Enum.uniq()
+      (shared_list -- Enum.uniq(shared_list))
+      |> Enum.uniq()
+      |> Enum.reject(&is_nil(&1))
     end
 
     %{
