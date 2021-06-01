@@ -13,6 +13,18 @@ defmodule Songmate.Community.MatchingService do
           genres: [%Songmate.Music.Genre{}]
         }
 
+  @spec find_top_match(%User{}, any()) :: %{user: %User{}, score: integer(), shared: music_type()}
+  def find_top_match(user, profile_mod \\ MusicPreferences) do
+    candidates = Accounts.list_users(except: [user.id])
+
+    candidates
+    |> Enum.map(& &1.id)
+    |> Enum.map(&generate_match_data(user.id, &1, profile_mod))
+    |> Enum.zip(candidates)
+    |> Enum.map(fn {data, user} -> Map.put(data, :user, user) end)
+    |> Enum.max_by(&Map.get(&1, :score))
+  end
+
   @spec generate_match_data(integer(), integer(), any()) :: %{
           score: integer(),
           shared: music_type()

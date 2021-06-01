@@ -77,6 +77,7 @@ defmodule Songmate.DataCase do
   def valid_user_attrs do
     %{
       name: "Bass Wannabe",
+      username: "hisongmate",
       bio: "Some nights I stay up cashing in my bad luck",
       avatar: "some-link-to-an-image",
       credential: %{
@@ -90,6 +91,7 @@ defmodule Songmate.DataCase do
   def valid_2nd_user_attrs do
     %{
       name: "Spotify Rocks",
+      username: "spotify-rocks",
       bio: "ugh",
       credential: %{
         provider: :spotify,
