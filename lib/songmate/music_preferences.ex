@@ -10,6 +10,20 @@ defmodule Songmate.MusicPreferences do
   alias Songmate.Music.{Artist, Track, Genre}
   alias Songmate.Accounts.User
 
+  @spec list_preferences(:artist | :genre | :track, user_ids: [non_neg_integer()]) ::
+          nil | [%ArtistPreference{} | %TrackPreference{} | %GenrePreference{}]
+  def list_preferences(type, user_ids: user_ids) do
+    schema =
+      case type do
+        :artist -> ArtistPreference
+        :track -> TrackPreference
+        :genre -> GenrePreference
+      end
+
+    Repo.all(from(pref in schema, where: pref.user_id in ^user_ids))
+    |> Repo.preload(type)
+  end
+
   @spec batch_create_artist_preferences([%Artist{}] | nil, User.t()) :: any
   def batch_create_artist_preferences(nil, _user), do: nil
 

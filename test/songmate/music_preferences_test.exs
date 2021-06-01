@@ -4,6 +4,41 @@ defmodule Songmate.MusicPreferencesTest do
   alias Songmate.MusicPreferences
   alias Songmate.MusicPreferences.{ArtistPreference, TrackPreference, GenrePreference}
 
+  describe "list_preferences/2" do
+    test "when :artist type returns list of ArtistPreferences" do
+      user = user_fixture()
+      artist = artist_fixture()
+      MusicPreferences.batch_create_artist_preferences([artist], user)
+
+      result = MusicPreferences.list_preferences(:artist, user_ids: [user.id])
+
+      assert Enum.count(result) == 1
+      assert List.first(result).user_id == user.id
+    end
+
+    test "when :track type returns list of trackPreferences" do
+      user = user_fixture()
+      track = track_fixture()
+      MusicPreferences.batch_create_track_preferences([track], user)
+
+      result = MusicPreferences.list_preferences(:track, user_ids: [user.id])
+
+      assert Enum.count(result) == 1
+      assert List.first(result).user_id == user.id
+    end
+
+    test "when :genre type returns list of GenrePreferences" do
+      user = user_fixture()
+      genre = genre_fixture()
+      MusicPreferences.batch_create_genre_preferences([genre], user)
+
+      result = MusicPreferences.list_preferences(:genre, user_ids: [user.id])
+
+      assert Enum.count(result) == 1
+      assert List.first(result).user_id == user.id
+    end
+  end
+
   describe "batch_create_artist_preferences/2" do
     test "creates preferences with artists and user" do
       user = user_fixture()
