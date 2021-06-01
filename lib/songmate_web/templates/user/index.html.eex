@@ -1,54 +1,45 @@
-<h1> Your tops, <%= @current_user.name %>! </h1>
-<h3> (in the past 6 months) </h3>
+<h1> Your match, <%= @current_user.name %>! </h1>
+<h3> (based on the data in the past 6 months) </h3>
 
-<table class="table">
-  <tbody>
-<%= for {rank, name, _score} <- @top_matches do %>
-    <tr>
-      <td><%= rank - 1 %></td>
-      <td><%= name %></td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
+<h2>🥁 <%= @match_user.name %> 🥁 </h2>
+<h2> <%= @score %> </h2>
 
 <div class="row">
   <div class="column">
-    <h2>Top tracks</h2>
-
+    <h2>Shared tracks</h2>
     <table class="table">
       <tbody>
-    <%= for track <- @top_tracks do %>
-        <tr>
-          <td><%= track %></td>
-        </tr>
-    <% end %>
+        <%= for track <- @shared_tracks do %>
+            <tr>
+              <td><%= track %></td>
+            </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
+
   <div class="column">
-  <h2>Top artists</h2>
+    <h2>Shared artists</h2>
     <table class="table">
       <tbody>
-    <%= for artist <- @top_artists do %>
-        <tr>
-          <td><%= artist %></td>
-        </tr>
-    <% end %>
+        <%= for artist <- @shared_artists do %>
+          <tr>
+            <td><%= artist %></td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
-  <div class="column">
-    <h2>Top genres</h2>
-    <h4>(not in order)</h4>
 
+  <div class="column">
+    <h2>Shared genres</h2>
     <table class="table">
       <tbody>
-    <%= for genre <- @top_genres do %>
-        <tr>
-          <td><%= genre %></td>
-        </tr>
-    <% end %>
+        <%= for genre <- @shared_genres do %>
+            <tr>
+              <td><%= genre %></td>
+            </tr>
+        <% end %>
       </tbody>
     </table>
   </div>

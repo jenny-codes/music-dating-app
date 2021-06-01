@@ -2,6 +2,7 @@ defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
   alias Songmate.SpotifyService
   alias Songmate.Workers.UpdateUserMusicPreferences
+  alias Songmate.Community.MatchingService
 
   def index(conn, _params) do
     conn = validate_token(conn)
@@ -12,14 +13,16 @@ defmodule SongmateWeb.UserController do
 
     UpdateUserMusicPreferences.call(user, %{artists: artists, tracks: tracks, genres: genres})
 
+    %{user: user, score: score, shared: shared} = MatchingService.find_top_match(user)
+
     render(
       conn,
       "index.html",
-      top_artists: Enum.map(artists, & &1.name),
-      top_tracks: Enum.map(tracks, & &1.name),
-      top_genres: Enum.map(genres, & &1.name),
-      # top_matches: Accounts.User.build_user_connections(user_prefs)
-      top_matches: []
+      shared_artists: Enum.map(shared[:artists], & &1.name),
+      shared_tracks: Enum.map(shared[:tracks], & &1.name),
+      shared_genres: Enum.map(shared[:genres], & &1.name),
+      match_user: user,
+      score: score
     )
   end
 
