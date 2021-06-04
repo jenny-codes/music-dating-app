@@ -14,5 +14,9 @@ config :songmate, SongmateWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :songmate, :context,
+  accounts: Songmate.Fixtures.Accounts,
+  music: Songmate.Fixtures.Music
+
 # Print only warnings and errors during test
 config :logger, level: :info

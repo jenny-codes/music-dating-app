@@ -13,9 +13,11 @@ defmodule Songmate.Community.MatchingService do
           genres: [%Songmate.Music.Genre{}]
         }
 
+  @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
+
   @spec find_top_match(%User{}, any()) :: %{user: %User{}, score: integer(), shared: music_type()}
   def find_top_match(user, profile_mod \\ MusicPreferences) do
-    candidates = Accounts.list_users(except: [user.id])
+    candidates = @account_mod.list_users(except: [user.id])
 
     candidates
     |> Enum.map(& &1.id)

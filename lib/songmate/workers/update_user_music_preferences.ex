@@ -9,6 +9,7 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
   (1) This data is not easily changed.
   (2) This operation is costly.
   """
+  @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
   @one_week_in_seconds 7 * 24 * 60 * 60
 
   @spec call(%Accounts.User{}, %{artists: [], tracks: [], genres: []}) :: any
@@ -33,7 +34,7 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
         |> Enum.reject(&is_nil/1)
         |> MusicPreferences.batch_create_genre_preferences(user)
 
-        Accounts.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
+        @account_mod.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
       end)
     end
   end

@@ -1,6 +1,7 @@
 defmodule Songmate.Community.MatchingServiceTest do
-  use Songmate.DataCase, async: true
+  use Songmate.DataCase, async: false
   alias Songmate.Community.MatchingService
+  alias Songmate.Fixtures
 
   defmodule FakePreference do
     defstruct [:user_id, :artist, :track, :genre]
@@ -20,28 +21,18 @@ defmodule Songmate.Community.MatchingServiceTest do
 
   describe "find_top_match/1" do
     test "returns the user in db that matches input user the most" do
+      start_supervised!({Fixtures.Accounts, %{}})
       user1 = user_fixture(valid_user_attrs())
       user2 = user_fixture(valid_2nd_user_attrs())
-      expected_id = user2.id
+      Fixtures.Accounts.set_users([user1, user2])
 
       result = MatchingService.find_top_match(user1, FakeProfile)
 
       assert %{
-               user: %Songmate.Accounts.User{id: ^expected_id},
+               user: user2,
                score: 5,
                shared: %{tracks: [], artists: ["Coldplay"], genres: []}
-             } = result
-    end
-  end
-
-  describe "generate_match_data/2" do
-    test "returns the match data between two users" do
-      result = MatchingService.generate_match_data(1, 2, FakeProfile)
-
-      assert result == %{
-               shared: %{tracks: [], artists: ["Coldplay"], genres: []},
-               score: 5
-             }
+             } == result
     end
   end
 

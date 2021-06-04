@@ -3,6 +3,8 @@ defmodule Songmate.Accounts do
   The Accounts context.
   """
 
+  @callback list_users(except: [non_neg_integer] | nil) :: [%{}]
+
   import Ecto.Query, warn: false
   alias Songmate.Repo
 
