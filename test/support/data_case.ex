@@ -151,28 +151,4 @@ defmodule Songmate.DataCase do
   def valid_genre_attrs do
     %{name: "Modern Rock"}
   end
-
-  # -----------------------------------------------------------------------
-  # MusicPreferences
-
-  def valid_artist_preference_attrs do
-    %{
-      rank: 1,
-      artist: valid_artist_attrs()
-    }
-  end
-
-  def valid_track_preference_attrs do
-    %{
-      rank: 2,
-      artist: valid_track_attrs()
-    }
-  end
-
-  def valid_genre_preference_attrs do
-    %{
-      rank: 3,
-      artist: valid_genre_attrs()
-    }
-  end
 end

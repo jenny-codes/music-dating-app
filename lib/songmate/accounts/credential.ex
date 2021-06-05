@@ -5,7 +5,7 @@ defmodule Songmate.Accounts.Credential do
   alias Songmate.Accounts.User
 
   schema "credentials" do
-    field(:provider, CredentialProviderEnum)
+    field(:provider, Ecto.Enum, values: [:spotify])
     field(:provider_uid, :string)
     field(:email, :string)
 

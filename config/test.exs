@@ -16,8 +16,7 @@ config :songmate, SongmateWeb.Endpoint,
 
 config :songmate, :context,
   accounts: Songmate.Fixtures.Accounts,
-  music: Songmate.Fixtures.Music,
-  music_preferences: Songmate.Fixtures.MusicPreferences
+  music: Songmate.Fixtures.Music
 
 # Print only warnings and errors during test
 config :logger, level: :info

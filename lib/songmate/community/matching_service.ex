@@ -1,24 +1,15 @@
 defmodule Songmate.Community.MatchingService do
   alias Songmate.Accounts
   alias Songmate.Accounts.User
-  alias Songmate.MusicPreferences
+  alias Songmate.Music.{Artist, Track, Genre}
 
   @track_score 10
   @artist_score 5
   @genre_score 2
 
-  @type music_type :: %{
-          artists: [%Songmate.Music.Artist{}],
-          tracks: [%Songmate.Music.Track{}],
-          genres: [%Songmate.Music.Genre{}]
-        }
+  @type music_type :: %{artist: [%Artist{}], track: [%Track{}], genre: [%Genre{}]}
 
   @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
-  @music_prefs_mod Application.compile_env(
-                     :songmate,
-                     [:context, :music_preferences],
-                     MusicPreferences
-                   )
 
   @spec find_top_match(%User{}) :: %{user: %User{}, score: integer(), shared: music_type()}
   def find_top_match(user) do
@@ -39,9 +30,9 @@ defmodule Songmate.Community.MatchingService do
   def generate_match_data(user_id1, user_id2) do
     shared = get_shared_preferences(user_id1, user_id2)
 
-    artist_scores = Enum.count(shared[:artists]) * @artist_score
-    track_scores = Enum.count(shared[:tracks]) * @track_score
-    genre_scores = Enum.count(shared[:genres]) * @genre_score
+    artist_scores = Enum.count(shared[:artist]) * @artist_score
+    track_scores = Enum.count(shared[:track]) * @track_score
+    genre_scores = Enum.count(shared[:genre]) * @genre_score
 
     %{
       shared: shared,
@@ -51,21 +42,17 @@ defmodule Songmate.Community.MatchingService do
 
   @spec get_shared_preferences(integer(), integer()) :: music_type()
   def get_shared_preferences(user_id1, user_id2) do
-    calculate = fn type ->
-      shared_list =
-        type
-        |> @music_prefs_mod.list_preferences(user_ids: [user_id1, user_id2])
-        |> Enum.map(&Map.get(&1, type))
+    @account_mod.list_music_preferences(user_ids: [user_id1, user_id2])
+    |> Enum.group_by(& &1.type, & &1.type_id)
+    |> Enum.map(fn {type, type_ids} -> {type, select_duplicates(type_ids)} end)
+    |> Map.new()
+  end
 
-      (shared_list -- Enum.uniq(shared_list))
-      |> Enum.uniq()
-      |> Enum.reject(&is_nil(&1))
-    end
-
-    %{
-      artists: calculate.(:artist),
-      tracks: calculate.(:track),
-      genres: calculate.(:genre)
-    }
+  defp select_duplicates(list) do
+    list
+    |> Enum.frequencies()
+    |> Enum.filter(fn {_val, count} -> count > 1 end)
+    |> Enum.map(&elem(&1, 0))
+    |> Enum.reject(&is_nil(&1))
   end
 end

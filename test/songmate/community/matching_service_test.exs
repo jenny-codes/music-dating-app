@@ -15,7 +15,7 @@ defmodule Songmate.Community.MatchingServiceTest do
       assert %{
                user: user2,
                score: 5,
-               shared: %{tracks: [], artists: ["Coldplay"], genres: []}
+               shared: %{track: [], artist: [1], genre: []}
              } == result
     end
   end
@@ -24,7 +24,7 @@ defmodule Songmate.Community.MatchingServiceTest do
     test "returns shared music types between two users" do
       result = MatchingService.get_shared_preferences(1, 2)
 
-      assert result == %{tracks: [], artists: ["Coldplay"], genres: []}
+      assert result == %{track: [], artist: [1], genre: []}
     end
   end
 end

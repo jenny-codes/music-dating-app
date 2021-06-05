@@ -7,9 +7,9 @@ defmodule Songmate.Repo.Migrations.CreateUsers do
       add :bio, :text
       add :avatar, :string
       add :username, :string
+      add :preferences_updated_at, :naive_datetime
 
       timestamps()
     end
-
   end
 end

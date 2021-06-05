@@ -36,6 +36,20 @@ defmodule Songmate.Fixtures.Accounts do
     update_state(:update_user, {user, args})
   end
 
+  @impl Songmate.Accounts
+  def list_music_preferences(user_ids: _user_ids) do
+    [
+      %{type: :artist, type_id: 1},
+      %{type: :artist, type_id: 1},
+      %{type: :artist, type_id: 1},
+      %{type: :track, type_id: 1},
+      %{type: :genre, type_id: 1}
+    ]
+  end
+
+  @impl Songmate.Accounts
+  def batch_upsert_music_preferences_for_user(_prefs, _user_id), do: nil
+
   # ----------------------------------------------
   # Assert
 
