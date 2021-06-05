@@ -8,6 +8,10 @@ defmodule Songmate.Music do
   alias Songmate.SpotifyService
   alias Songmate.Music.{Track, Genre, Artist}
 
+  @callback batch_get_or_create_artists([SpotifyService.artist()], order: boolean()) :: [Artist]
+  @callback batch_get_or_create_tracks([SpotifyService.track()], order: boolean()) :: [Track]
+  @callback batch_get_or_create_genres([SpotifyService.genre()], order: boolean()) :: [Genre]
+
   @spec batch_get_or_create_artists([SpotifyService.artist()], order: boolean()) :: [Artist]
   def batch_get_or_create_artists([], _), do: []
 

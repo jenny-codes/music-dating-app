@@ -10,6 +10,7 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
   (2) This operation is costly.
   """
   @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
+  @music_mod Application.compile_env(:songmate, [:context, :music], Music)
   @one_week_in_seconds 7 * 24 * 60 * 60
 
   @spec call(%Accounts.User{}, %{artists: [], tracks: [], genres: []}) :: any
@@ -20,17 +21,17 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
 
       Task.Supervisor.start_child(TaskSupervisor, fn ->
         music_profile[:artists]
-        |> Music.batch_get_or_create_artists(order: true)
+        |> @music_mod.batch_get_or_create_artists(order: true)
         |> Enum.reject(&is_nil/1)
         |> MusicPreferences.batch_create_artist_preferences(user)
 
         music_profile[:tracks]
-        |> Music.batch_get_or_create_tracks(order: true)
+        |> @music_mod.batch_get_or_create_tracks(order: true)
         |> Enum.reject(&is_nil/1)
         |> MusicPreferences.batch_create_track_preferences(user)
 
         music_profile[:genres]
-        |> Music.batch_get_or_create_genres(order: true)
+        |> @music_mod.batch_get_or_create_genres(order: true)
         |> Enum.reject(&is_nil/1)
         |> MusicPreferences.batch_create_genre_preferences(user)
 
