@@ -10,6 +10,12 @@ defmodule Songmate.MusicPreferences do
   alias Songmate.Music.{Artist, Track, Genre}
   alias Songmate.Accounts.User
 
+  @callback list_preferences(:artist | :genre | :track, user_ids: [non_neg_integer()]) ::
+              nil | [%{}]
+  @callback batch_create_artist_preferences([%Artist{}] | nil, User.t()) :: any
+  @callback batch_create_track_preferences([%Track{}] | nil, User.t()) :: any
+  @callback batch_create_genre_preferences([%Genre{}] | nil, User.t()) :: any
+
   @spec list_preferences(:artist | :genre | :track, user_ids: [non_neg_integer()]) ::
           nil | [%ArtistPreference{} | %TrackPreference{} | %GenrePreference{}]
   def list_preferences(type, user_ids: user_ids) do

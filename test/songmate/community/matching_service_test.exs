@@ -1,23 +1,7 @@
 defmodule Songmate.Community.MatchingServiceTest do
-  use Songmate.DataCase, async: false
+  use ExUnit.Case, async: false
   alias Songmate.Community.MatchingService
   alias Songmate.Fixtures
-
-  defmodule FakePreference do
-    defstruct [:user_id, :artist, :track, :genre]
-  end
-
-  defmodule FakeProfile do
-    def list_preferences(_, _) do
-      [
-        %FakePreference{artist: "Coldplay"},
-        %FakePreference{artist: "Coldplay"},
-        %FakePreference{artist: "Coldplay"},
-        %FakePreference{track: "Yellow"},
-        %FakePreference{genre: "coolkid pop"}
-      ]
-    end
-  end
 
   describe "find_top_match/1" do
     test "returns the user in db that matches input user the most" do
@@ -26,7 +10,7 @@ defmodule Songmate.Community.MatchingServiceTest do
       user2 = %{id: 2}
       Fixtures.Accounts.set_users([user1, user2])
 
-      result = MatchingService.find_top_match(user1, FakeProfile)
+      result = MatchingService.find_top_match(user1)
 
       assert %{
                user: user2,
@@ -38,7 +22,7 @@ defmodule Songmate.Community.MatchingServiceTest do
 
   describe "get_shared_preferences/2" do
     test "returns shared music types between two users" do
-      result = MatchingService.get_shared_preferences(1, 2, FakeProfile)
+      result = MatchingService.get_shared_preferences(1, 2)
 
       assert result == %{tracks: [], artists: ["Coldplay"], genres: []}
     end

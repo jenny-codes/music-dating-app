@@ -11,6 +11,12 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
   """
   @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
   @music_mod Application.compile_env(:songmate, [:context, :music], Music)
+  @music_pref_mod Application.compile_env(
+                    :songmate,
+                    [:context, :music_preferences],
+                    MusicPreferences
+                  )
+
   @one_week_in_seconds 7 * 24 * 60 * 60
 
   @spec call(%Accounts.User{}, %{artists: [], tracks: [], genres: []}) :: any
@@ -23,17 +29,17 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
         music_profile[:artists]
         |> @music_mod.batch_get_or_create_artists(order: true)
         |> Enum.reject(&is_nil/1)
-        |> MusicPreferences.batch_create_artist_preferences(user)
+        |> @music_pref_mod.batch_create_artist_preferences(user)
 
         music_profile[:tracks]
         |> @music_mod.batch_get_or_create_tracks(order: true)
         |> Enum.reject(&is_nil/1)
-        |> MusicPreferences.batch_create_track_preferences(user)
+        |> @music_pref_mod.batch_create_track_preferences(user)
 
         music_profile[:genres]
         |> @music_mod.batch_get_or_create_genres(order: true)
         |> Enum.reject(&is_nil/1)
-        |> MusicPreferences.batch_create_genre_preferences(user)
+        |> @music_pref_mod.batch_create_genre_preferences(user)
 
         @account_mod.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
       end)
