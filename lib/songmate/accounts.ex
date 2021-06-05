@@ -3,13 +3,14 @@ defmodule Songmate.Accounts do
   The Accounts context.
   """
 
-  @callback list_users(except: [non_neg_integer] | nil) :: [%{}]
-
   import Ecto.Query, warn: false
   alias Songmate.Repo
 
   alias Songmate.Accounts.User
   alias Songmate.Accounts.Credential
+
+  @callback list_users(except: [non_neg_integer] | nil) :: [%{}]
+  @callback update_user(%User{}, %{}) :: any
 
   @spec list_users(except: [non_neg_integer] | nil) :: [%User{}]
   def list_users() do
@@ -37,6 +38,7 @@ defmodule Songmate.Accounts do
     |> Repo.insert()
   end
 
+  @spec update_user(%User{}, %{}) :: any
   def update_user(%User{} = user, attrs \\ %{}) do
     user
     |> User.changeset(attrs)

@@ -22,8 +22,8 @@ defmodule Songmate.Community.MatchingServiceTest do
   describe "find_top_match/1" do
     test "returns the user in db that matches input user the most" do
       start_supervised!({Fixtures.Accounts, %{}})
-      user1 = user_fixture(valid_user_attrs())
-      user2 = user_fixture(valid_2nd_user_attrs())
+      user1 = %{id: 1}
+      user2 = %{id: 2}
       Fixtures.Accounts.set_users([user1, user2])
 
       result = MatchingService.find_top_match(user1, FakeProfile)
