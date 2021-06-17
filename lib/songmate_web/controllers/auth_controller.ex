@@ -1,18 +1,18 @@
 defmodule SongmateWeb.AuthController do
   use SongmateWeb, :controller
   alias Songmate.Accounts
-  alias Songmate.SpotifyService
+  alias Songmate.AuthService
 
   def login(conn, _param) do
     login_with_token(conn) || redirect(conn, to: "/authorize")
   end
 
   defp login_with_token(conn) do
-    with {:ok, conn} <- SpotifyService.validate_and_refresh_token(conn),
+    with {:ok, conn} <- AuthService.validate_and_refresh_token(conn),
          login_dest <- get_session(conn, :login_dest) do
       {:ok, user} =
         conn
-        |> SpotifyService.fetch_user_info()
+        |> AuthService.fetch_user_info()
         |> normalize_to_user_attrs()
         |> Accounts.get_or_create_user()
 
@@ -34,11 +34,11 @@ defmodule SongmateWeb.AuthController do
   Ref: https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow
   """
   def authorize(conn, _params) do
-    redirect(conn, external: SpotifyService.authorize_url())
+    redirect(conn, external: AuthService.authorize_url())
   end
 
   def authenticate(conn, params) do
-    case SpotifyService.authenticate(conn, params) do
+    case AuthService.authenticate(conn, params) do
       {:ok, conn} ->
         redirect(conn, to: "/")
 

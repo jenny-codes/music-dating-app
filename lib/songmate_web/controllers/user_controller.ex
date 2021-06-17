@@ -1,6 +1,6 @@
 defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
-  alias Songmate.SpotifyService
+  alias Songmate.ImportMusicService
   alias Songmate.Workers.UpdateUserMusicPreferences
   alias Songmate.Community.MatchingService
 
@@ -9,7 +9,7 @@ defmodule SongmateWeb.UserController do
     user = conn.assigns.current_user
 
     [artists: artists, tracks: tracks, genres: genres] =
-      SpotifyService.fetch_listening_history(conn)
+      ImportMusicService.fetch_listening_history(conn)
 
     UpdateUserMusicPreferences.call(user, %{artists: artists, tracks: tracks, genres: genres})
 
@@ -31,7 +31,7 @@ defmodule SongmateWeb.UserController do
   end
 
   defp validate_token(conn) do
-    case SpotifyService.validate_and_refresh_token(conn) do
+    case Songmate.AuthService.validate_and_refresh_token(conn) do
       {:ok, conn} ->
         conn
 

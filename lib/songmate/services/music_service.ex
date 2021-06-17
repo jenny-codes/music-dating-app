@@ -5,14 +5,16 @@ defmodule Songmate.Music do
 
   import Ecto.Query, warn: false
   alias Songmate.Repo
-  alias Songmate.SpotifyService
+  alias Songmate.ImportMusicService
   alias Songmate.Music.{Track, Genre, Artist}
 
-  @callback batch_get_or_create_artists([SpotifyService.artist()], order: boolean()) :: [Artist]
-  @callback batch_get_or_create_tracks([SpotifyService.track()], order: boolean()) :: [Track]
-  @callback batch_get_or_create_genres([SpotifyService.genre()], order: boolean()) :: [Genre]
+  @callback batch_get_or_create_artists([ImportMusicService.artist()], order: boolean()) :: [
+              Artist
+            ]
+  @callback batch_get_or_create_tracks([ImportMusicService.track()], order: boolean()) :: [Track]
+  @callback batch_get_or_create_genres([ImportMusicService.genre()], order: boolean()) :: [Genre]
 
-  @spec batch_get_or_create_artists([SpotifyService.artist()], order: boolean()) :: [Artist]
+  @spec batch_get_or_create_artists([ImportMusicService.artist()], order: boolean()) :: [Artist]
   def batch_get_or_create_artists([], _), do: []
 
   def batch_get_or_create_artists(artists, order: true) do
@@ -20,7 +22,7 @@ defmodule Songmate.Music do
     Repo.all_with_order(Artist, :spotify_id, Enum.map(artists, & &1.spotify_id))
   end
 
-  @spec batch_get_or_create_tracks([SpotifyService.track()], order: boolean()) :: [Track]
+  @spec batch_get_or_create_tracks([ImportMusicService.track()], order: boolean()) :: [Track]
   def batch_get_or_create_tracks([], _), do: []
 
   def batch_get_or_create_tracks(tracks, order: true) do
@@ -28,7 +30,7 @@ defmodule Songmate.Music do
     Repo.all_with_order(Track, :spotify_id, Enum.map(tracks, & &1.spotify_id))
   end
 
-  @spec batch_get_or_create_genres([SpotifyService.genre()], order: boolean()) :: [Genre]
+  @spec batch_get_or_create_genres([ImportMusicService.genre()], order: boolean()) :: [Genre]
   def batch_get_or_create_genres([], _), do: []
 
   def batch_get_or_create_genres(genres, order: true) do
