@@ -69,7 +69,7 @@ defmodule Songmate.DataCase do
     {:ok, user} =
       attrs
       |> Enum.into(valid_user_attrs())
-      |> Songmate.Accounts.create_user()
+      |> Songmate.Accounts.UserRepo.create_user()
 
     user
   end

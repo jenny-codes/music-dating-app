@@ -1,6 +1,6 @@
 defmodule SongmateWeb.AuthController do
   use SongmateWeb, :controller
-  alias Songmate.Accounts
+  alias Songmate.Accounts.UserRepo
   alias Songmate.AuthService
 
   def login(conn, _param) do
@@ -14,7 +14,7 @@ defmodule SongmateWeb.AuthController do
         conn
         |> AuthService.fetch_user_info()
         |> normalize_to_user_attrs()
-        |> Accounts.get_or_create_user()
+        |> UserRepo.get_or_create_user()
 
       conn
       |> put_session(:login_dest, nil)

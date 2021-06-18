@@ -2,6 +2,7 @@ defmodule Songmate.Community.MatchingService do
   alias Songmate.Accounts
   alias Songmate.Accounts.User
   alias Songmate.Music.{Artist, Track, Genre}
+  alias Songmate.Accounts.UserRepo
 
   @track_score 10
   @artist_score 5
@@ -10,10 +11,11 @@ defmodule Songmate.Community.MatchingService do
   @type music_type :: %{artist: [%Artist{}], track: [%Track{}], genre: [%Genre{}]}
 
   @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
+  @user_repo Application.compile_env(:songmate, [:adapters, :user_repo], UserRepo)
 
   @spec find_top_match(%User{}) :: %{user: %User{}, score: integer(), shared: music_type()}
   def find_top_match(user) do
-    candidates = @account_mod.list_users(except: [user.id])
+    candidates = @user_repo.list_users(except: [user.id])
 
     candidates
     |> Enum.map(& &1.id)

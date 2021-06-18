@@ -18,5 +18,7 @@ config :songmate, :context,
   accounts: Songmate.Fixtures.Accounts,
   music: Songmate.Fixtures.Music
 
+config :songmate, :adapters, user_repo: Songmate.Fixtures.UserRepo
+
 # Print only warnings and errors during test
 config :logger, level: :info

@@ -4,12 +4,12 @@ defmodule Songmate.Worker.UpdateUserMusicPreferencesTest do
 
   describe "call/1" do
     test "does not update if user has updated in the past week" do
-      start_supervised!({Fixtures.Accounts, %{}})
+      start_supervised!({Fixtures.UserRepo, %{}})
       user = %{preferences_updated_at: NaiveDateTime.local_now()}
 
       Songmate.Workers.UpdateUserMusicPreferences.call(user, %{tracks: ["a track"]})
 
-      refute Fixtures.Accounts.called_update_user(user)
+      refute Fixtures.UserRepo.called_update_user(user)
     end
   end
 end
