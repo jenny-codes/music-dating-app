@@ -6,25 +6,7 @@ defmodule Songmate.Accounts do
   import Ecto.Query, warn: false
   alias Songmate.Repo
 
-  alias Songmate.Accounts.{User, Credential, MusicPreference}
-
-  def create_credential(attrs \\ %{}) do
-    %Credential{}
-    |> Credential.changeset(attrs)
-    |> Ecto.Changeset.cast_assoc(:user, with: &User.changeset/2)
-    |> Repo.insert()
-  end
-
-  def update_credential(%Credential{} = credential, attrs) do
-    credential
-    |> Credential.changeset(attrs)
-    |> Ecto.Changeset.cast_assoc(:user, with: &User.changeset/2)
-    |> Repo.update()
-  end
-
-  def delete_credential(%Credential{} = credential) do
-    Repo.delete(credential)
-  end
+  alias Songmate.Accounts.MusicPreference
 
   @callback list_music_preferences(user_ids: [non_neg_integer()]) :: nil | [%MusicPreference{}]
   @callback batch_upsert_music_preferences_for_user([%{}] | nil, integer()) :: any

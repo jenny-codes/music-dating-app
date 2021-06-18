@@ -4,7 +4,7 @@ defmodule Songmate.AccountsTest do
   alias Songmate.Repo
   alias Songmate.Accounts
   alias Songmate.Accounts.{User, Credential, MusicPreference}
-  alias Songmate.Accounts.UserRepo
+  alias Songmate.Accounts.{UserRepo, CredentialRepo}
 
   describe "users" do
     @update_attrs %{
@@ -108,13 +108,13 @@ defmodule Songmate.AccountsTest do
       {:ok, credential} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Accounts.create_credential()
+        |> CredentialRepo.create_credential()
 
       credential
     end
 
     test "create_credential/1 with valid data creates a credential" do
-      assert {:ok, %Credential{} = credential} = Accounts.create_credential(@valid_attrs)
+      assert {:ok, %Credential{} = credential} = CredentialRepo.create_credential(@valid_attrs)
       assert credential.provider == :spotify
       assert credential.email == "hi@songmate.co"
       assert credential.provider_uid == "songmate"
@@ -122,14 +122,14 @@ defmodule Songmate.AccountsTest do
     end
 
     test "create_credential/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Accounts.create_credential(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = CredentialRepo.create_credential(@invalid_attrs)
     end
 
     test "update_credential/2 with valid data updates the credential" do
       credential = credential_fixture()
 
       assert {:ok, %Credential{} = credential} =
-               Accounts.update_credential(credential, @update_attrs)
+               CredentialRepo.update_credential(credential, @update_attrs)
 
       assert credential.email == "updated@songmate.co"
       assert credential.provider_uid == "songmate"
@@ -137,13 +137,16 @@ defmodule Songmate.AccountsTest do
 
     test "update_credential/2 with invalid data returns error changeset" do
       credential = credential_fixture()
-      assert {:error, %Ecto.Changeset{}} = Accounts.update_credential(credential, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               CredentialRepo.update_credential(credential, @invalid_attrs)
+
       assert credential == Repo.get!(Credential, credential.id) |> Repo.preload(:user)
     end
 
     test "delete_credential/1 deletes the credential" do
       credential = credential_fixture()
-      assert {:ok, %Credential{}} = Accounts.delete_credential(credential)
+      assert {:ok, %Credential{}} = CredentialRepo.delete_credential(credential)
       assert_raise Ecto.NoResultsError, fn -> Repo.get!(Credential, credential.id) end
     end
 
@@ -151,7 +154,7 @@ defmodule Songmate.AccountsTest do
       credential = credential_fixture() |> Repo.preload(:user)
       user = credential.user
 
-      assert {:ok, %Credential{}} = Accounts.delete_credential(credential)
+      assert {:ok, %Credential{}} = CredentialRepo.delete_credential(credential)
       assert user.id == Repo.get!(User, user.id).id
     end
   end
