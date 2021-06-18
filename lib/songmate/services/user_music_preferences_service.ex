@@ -1,15 +1,17 @@
 defmodule Songmate.Workers.UpdateUserMusicPreferences do
-  alias Songmate.Music
   alias Songmate.TaskSupervisor
   alias Songmate.Accounts.User
   alias Songmate.Accounts.{UserRepo, MusicPreferenceRepo}
+  alias Songmate.Music.{ArtistRepo, TrackRepo, GenreRepo}
 
   @moduledoc """
   We update user's music preferences once per week because
   (1) This data is not easily changed.
   (2) This operation is costly.
   """
-  @music_mod Application.compile_env(:songmate, [:context, :music], Music)
+  @artist_repo Application.compile_env(:songmate, [:adapters, :artist], ArtistRepo)
+  @track_repo Application.compile_env(:songmate, [:adapters, :track], TrackRepo)
+  @genre_repo Application.compile_env(:songmate, [:adapters, :genre], GenreRepo)
   @user_repo Application.compile_env(
                :songmate,
                [:adapters, :user_repo],
@@ -32,17 +34,17 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
       Task.Supervisor.start_child(TaskSupervisor, fn ->
         artist_prefs =
           music_profile[:artists]
-          |> @music_mod.batch_get_or_create_artists(order: true)
+          |> @artist_repo.batch_get_or_create_artists(order: true)
           |> build_music_prefs_for_user(user)
 
         track_prefs =
           music_profile[:tracks]
-          |> @music_mod.batch_get_or_create_tracks(order: true)
+          |> @track_repo.batch_get_or_create_tracks(order: true)
           |> build_music_prefs_for_user(user)
 
         genre_prefs =
           music_profile[:genres]
-          |> @music_mod.batch_get_or_create_genres(order: true)
+          |> @genre_repo.batch_get_or_create_genres(order: true)
           |> build_music_prefs_for_user(user)
 
         (artist_prefs ++ track_prefs ++ genre_prefs)

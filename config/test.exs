@@ -14,11 +14,12 @@ config :songmate, SongmateWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-config :songmate, :context, music: Songmate.Fixtures.Music
-
 config :songmate, :adapters,
   user_repo: Songmate.Fixtures.UserRepo,
-  music_preference_repo: Songmate.Fixtures.MusicPreferenceRepo
+  music_preference_repo: Songmate.Fixtures.MusicPreferenceRepo,
+  artist_repo: Songmate.Fixtures.ArtistRepo,
+  track_repo: Songmate.Fixtures.TrackRepo,
+  genre_repo: Songmate.Fixtures.GenreRepo
 
 # Print only warnings and errors during test
 config :logger, level: :info
