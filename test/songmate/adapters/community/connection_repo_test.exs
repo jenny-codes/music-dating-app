@@ -1,7 +1,7 @@
-defmodule Songmate.CommunityTest do
+defmodule Songmate.ConnectionRepoTest do
   use Songmate.DataCase, async: true
 
-  alias Songmate.Community
+  alias Songmate.Community.ConnectionRepo
 
   describe "connections" do
     alias Songmate.Community.Connection
@@ -14,19 +14,19 @@ defmodule Songmate.CommunityTest do
       {:ok, connection} =
         attrs
         |> Enum.into(@valid_attrs)
-        |> Community.create_connection()
+        |> ConnectionRepo.create_connection()
 
       connection
     end
 
     test "list_connections/0 returns all connections" do
       connection = connection_fixture()
-      assert Community.list_connections() == [connection]
+      assert ConnectionRepo.list_connections() == [connection]
     end
 
     test "get_connection!/1 returns the connection with given id" do
       connection = connection_fixture()
-      assert Community.get_connection!(connection.id) == connection
+      assert ConnectionRepo.get_connection!(connection.id) == connection
     end
 
     test "create_connection/1 with valid data creates a connection" do
@@ -38,21 +38,21 @@ defmodule Songmate.CommunityTest do
         ]
       }
 
-      assert {:ok, %Connection{} = connection} = Community.create_connection(attrs)
+      assert {:ok, %Connection{} = connection} = ConnectionRepo.create_connection(attrs)
       connection = Repo.preload(connection, :users)
       assert connection.score == 100
       assert length(connection.users) == 2
     end
 
     test "create_connection/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Community.create_connection(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = ConnectionRepo.create_connection(@invalid_attrs)
     end
 
     test "update_connection/2 with valid data updates the connection" do
       connection = connection_fixture()
 
       assert {:ok, %Connection{} = connection} =
-               Community.update_connection(connection, @update_attrs)
+               ConnectionRepo.update_connection(connection, @update_attrs)
 
       assert connection.score == 43
       assert connection.shared_preferences == %{}
@@ -60,19 +60,22 @@ defmodule Songmate.CommunityTest do
 
     test "update_connection/2 with invalid data returns error changeset" do
       connection = connection_fixture()
-      assert {:error, %Ecto.Changeset{}} = Community.update_connection(connection, @invalid_attrs)
-      assert connection == Community.get_connection!(connection.id)
+
+      assert {:error, %Ecto.Changeset{}} =
+               ConnectionRepo.update_connection(connection, @invalid_attrs)
+
+      assert connection == ConnectionRepo.get_connection!(connection.id)
     end
 
     test "delete_connection/1 deletes the connection" do
       connection = connection_fixture()
-      assert {:ok, %Connection{}} = Community.delete_connection(connection)
-      assert_raise Ecto.NoResultsError, fn -> Community.get_connection!(connection.id) end
+      assert {:ok, %Connection{}} = ConnectionRepo.delete_connection(connection)
+      assert_raise Ecto.NoResultsError, fn -> ConnectionRepo.get_connection!(connection.id) end
     end
 
     test "change_connection/1 returns a connection changeset" do
       connection = connection_fixture()
-      assert %Ecto.Changeset{} = Community.change_connection(connection)
+      assert %Ecto.Changeset{} = ConnectionRepo.change_connection(connection)
     end
   end
 end
