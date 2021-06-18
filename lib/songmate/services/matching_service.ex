@@ -1,8 +1,7 @@
 defmodule Songmate.Community.MatchingService do
-  alias Songmate.Accounts
   alias Songmate.Accounts.User
+  alias Songmate.Accounts.{UserRepo, MusicPreferenceRepo}
   alias Songmate.Music.{Artist, Track, Genre}
-  alias Songmate.Accounts.UserRepo
 
   @track_score 10
   @artist_score 5
@@ -10,8 +9,16 @@ defmodule Songmate.Community.MatchingService do
 
   @type music_type :: %{artist: [%Artist{}], track: [%Track{}], genre: [%Genre{}]}
 
-  @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
-  @user_repo Application.compile_env(:songmate, [:adapters, :user_repo], UserRepo)
+  @music_pref_repo Application.compile_env(
+                     :songmate,
+                     [:adapters, :music_preference_repo],
+                     MusicPreferenceRepo
+                   )
+  @user_repo Application.compile_env(
+               :songmate,
+               [:adapters, :user_repo],
+               UserRepo
+             )
 
   @spec find_top_match(%User{}) :: %{user: %User{}, score: integer(), shared: music_type()}
   def find_top_match(user) do
@@ -44,7 +51,7 @@ defmodule Songmate.Community.MatchingService do
 
   @spec get_shared_preferences(integer(), integer()) :: music_type()
   def get_shared_preferences(user_id1, user_id2) do
-    @account_mod.list_music_preferences(user_ids: [user_id1, user_id2])
+    @music_pref_repo.list_music_preferences(user_ids: [user_id1, user_id2])
     |> Enum.group_by(& &1.type, & &1.type_id)
     |> Enum.map(fn {type, type_ids} -> {type, select_duplicates(type_ids)} end)
     |> Map.new()

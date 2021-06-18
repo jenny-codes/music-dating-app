@@ -1,21 +1,29 @@
 defmodule Songmate.Workers.UpdateUserMusicPreferences do
   alias Songmate.Music
-  alias Songmate.Accounts
   alias Songmate.TaskSupervisor
-  alias Songmate.Accounts.UserRepo
+  alias Songmate.Accounts.User
+  alias Songmate.Accounts.{UserRepo, MusicPreferenceRepo}
 
   @moduledoc """
   We update user's music preferences once per week because
   (1) This data is not easily changed.
   (2) This operation is costly.
   """
-  @account_mod Application.compile_env(:songmate, [:context, :accounts], Accounts)
   @music_mod Application.compile_env(:songmate, [:context, :music], Music)
-  @user_repo Application.compile_env(:songmate, [:adapters, :user_repo], UserRepo)
+  @user_repo Application.compile_env(
+               :songmate,
+               [:adapters, :user_repo],
+               UserRepo
+             )
+  @music_pref_repo Application.compile_env(
+                     :songmate,
+                     [:adapters, :music_preference_repo],
+                     MusicPreferenceRepo
+                   )
 
   @one_week_in_seconds 7 * 24 * 60 * 60
 
-  @spec call(%Accounts.User{}, %{artists: [], tracks: [], genres: []}) :: any
+  @spec call(%User{}, %{artists: [], tracks: [], genres: []}) :: any
   def call(user, %{} = music_profile) do
     if should_update(user) do
       default = %{artists: [], tracks: [], genres: []}
@@ -38,7 +46,7 @@ defmodule Songmate.Workers.UpdateUserMusicPreferences do
           |> build_music_prefs_for_user(user)
 
         (artist_prefs ++ track_prefs ++ genre_prefs)
-        |> @account_mod.batch_upsert_music_preferences_for_user(user.id)
+        |> @music_pref_repo.batch_upsert_music_preferences_for_user(user.id)
 
         @user_repo.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
       end)

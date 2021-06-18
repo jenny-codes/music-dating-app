@@ -1,6 +1,7 @@
-defmodule Songmate.Fixtures.Accounts do
+defmodule Songmate.Fixtures.MusicPreferenceRepo do
   use Agent
-  @behaviour Songmate.Accounts
+  alias Songmate.Accounts.MusicPreferenceRepo
+  @behaviour MusicPreferenceRepo
 
   # ----------------------------------------------
   # Arrange
@@ -16,7 +17,7 @@ defmodule Songmate.Fixtures.Accounts do
   # ----------------------------------------------
   # Act
 
-  @impl Songmate.Accounts
+  @impl MusicPreferenceRepo
   def list_music_preferences(user_ids: _user_ids) do
     [
       %{type: :artist, type_id: 1},
@@ -27,7 +28,7 @@ defmodule Songmate.Fixtures.Accounts do
     ]
   end
 
-  @impl Songmate.Accounts
+  @impl MusicPreferenceRepo
   def batch_upsert_music_preferences_for_user(_prefs, _user_id), do: nil
 
   # ----------------------------------------------
@@ -36,7 +37,7 @@ defmodule Songmate.Fixtures.Accounts do
     Agent.update(__MODULE__, &Map.put(&1, key, val))
   end
 
-  def get_state(key) do
-    Agent.get(__MODULE__, &Map.get(&1, key))
-  end
+  # def get_state(key) do
+  #   Agent.get(__MODULE__, &Map.get(&1, key))
+  # end
 end

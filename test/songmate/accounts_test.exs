@@ -2,9 +2,8 @@ defmodule Songmate.AccountsTest do
   use Songmate.DataCase, async: true
 
   alias Songmate.Repo
-  alias Songmate.Accounts
   alias Songmate.Accounts.{User, Credential, MusicPreference}
-  alias Songmate.Accounts.{UserRepo, CredentialRepo}
+  alias Songmate.Accounts.{UserRepo, CredentialRepo, MusicPreferenceRepo}
 
   describe "users" do
     @update_attrs %{
@@ -172,9 +171,9 @@ defmodule Songmate.AccountsTest do
         }
       ]
 
-      Accounts.batch_upsert_music_preferences_for_user(valid_input, user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user(valid_input, user.id)
 
-      result = Accounts.list_music_preferences(user_ids: [user.id])
+      result = MusicPreferenceRepo.list_music_preferences(user_ids: [user.id])
 
       assert Enum.count(result) == 1
       assert List.first(result).user_id == user.id
@@ -194,7 +193,7 @@ defmodule Songmate.AccountsTest do
         }
       ]
 
-      Accounts.batch_upsert_music_preferences_for_user(valid_input, user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user(valid_input, user.id)
 
       assert Repo.get_by(MusicPreference, user_id: user.id, type: :artist, type_id: 3, rank: 2)
     end
@@ -220,8 +219,8 @@ defmodule Songmate.AccountsTest do
         }
       ]
 
-      Accounts.batch_upsert_music_preferences_for_user(previous_record, user.id)
-      Accounts.batch_upsert_music_preferences_for_user(new_record, user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user(previous_record, user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user(new_record, user.id)
 
       refute Repo.get_by(MusicPreference, user_id: user.id, type: :artist, type_id: 3, rank: 2)
     end
@@ -239,10 +238,10 @@ defmodule Songmate.AccountsTest do
       ]
 
       # Establishing record
-      Accounts.batch_upsert_music_preferences_for_user(record, user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user(record, user.id)
 
       # This shouldn't erase the existing record.
-      Accounts.batch_upsert_music_preferences_for_user([], user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user([], user.id)
 
       assert Repo.get_by(MusicPreference, user_id: user.id, type: :artist, type_id: 3, rank: 2)
     end
@@ -261,7 +260,7 @@ defmodule Songmate.AccountsTest do
         }
       ]
 
-      Accounts.batch_upsert_music_preferences_for_user(record, user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user(record, user.id)
       {:ok, _} = Repo.delete(user)
 
       refute Repo.exists?(from(pref in MusicPreference, where: pref.user_id == ^user.id))
@@ -279,7 +278,7 @@ defmodule Songmate.AccountsTest do
         }
       ]
 
-      Accounts.batch_upsert_music_preferences_for_user(record, user.id)
+      MusicPreferenceRepo.batch_upsert_music_preferences_for_user(record, user.id)
 
       Repo.delete_all(MusicPreference)
 
