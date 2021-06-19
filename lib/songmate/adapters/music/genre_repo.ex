@@ -17,6 +17,10 @@ defmodule Songmate.Music.GenreRepo do
     Repo.all_with_order(Genre, :name, Enum.map(genres, & &1.name))
   end
 
+  def get_genres(ids) do
+    Repo.all(from(g in Genre, where: g.id in ^ids))
+  end
+
   def create_genre(attrs \\ %{}) do
     %Genre{}
     |> Genre.changeset(attrs)

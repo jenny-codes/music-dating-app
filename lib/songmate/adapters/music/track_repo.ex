@@ -13,6 +13,10 @@ defmodule Songmate.Music.TrackRepo do
     Repo.all_with_order(Track, :spotify_id, Enum.map(tracks, & &1.spotify_id))
   end
 
+  def get_tracks(ids) do
+    Repo.all(from(t in Track, where: t.id in ^ids))
+  end
+
   def create_track(attrs \\ %{}) do
     changeset =
       if attrs[:artists] do

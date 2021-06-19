@@ -2,6 +2,7 @@ defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
   alias Songmate.UserMusicPreferencesService
   alias Songmate.MatchingService
+  alias Songmate.MusicService
 
   @one_week_in_seconds 7 * 24 * 60 * 60
 
@@ -12,14 +13,14 @@ defmodule SongmateWeb.UserController do
     if should_update(user), do: UserMusicPreferencesService.import(user, conn)
 
     %{user: user, score: score, shared: shared} = MatchingService.find_top_match(user)
+    music_records = MusicService.batch_get_music_records(shared)
 
     render(
       conn,
       "index.html",
-      # shared_artists: Enum.map(shared[:artist], & &1.name),
-      shared_artists: shared[:artist],
-      shared_tracks: shared[:track],
-      shared_genres: shared[:genre],
+      shared_artists: Enum.map(music_records[:artist], & &1.name),
+      shared_tracks: Enum.map(music_records[:track], & &1.name),
+      shared_genres: Enum.map(music_records[:genre], & &1.name),
       match_user: user,
       score: score
     )

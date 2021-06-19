@@ -28,6 +28,10 @@ defmodule Songmate.Music.ArtistRepo do
     Repo.insert(changeset)
   end
 
+  def get_artists(ids) do
+    Repo.all(from(a in Artist, where: a.id in ^ids))
+  end
+
   def update_artist(%Artist{} = artist, attrs) do
     changeset =
       if attrs[:genres] do
