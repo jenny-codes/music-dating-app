@@ -1,76 +1,64 @@
-defmodule Songmate.Workers.UpdateUserMusicPreferences do
-  alias Songmate.TaskSupervisor
+defmodule Songmate.UserMusicPreferencesService do
   alias Songmate.Accounts.User
   alias Songmate.Accounts.{UserRepo, MusicPreferenceRepo}
   alias Songmate.Music.{ArtistRepo, TrackRepo, GenreRepo}
+  alias Songmate.SpotifyPort
 
   @moduledoc """
   We update user's music preferences once per week because
   (1) This data is not easily changed.
   (2) This operation is costly.
   """
-  @artist_repo Application.compile_env(:songmate, [:adapters, :artist], ArtistRepo)
-  @track_repo Application.compile_env(:songmate, [:adapters, :track], TrackRepo)
-  @genre_repo Application.compile_env(:songmate, [:adapters, :genre], GenreRepo)
-  @user_repo Application.compile_env(
-               :songmate,
-               [:adapters, :user_repo],
-               UserRepo
-             )
+  @spotify_port Application.compile_env(:songmate, [:adapters, :spotify_port], SpotifyPort)
+  @artist_repo Application.compile_env(:songmate, [:adapters, :artist_repo], ArtistRepo)
+  @track_repo Application.compile_env(:songmate, [:adapters, :track_repo], TrackRepo)
+  @genre_repo Application.compile_env(:songmate, [:adapters, :genre_repo], GenreRepo)
+  @user_repo Application.compile_env(:songmate, [:adapters, :user_repo], UserRepo)
   @music_pref_repo Application.compile_env(
                      :songmate,
                      [:adapters, :music_preference_repo],
                      MusicPreferenceRepo
                    )
 
-  @one_week_in_seconds 7 * 24 * 60 * 60
+  @spec import(%User{}, any) :: any
+  def import(user, conn) do
+    music_profile =
+      conn
+      |> @spotify_port.fetch_listening_history()
+      |> Enum.into(%{artists: [], tracks: [], genres: []})
 
-  @spec call(%User{}, %{artists: [], tracks: [], genres: []}) :: any
-  def call(user, %{} = music_profile) do
-    if should_update(user) do
-      default = %{artists: [], tracks: [], genres: []}
-      music_profile = Enum.into(music_profile, default)
+    artist_prefs =
+      music_profile[:artists]
+      |> @artist_repo.batch_get_or_create_artists(order: true)
+      |> build_music_prefs_for_user(user, :artist)
 
-      Task.Supervisor.start_child(TaskSupervisor, fn ->
-        artist_prefs =
-          music_profile[:artists]
-          |> @artist_repo.batch_get_or_create_artists(order: true)
-          |> build_music_prefs_for_user(user)
+    track_prefs =
+      music_profile[:tracks]
+      |> @track_repo.batch_get_or_create_tracks(order: true)
+      |> build_music_prefs_for_user(user, :track)
 
-        track_prefs =
-          music_profile[:tracks]
-          |> @track_repo.batch_get_or_create_tracks(order: true)
-          |> build_music_prefs_for_user(user)
+    genre_prefs =
+      music_profile[:genres]
+      |> @genre_repo.batch_get_or_create_genres(order: true)
+      |> build_music_prefs_for_user(user, :genre)
 
-        genre_prefs =
-          music_profile[:genres]
-          |> @genre_repo.batch_get_or_create_genres(order: true)
-          |> build_music_prefs_for_user(user)
+    (artist_prefs ++ track_prefs ++ genre_prefs)
+    |> @music_pref_repo.batch_upsert_music_preferences_for_user(user.id)
 
-        (artist_prefs ++ track_prefs ++ genre_prefs)
-        |> @music_pref_repo.batch_upsert_music_preferences_for_user(user.id)
-
-        @user_repo.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
-      end)
-    end
+    @user_repo.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
   end
 
-  defp should_update(user) do
-    !user.preferences_updated_at ||
-      NaiveDateTime.diff(
-        NaiveDateTime.local_now(),
-        user.preferences_updated_at
-      ) > @one_week_in_seconds
-  end
-
-  defp build_music_prefs_for_user(attrs, user) do
+  defp build_music_prefs_for_user(attrs, user, type) do
     attrs
     |> Enum.reject(&is_nil/1)
     |> Enum.with_index(1)
     |> Enum.map(fn {attrs, rank} ->
-      attrs
-      |> Map.put(:rank, rank)
-      |> Map.put(:user_id, user.id)
+      %{
+        type: type,
+        type_id: attrs.id,
+        user_id: user.id,
+        rank: rank
+      }
     end)
   end
 end

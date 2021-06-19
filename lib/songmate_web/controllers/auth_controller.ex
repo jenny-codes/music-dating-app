@@ -1,6 +1,5 @@
 defmodule SongmateWeb.AuthController do
   use SongmateWeb, :controller
-  alias Songmate.Accounts.UserRepo
   alias Songmate.AuthService
 
   def login(conn, _param) do
@@ -8,20 +7,18 @@ defmodule SongmateWeb.AuthController do
   end
 
   defp login_with_token(conn) do
-    with {:ok, conn} <- AuthService.validate_and_refresh_token(conn),
-         login_dest <- get_session(conn, :login_dest) do
-      {:ok, user} =
-        conn
-        |> AuthService.fetch_user_info()
-        |> normalize_to_user_attrs()
-        |> UserRepo.get_or_create_user()
+    case AuthService.validate_and_refresh_token(conn) do
+      {:ok, conn} ->
+        login_dest = get_session(conn, :login_dest)
+        {:ok, user} = AuthService.fetch_user(conn)
 
-      conn
-      |> put_session(:login_dest, nil)
-      |> put_session(:current_user_id, user.id)
-      |> redirect(to: login_dest)
-    else
-      _ -> nil
+        conn
+        |> put_session(:login_dest, nil)
+        |> put_session(:current_user_id, user.id)
+        |> redirect(to: login_dest)
+
+      _ ->
+        nil
     end
   end
 
@@ -45,18 +42,5 @@ defmodule SongmateWeb.AuthController do
       {:error, conn} ->
         redirect(conn, to: "/error")
     end
-  end
-
-  defp normalize_to_user_attrs(user_info) do
-    %{
-      name: user_info[:display_name],
-      avatar: user_info[:avatar_url],
-      username: user_info[:username],
-      credential: %{
-        email: user_info[:email],
-        provider_uid: user_info[:username],
-        provider: :spotify
-      }
-    }
   end
 end

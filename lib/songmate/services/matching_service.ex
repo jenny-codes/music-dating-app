@@ -1,4 +1,4 @@
-defmodule Songmate.Community.MatchingService do
+defmodule Songmate.MatchingService do
   alias Songmate.Accounts.User
   alias Songmate.Accounts.{UserRepo, MusicPreferenceRepo}
   alias Songmate.Music.{Artist, Track, Genre}

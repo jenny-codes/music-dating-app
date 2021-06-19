@@ -1,26 +1,25 @@
 defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
-  alias Songmate.ImportMusicService
-  alias Songmate.Workers.UpdateUserMusicPreferences
-  alias Songmate.Community.MatchingService
+  alias Songmate.UserMusicPreferencesService
+  alias Songmate.MatchingService
+
+  @one_week_in_seconds 7 * 24 * 60 * 60
 
   def index(conn, _params) do
     conn = validate_token(conn)
     user = conn.assigns.current_user
 
-    [artists: artists, tracks: tracks, genres: genres] =
-      ImportMusicService.fetch_listening_history(conn)
-
-    UpdateUserMusicPreferences.call(user, %{artists: artists, tracks: tracks, genres: genres})
+    if should_update(user), do: UserMusicPreferencesService.import(user, conn)
 
     %{user: user, score: score, shared: shared} = MatchingService.find_top_match(user)
 
     render(
       conn,
       "index.html",
-      shared_artists: Enum.map(shared[:artists], & &1.name),
-      shared_tracks: Enum.map(shared[:tracks], & &1.name),
-      shared_genres: Enum.map(shared[:genres], & &1.name),
+      # shared_artists: Enum.map(shared[:artist], & &1.name),
+      shared_artists: shared[:artist],
+      shared_tracks: shared[:track],
+      shared_genres: shared[:genre],
       match_user: user,
       score: score
     )
@@ -40,5 +39,13 @@ defmodule SongmateWeb.UserController do
         |> put_session(:login_dest, conn.request_path)
         |> redirect(to: "/authorize")
     end
+  end
+
+  defp should_update(user) do
+    !user.preferences_updated_at ||
+      NaiveDateTime.diff(
+        NaiveDateTime.local_now(),
+        user.preferences_updated_at
+      ) > @one_week_in_seconds
   end
 end

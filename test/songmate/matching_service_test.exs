@@ -1,6 +1,6 @@
-defmodule Songmate.Community.MatchingServiceTest do
+defmodule Songmate.MatchingServiceTest do
   use ExUnit.Case, async: false
-  alias Songmate.Community.MatchingService
+  alias Songmate.MatchingService
   alias Songmate.Fixtures
 
   describe "find_top_match/1" do

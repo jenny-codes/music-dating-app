@@ -19,7 +19,8 @@ config :songmate, :adapters,
   music_preference_repo: Songmate.Fixtures.MusicPreferenceRepo,
   artist_repo: Songmate.Fixtures.ArtistRepo,
   track_repo: Songmate.Fixtures.TrackRepo,
-  genre_repo: Songmate.Fixtures.GenreRepo
+  genre_repo: Songmate.Fixtures.GenreRepo,
+  spotify_port: Songamte.Fixtures.SpotifyPort
 
 # Print only warnings and errors during test
 config :logger, level: :info
