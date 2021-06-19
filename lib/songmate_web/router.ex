@@ -7,7 +7,7 @@ defmodule SongmateWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug(:ensure_current_user)
+    plug(SongmateWeb.AuthPlug)
     plug(:put_user_token)
   end
 
@@ -17,23 +17,6 @@ defmodule SongmateWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-  end
-
-  defp ensure_current_user(conn, _params) do
-    cond do
-      conn.assigns[:current_user] ->
-        conn
-
-      get_session(conn, :current_user_id) ->
-        user = Songmate.Repo.get!(Songmate.Accounts.User, get_session(conn, :current_user_id))
-        assign(conn, :current_user, user)
-
-      true ->
-        conn
-        |> Plug.Conn.put_session(:login_dest, conn.request_path)
-        |> Phoenix.Controller.redirect(to: "/login")
-        |> halt
-    end
   end
 
   defp put_user_token(conn, _params) do
