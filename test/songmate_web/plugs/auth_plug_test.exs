@@ -1,47 +1,47 @@
 defmodule SongmateWeb.AuthPlugTest do
   use SongmateWeb.ConnCase, async: true
-  # use Plug.Test
+  import Mox
+  alias Songmate.Mock
   alias SongmateWeb.AuthPlug
+
+  setup :set_mox_from_context
 
   test "does nothing if current_user is present" do
     user = user_fixture()
+    expect(Mock.AuthService, :fetch_user_with_token, 0, fn _ -> nil end)
 
     conn =
       build_conn()
-      |> get("/")
       |> assign(:current_user, user)
       |> AuthPlug.call(%{})
 
     assert user.id == conn.assigns[:current_user].id
   end
 
-  test "looks up current_user of id is present" do
+  test "fetch user with token if no current user" do
     user = user_fixture()
 
-    conn =
-      build_conn()
-      |> init_test_session(%{current_user_id: user.id})
-      |> AuthPlug.call(%{})
+    expect(Mock.AuthService, :fetch_user_with_token, fn conn -> {conn, user} end)
 
-    assert user.id == conn.assigns[:current_user].id
-  end
-
-  test "redirects to login if cannot find current_user by id" do
-    conn =
-      build_conn()
-      |> init_test_session(%{current_user_id: 0})
-      |> AuthPlug.call(%{})
-
-    assert redirected_to(conn, 302) == "/login"
-  end
-
-  test "redirects to login if cannot find current user" do
     conn =
       build_conn()
       |> init_test_session(%{})
       |> AuthPlug.call(%{})
 
-    assert redirected_to(conn, 302) == "/login"
+    verify!()
+    assert user.id == conn.assigns[:current_user].id
+  end
+
+  test "redirects to login if cannot find current_user" do
+    expect(Mock.AuthService, :fetch_user_with_token, fn _conn -> nil end)
+
+    conn =
+      build_conn()
+      |> init_test_session(%{})
+      |> AuthPlug.call(%{})
+
+    assert redirected_to(conn, 302) == "/authorize"
+    verify!()
   end
 
   def user_fixture(attrs \\ %{}) do

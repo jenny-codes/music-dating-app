@@ -22,5 +22,7 @@ config :songmate, :adapters,
   genre_repo: Songmate.Fixtures.GenreRepo,
   spotify_port: Songamte.Fixtures.SpotifyPort
 
+config :songmate, :services, auth_service: Songmate.Mock.AuthService
+
 # Print only warnings and errors during test
 config :logger, level: :info

@@ -1,6 +1,11 @@
 defmodule SongmateWeb.AuthPlug do
   import Plug.Conn
-  alias Songmate.AuthService
+
+  @auth_service Application.compile_env(
+                  :songmate,
+                  [:services, :auth_service],
+                  Songmate.AuthService
+                )
 
   def init(options) do
     options
@@ -10,11 +15,11 @@ defmodule SongmateWeb.AuthPlug do
     if conn.assigns[:current_user] do
       conn
     else
-      with {:ok, conn} <- AuthService.validate_and_refresh_token(conn),
-           {:ok, user} <- AuthService.fetch_user(conn) do
-        assign(conn, :current_user, user)
-      else
-        _ ->
+      case @auth_service.fetch_user_with_token(conn) do
+        {conn, user} ->
+          assign(conn, :current_user, user)
+
+        nil ->
           conn
           |> put_session(:login_dest, conn.request_path)
           |> Phoenix.Controller.redirect(to: "/authorize")

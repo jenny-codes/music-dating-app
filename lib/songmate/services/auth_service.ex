@@ -1,11 +1,7 @@
 defmodule Songmate.AuthService do
   alias Songmate.Accounts.UserRepo
-
-  def validate_and_refresh_token(conn) do
-    if Spotify.Authentication.tokens_present?(conn) do
-      Spotify.Authentication.refresh(conn)
-    end
-  end
+  alias Songmate.Accounts.User
+  @callback fetch_user_with_token(%Plug.Conn{}) :: nil | {%Plug.Conn{}, %User{}}
 
   def authorize_url do
     Spotify.Authorization.url()
@@ -15,10 +11,20 @@ defmodule Songmate.AuthService do
     Spotify.Authentication.authenticate(conn, params)
   end
 
-  def fetch_user(conn) do
-    {:ok, profile} = Spotify.Profile.me(conn)
+  @spec fetch_user_with_token(%Plug.Conn{}) :: nil | {%Plug.Conn{}, %User{}}
+  def fetch_user_with_token(conn) do
+    with true <- Spotify.Authentication.tokens_present?(conn),
+         {:ok, conn} <- Spotify.Authentication.refresh(conn),
+         {:ok, profile} <- Spotify.Profile.me(conn),
+         {:ok, user} <- UserRepo.get_or_create_user(format_user(profile)) do
+      {conn, user}
+    else
+      _ -> nil
+    end
+  end
 
-    UserRepo.get_or_create_user(%{
+  defp format_user(profile) do
+    %{
       name: profile.display_name,
       avatar: List.first(profile.images)["url"],
       username: profile.id,
@@ -27,6 +33,6 @@ defmodule Songmate.AuthService do
         provider_uid: profile.id,
         provider: :spotify
       }
-    })
+    }
   end
 end
