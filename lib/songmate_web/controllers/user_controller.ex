@@ -6,7 +6,7 @@ defmodule SongmateWeb.UserController do
 
   @one_week_in_seconds 7 * 24 * 60 * 60
 
-  def index(conn, _params) do
+  def me(conn, _params) do
     conn = validate_token(conn)
     user = conn.assigns.current_user
 
