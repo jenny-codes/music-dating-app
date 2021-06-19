@@ -7,7 +7,6 @@ defmodule SongmateWeb.UserController do
   @one_week_in_seconds 7 * 24 * 60 * 60
 
   def me(conn, _params) do
-    conn = validate_token(conn)
     user = conn.assigns.current_user
 
     if should_update(user), do: UserMusicPreferencesService.import(user, conn)
@@ -28,18 +27,6 @@ defmodule SongmateWeb.UserController do
 
   def chat(conn, _params) do
     render(conn, "chat.html")
-  end
-
-  defp validate_token(conn) do
-    case Songmate.AuthService.validate_and_refresh_token(conn) do
-      {:ok, conn} ->
-        conn
-
-      _ ->
-        conn
-        |> put_session(:login_dest, conn.request_path)
-        |> redirect(to: "/authorize")
-    end
   end
 
   defp should_update(user) do

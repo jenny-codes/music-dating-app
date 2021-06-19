@@ -2,26 +2,6 @@ defmodule SongmateWeb.AuthController do
   use SongmateWeb, :controller
   alias Songmate.AuthService
 
-  def login(conn, _param) do
-    login_with_token(conn) || redirect(conn, to: "/authorize")
-  end
-
-  defp login_with_token(conn) do
-    case AuthService.validate_and_refresh_token(conn) do
-      {:ok, conn} ->
-        login_dest = get_session(conn, :login_dest)
-        {:ok, user} = AuthService.fetch_user(conn)
-
-        conn
-        |> put_session(:login_dest, nil)
-        |> put_session(:current_user_id, user.id)
-        |> redirect(to: login_dest)
-
-      _ ->
-        nil
-    end
-  end
-
   @doc """
   Authorize is the step that asks user to sign in.
   After a user successfully sign in, Spotify will redirect to /authenticate, where we
@@ -37,7 +17,11 @@ defmodule SongmateWeb.AuthController do
   def authenticate(conn, params) do
     case AuthService.authenticate(conn, params) do
       {:ok, conn} ->
-        redirect(conn, to: "/")
+        login_dest = get_session(conn, :login_dest)
+
+        conn
+        |> put_session(:login_dest, nil)
+        |> redirect(to: login_dest)
 
       {:error, conn} ->
         redirect(conn, to: "/error")

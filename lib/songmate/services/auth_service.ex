@@ -16,28 +16,17 @@ defmodule Songmate.AuthService do
   end
 
   def fetch_user(conn) do
-    user_info = fetch_user_profile(conn)
+    {:ok, profile} = Spotify.Profile.me(conn)
 
     UserRepo.get_or_create_user(%{
-      name: user_info[:display_name],
-      avatar: user_info[:avatar_url],
-      username: user_info[:username],
+      name: profile.display_name,
+      avatar: List.first(profile.images)["url"],
+      username: profile.id,
       credential: %{
-        email: user_info[:email],
-        provider_uid: user_info[:username],
+        email: profile.email,
+        provider_uid: profile.id,
         provider: :spotify
       }
     })
-  end
-
-  def fetch_user_profile(conn) do
-    {:ok, profile} = Spotify.Profile.me(conn)
-
-    %{
-      email: profile.email,
-      username: profile.id,
-      avatar_url: List.first(profile.images)["url"],
-      display_name: profile.display_name
-    }
   end
 end
