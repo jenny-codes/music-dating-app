@@ -45,7 +45,8 @@ defmodule Songmate.MixProject do
       {:plug_cowboy, "~> 2.3"},
       {:spotify_ex, "~> 2.0.9"},
       {:ecto_enum, "~> 1.4"},
-      {:hackney, "~> 1.16"}
+      {:hackney, "~> 1.16"},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 
