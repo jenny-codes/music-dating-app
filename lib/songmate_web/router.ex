@@ -38,6 +38,7 @@ defmodule SongmateWeb.Router do
     get("/", UserController, :index)
     get("/chat", UserController, :chat)
     get("/peek", UserController, :peek)
+    get("/explore", UserController, :explore)
   end
 
   scope "/", SongmateWeb do

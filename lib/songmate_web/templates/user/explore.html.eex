@@ -1,0 +1,42 @@
+<h1> hey <%= @current_user.name %>, seems like <%= @match_user.name %> shares quite a lot of music with you. Check it out! </h1>
+
+<div class="row">
+  <div class="column">
+    <h2>Shared tracks</h2>
+    <table class="table">
+      <tbody>
+        <%= for track <- @shared_tracks do %>
+            <tr>
+              <td><%= track %></td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="column">
+    <h2>Shared artists</h2>
+    <table class="table">
+      <tbody>
+        <%= for artist <- @shared_artists do %>
+          <tr>
+            <td><%= artist %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="column">
+    <h2>Shared genres</h2>
+    <table class="table">
+      <tbody>
+        <%= for genre <- @shared_genres do %>
+            <tr>
+              <td><%= genre %></td>
+            </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
