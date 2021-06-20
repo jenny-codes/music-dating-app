@@ -1,16 +1,14 @@
 defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
-  alias Songmate.UseCase.{FindTopMatch, GenerateMatchData, ImportMusicPreference}
+  alias Songmate.UseCase.{FindTopMatch, GenerateMatchData}
   alias Songmate.MusicService
   alias Songmate.AccountService
   alias Songmate.Accounts.MusicPreferenceService
 
-  @one_week_in_seconds 7 * 24 * 60 * 60
+  plug(SongmateWeb.SyncUserInfoPlug)
 
   def index(conn, _params) do
     user = conn.assigns.current_user
-
-    if should_update(user), do: ImportMusicPreference.call(user, conn)
 
     music_records =
       MusicPreferenceService.list_music_preferences(user_ids: [user.id])
@@ -55,8 +53,6 @@ defmodule SongmateWeb.UserController do
   def explore(conn, _params) do
     user = conn.assigns.current_user
 
-    if should_update(user), do: ImportMusicPreference.call(user, conn)
-
     %{user: user, score: score, shared: shared} = FindTopMatch.call(user)
     music_records = MusicService.batch_get_music_records(shared)
 
@@ -73,13 +69,5 @@ defmodule SongmateWeb.UserController do
 
   def chat(conn, _params) do
     render(conn, "chat.html")
-  end
-
-  defp should_update(user) do
-    !user.preferences_updated_at ||
-      NaiveDateTime.diff(
-        NaiveDateTime.local_now(),
-        user.preferences_updated_at
-      ) > @one_week_in_seconds
   end
 end

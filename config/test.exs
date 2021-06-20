@@ -23,5 +23,7 @@ config :songmate, :services,
   auth_service: Songmate.Mock.AuthService,
   spotify_service: Songmate.Fixtures.SpotifyService
 
+config :songmate, :use_cases, import_music_preference: Songmate.Mock.ImportMusicPreference
+
 # Print only warnings and errors during test
 config :logger, level: :info

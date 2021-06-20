@@ -10,6 +10,8 @@ defmodule Songmate.UseCase.ImportMusicPreference do
   (2) This operation is costly.
   """
 
+  @callback call(%User{}, any) :: any
+
   @artist_service Application.compile_env(:songmate, [:services, :artist_service], ArtistService)
   @track_service Application.compile_env(:songmate, [:services, :track_service], TrackService)
   @genre_service Application.compile_env(:songmate, [:services, :genre_service], GenreService)
