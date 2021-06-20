@@ -10,13 +10,13 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias Songmate.Accounts.{UserRepo, MusicPreferenceRepo}
-alias Songmate.Music.{ArtistRepo, TrackRepo}
+alias Songmate.Accounts.{UserService, MusicPreferenceService}
+alias Songmate.Music.{ArtistService, TrackService}
 
 # --------------------------------------------------------
 # Music.Artist
 
-ArtistRepo.create_artist(%{
+ArtistService.create_artist(%{
   name: "fun.",
   popularity: 72,
   spotify_id: "5nCi3BB41mBaMH9gfr6Su0",
@@ -29,7 +29,7 @@ ArtistRepo.create_artist(%{
   ]
 })
 
-ArtistRepo.create_artist(%{
+ArtistService.create_artist(%{
   name: "The National",
   popularity: 71,
   spotify_id: "2cCUtGK9sDU2EoElnk0GNB",
@@ -40,7 +40,7 @@ ArtistRepo.create_artist(%{
   ]
 })
 
-ArtistRepo.create_artist(%{
+ArtistService.create_artist(%{
   name: "Vampire Weekend",
   popularity: 73,
   spotify_id: "5BvJzeQpmsdsFp4HGUYUEx",
@@ -51,7 +51,7 @@ ArtistRepo.create_artist(%{
   ]
 })
 
-ArtistRepo.create_artist(%{
+ArtistService.create_artist(%{
   name: "Alt-J",
   popularity: 76,
   spotify_id: "3XHO7cRUPCLOr6jwp8vsx5",
@@ -61,7 +61,7 @@ ArtistRepo.create_artist(%{
   ]
 })
 
-ArtistRepo.create_artist(%{
+ArtistService.create_artist(%{
   name: "Coldplay",
   popularity: 89,
   spotify_id: "4gzpq5DPGxSnKTe4SA8HAU",
@@ -74,7 +74,7 @@ ArtistRepo.create_artist(%{
 # --------------------------------------------------------
 # Music.Track
 
-TrackRepo.create_track(%{
+TrackService.create_track(%{
   isrc: "TWAE31801542",
   name: "小夜曲",
   popularity: 13,
@@ -84,7 +84,7 @@ TrackRepo.create_track(%{
   ]
 })
 
-TrackRepo.create_track(%{
+TrackService.create_track(%{
   isrc: "CNA791600507",
   name: "我们拥抱亲吻相爱的人",
   popularity: 12,
@@ -94,7 +94,7 @@ TrackRepo.create_track(%{
   ]
 })
 
-TrackRepo.create_track(%{
+TrackService.create_track(%{
   isrc: "USMRG0467010",
   name: "Rebellion (Lies)",
   popularity: 65,
@@ -104,7 +104,7 @@ TrackRepo.create_track(%{
   ]
 })
 
-TrackRepo.create_track(%{
+TrackService.create_track(%{
   isrc: "TWA471204005",
   name: "如何 - Through Our Lives",
   popularity: 33,
@@ -114,7 +114,7 @@ TrackRepo.create_track(%{
   ]
 })
 
-TrackRepo.create_track(%{
+TrackService.create_track(%{
   isrc: "GBAFL1000103",
   name: "England",
   popularity: 46,
@@ -127,13 +127,13 @@ TrackRepo.create_track(%{
 # --------------------------------------------------------
 # Accounts
 
-{:ok, user1} = UserRepo.get_or_create_user(%{
+{:ok, user1} = UserService.get_or_create_user(%{
   name: "French toast",
   username: "french-toast",
   credential: %{provider: :spotify, email: "hi@songmate", provider_uid: "french-toast"}
 })
 
-{:ok, user2} = UserRepo.get_or_create_user(%{
+{:ok, user2} = UserService.get_or_create_user(%{
   name: "Whisky Egg",
   username: "whisky-egg",
   credential: %{provider: :spotify, email: "egg@songmate", provider_uid: "whisky-egg"}
@@ -207,5 +207,5 @@ user2_prefs = [
 ]
 
 
-MusicPreferenceRepo.batch_upsert_music_preferences_for_user(user1_prefs, user1.id)
-MusicPreferenceRepo.batch_upsert_music_preferences_for_user(user2_prefs, user2.id)
+MusicPreferenceService.batch_upsert_music_preferences_for_user(user1_prefs, user1.id)
+MusicPreferenceService.batch_upsert_music_preferences_for_user(user2_prefs, user2.id)

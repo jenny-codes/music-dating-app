@@ -1,7 +1,6 @@
 defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
-  alias Songmate.UserMusicPreferencesService
-  alias Songmate.MatchingService
+  alias Songmate.UseCase.{FindTopMatch, GenerateMatchData, ImportMusicPreference}
   alias Songmate.MusicService
   alias Songmate.AccountService
 
@@ -10,9 +9,9 @@ defmodule SongmateWeb.UserController do
   def me(conn, _params) do
     user = conn.assigns.current_user
 
-    if should_update(user), do: UserMusicPreferencesService.import(user, conn)
+    if should_update(user), do: ImportMusicPreference.call(user, conn)
 
-    %{user: user, score: score, shared: shared} = MatchingService.find_top_match(user)
+    %{user: user, score: score, shared: shared} = FindTopMatch.call(user)
     music_records = MusicService.batch_get_music_records(shared)
 
     render(
@@ -32,8 +31,7 @@ defmodule SongmateWeb.UserController do
     with username when not is_nil(username) and username != current_user.username <-
            params["user"],
          {:ok, target_user} <- AccountService.get_user_by(username: username) do
-      %{score: score, shared: shared} =
-        MatchingService.generate_match_data(current_user.id, target_user.id)
+      %{score: score, shared: shared} = GenerateMatchData.call(current_user.id, target_user.id)
 
       music_records = MusicService.batch_get_music_records(shared)
 

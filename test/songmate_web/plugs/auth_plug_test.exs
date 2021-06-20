@@ -56,7 +56,7 @@ defmodule SongmateWeb.AuthPlugTest do
           provider_uid: "hisongmate"
         }
       })
-      |> Songmate.Accounts.UserRepo.create_user()
+      |> Songmate.Accounts.UserService.create_user()
 
     user
   end

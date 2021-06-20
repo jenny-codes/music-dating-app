@@ -69,7 +69,7 @@ defmodule Songmate.DataCase do
     {:ok, user} =
       attrs
       |> Enum.into(valid_user_attrs())
-      |> Songmate.Accounts.UserRepo.create_user()
+      |> Songmate.Accounts.UserService.create_user()
 
     user
   end
@@ -108,7 +108,7 @@ defmodule Songmate.DataCase do
     {:ok, artist} =
       attrs
       |> Enum.into(valid_artist_attrs())
-      |> Songmate.Music.ArtistRepo.create_artist()
+      |> Songmate.Music.ArtistService.create_artist()
 
     artist
   end
@@ -117,7 +117,7 @@ defmodule Songmate.DataCase do
     {:ok, track} =
       attrs
       |> Enum.into(valid_track_attrs())
-      |> Songmate.Music.TrackRepo.create_track()
+      |> Songmate.Music.TrackService.create_track()
 
     track
   end
@@ -126,7 +126,7 @@ defmodule Songmate.DataCase do
     {:ok, genre} =
       attrs
       |> Enum.into(valid_genre_attrs())
-      |> Songmate.Music.GenreRepo.create_genre()
+      |> Songmate.Music.GenreService.create_genre()
 
     genre
   end

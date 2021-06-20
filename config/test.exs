@@ -14,16 +14,14 @@ config :songmate, SongmateWeb.Endpoint,
   http: [port: 4002],
   server: false
 
-config :songmate, :adapters,
-  user_repo: Songmate.Fixtures.UserRepo,
-  music_preference_repo: Songmate.Fixtures.MusicPreferenceRepo,
-  artist_repo: Songmate.Fixtures.ArtistRepo,
-  track_repo: Songmate.Fixtures.TrackRepo,
-  genre_repo: Songmate.Fixtures.GenreRepo
-
 config :songmate, :services,
+  user_service: Songmate.Fixtures.UserService,
+  music_preference_service: Songmate.Fixtures.MusicPreferenceService,
+  artist_service: Songmate.Fixtures.ArtistService,
+  track_service: Songmate.Fixtures.TrackService,
+  genre_service: Songmate.Fixtures.GenreService,
   auth_service: Songmate.Mock.AuthService,
-  import_spotify_service: Songmate.Fixtures.ImporterSpotifyService
+  spotify_service: Songmate.Fixtures.SpotifyService
 
 # Print only warnings and errors during test
 config :logger, level: :info
