@@ -20,4 +20,8 @@ a {
   overflow: hidden;
 }
 
+h5,
+p {
+  font-size: 2rem;
+  text-align: left;
 }

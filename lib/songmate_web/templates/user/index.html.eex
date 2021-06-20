@@ -1,15 +1,19 @@
-<h1> Your match, <%= @current_user.name %>! </h1>
-<h3> (based on the data in the past 6 months) </h3>
+<div class="landing-intro">
+<h5> hi <%= @current_user.name %>, hello, we've collected your listening history and will use it to do exciting stuff! </h5>
+<h5> For your amusement, below you can see your information collected by Spotify in the past 6 months. </h5>
+<h5> In case you want to change what we present you to others, click here to edit your information. </h5>
+<h5> As you can see, this app is <b> desperately in need of a frontend developer </b> 🙈 Shoot us a message if you happen to know some CSS & Javascript and the very limited functionality this app currently provides somehow piques your interest.  </h5>
+</div>
 
-<h2>🥁 <%= @match_user.name %> 🥁 </h2>
-<h2> <%= @score %> </h2>
+
+<h2> What you've been listening to lately </h2>
 
 <div class="row">
   <div class="column">
-    <h2>Shared tracks</h2>
+    <h3>Top tracks</h3>
     <table class="table">
       <tbody>
-        <%= for track <- @shared_tracks do %>
+        <%= for track <- @top_tracks do %>
             <tr>
               <td><%= track %></td>
             </tr>
@@ -19,10 +23,10 @@
   </div>
 
   <div class="column">
-    <h2>Shared artists</h2>
+    <h3>Top artists</h3>
     <table class="table">
       <tbody>
-        <%= for artist <- @shared_artists do %>
+        <%= for artist <- @top_artists do %>
           <tr>
             <td><%= artist %></td>
           </tr>
@@ -32,10 +36,10 @@
   </div>
 
   <div class="column">
-    <h2>Shared genres</h2>
+    <h3>Top genres</h3>
     <table class="table">
       <tbody>
-        <%= for genre <- @shared_genres do %>
+        <%= for genre <- @top_genres do %>
             <tr>
               <td><%= genre %></td>
             </tr>

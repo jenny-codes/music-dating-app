@@ -3,25 +3,26 @@ defmodule SongmateWeb.UserController do
   alias Songmate.UseCase.{FindTopMatch, GenerateMatchData, ImportMusicPreference}
   alias Songmate.MusicService
   alias Songmate.AccountService
+  alias Songmate.Accounts.MusicPreferenceService
 
   @one_week_in_seconds 7 * 24 * 60 * 60
 
-  def me(conn, _params) do
+  def index(conn, _params) do
     user = conn.assigns.current_user
 
     if should_update(user), do: ImportMusicPreference.call(user, conn)
 
-    %{user: user, score: score, shared: shared} = FindTopMatch.call(user)
-    music_records = MusicService.batch_get_music_records(shared)
+    music_records =
+      MusicPreferenceService.list_music_preferences(user_ids: [user.id])
+      |> Enum.group_by(& &1.type, & &1.type_id)
+      |> MusicService.batch_get_music_records()
 
     render(
       conn,
       "index.html",
-      shared_artists: Enum.map(music_records[:artist], & &1.name),
-      shared_tracks: Enum.map(music_records[:track], & &1.name),
-      shared_genres: Enum.map(music_records[:genre], & &1.name),
-      match_user: user,
-      score: score
+      top_artists: Enum.map(music_records[:artist], & &1.name),
+      top_tracks: Enum.map(music_records[:track], & &1.name),
+      top_genres: Enum.map(music_records[:genre], & &1.name)
     )
   end
 
