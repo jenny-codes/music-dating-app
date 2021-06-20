@@ -3,11 +3,10 @@ defmodule SongmateWeb.AuthPlugTest do
   import Mox
   alias Songmate.Mock
   alias SongmateWeb.AuthPlug
-
-  setup :set_mox_from_context
+  alias Songmate.UserFactory
 
   test "does nothing if current_user is present" do
-    user = user_fixture()
+    user = UserFactory.new()
     expect(Mock.AuthService, :fetch_user_with_token, 0, fn _ -> nil end)
 
     conn =
@@ -15,11 +14,12 @@ defmodule SongmateWeb.AuthPlugTest do
       |> assign(:current_user, user)
       |> AuthPlug.call(%{})
 
+    verify!()
     assert user.id == conn.assigns[:current_user].id
   end
 
   test "fetch user with token if no current user" do
-    user = user_fixture()
+    user = UserFactory.new()
 
     expect(Mock.AuthService, :fetch_user_with_token, fn conn -> {conn, user} end)
 
@@ -42,22 +42,5 @@ defmodule SongmateWeb.AuthPlugTest do
 
     assert redirected_to(conn, 302) == "/authorize"
     verify!()
-  end
-
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> Enum.into(%{
-        name: "Bass Wannabe",
-        username: "hisongmate",
-        credential: %{
-          provider: :spotify,
-          email: "hi@songmate.co",
-          provider_uid: "hisongmate"
-        }
-      })
-      |> Songmate.Accounts.UserService.create_user()
-
-    user
   end
 end
