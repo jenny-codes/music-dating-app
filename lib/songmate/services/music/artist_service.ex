@@ -3,11 +3,9 @@ defmodule Songmate.Music.ArtistService do
   alias Songmate.Repo
   alias Songmate.Music.{Genre, Artist}
 
-  @callback batch_get_or_create_artists([%Artist{}], order: boolean()) :: [
-              Artist
-            ]
+  @callback batch_get_or_create_artists([%Artist{}], order: boolean()) :: [Artist.t()]
+  @callback get_artists([integer()]) :: [Artist.t()]
 
-  @spec batch_get_or_create_artists([%Artist{}], order: boolean()) :: [Artist]
   def batch_get_or_create_artists([], _), do: []
 
   def batch_get_or_create_artists(artists, order: true) do

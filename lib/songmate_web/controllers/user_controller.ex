@@ -1,19 +1,13 @@
 defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
-  alias Songmate.UseCase.{FindTopMatch, GenerateMatchData}
+  alias Songmate.UseCase.{FetchMusicPreference, FindTopMatch, GenerateMatchData}
   alias Songmate.MusicService
   alias Songmate.AccountService
-  alias Songmate.Accounts.MusicPreferenceService
 
   plug(SongmateWeb.SyncUserInfoPlug)
 
   def index(conn, _params) do
-    user = conn.assigns.current_user
-
-    music_records =
-      MusicPreferenceService.list_music_preferences(user_ids: [user.id])
-      |> Enum.group_by(& &1.type, & &1.type_id)
-      |> MusicService.batch_get_music_records()
+    music_records = FetchMusicPreference.call(conn.assigns.current_user.id)
 
     render(
       conn,

@@ -3,9 +3,9 @@ defmodule Songmate.Music.TrackService do
   alias Songmate.Repo
   alias Songmate.Music.{Track, Artist}
 
-  @callback batch_get_or_create_tracks([%Track{}], order: boolean()) :: [Track]
+  @callback batch_get_or_create_tracks([%Track{}], order: boolean()) :: [Track.t()]
+  @callback get_tracks([integer()]) :: [Track.t()]
 
-  @spec batch_get_or_create_tracks([%Track{}], order: boolean()) :: [Track]
   def batch_get_or_create_tracks([], _), do: []
 
   def batch_get_or_create_tracks(tracks, order: true) do

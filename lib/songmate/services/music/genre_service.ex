@@ -1,15 +1,11 @@
 defmodule Songmate.Music.GenreService do
-  @moduledoc """
-  The Music context.
-  """
-
   import Ecto.Query, warn: false
   alias Songmate.Repo
   alias Songmate.Music.Genre
 
-  @callback batch_get_or_create_genres([%Genre{}], order: boolean()) :: [Genre]
+  @callback batch_get_or_create_genres([%Genre{}], order: boolean()) :: [Genre.t()]
+  @callback get_genres([integer()]) :: [Genre.t()]
 
-  @spec batch_get_or_create_genres([%Genre{}], order: boolean()) :: [Genre]
   def batch_get_or_create_genres([], _), do: []
 
   def batch_get_or_create_genres(genres, order: true) do
