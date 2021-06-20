@@ -19,10 +19,11 @@ config :songmate, :adapters,
   music_preference_repo: Songmate.Fixtures.MusicPreferenceRepo,
   artist_repo: Songmate.Fixtures.ArtistRepo,
   track_repo: Songmate.Fixtures.TrackRepo,
-  genre_repo: Songmate.Fixtures.GenreRepo,
-  spotify_port: Songamte.Fixtures.SpotifyPort
+  genre_repo: Songmate.Fixtures.GenreRepo
 
-config :songmate, :services, auth_service: Songmate.Mock.AuthService
+config :songmate, :services,
+  auth_service: Songmate.Mock.AuthService,
+  import_spotify_service: Songmate.Fixtures.ImporterSpotifyService
 
 # Print only warnings and errors during test
 config :logger, level: :info

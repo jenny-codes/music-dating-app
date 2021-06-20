@@ -1,4 +1,6 @@
-defmodule Songmate.SpotifyPort do
+defmodule Songmate.Importer.SpotifyService do
+  @spotify_port Spotify.Personalization
+
   @type artist :: %{
           name: String.t(),
           spotify_id: String.t(),
@@ -16,12 +18,13 @@ defmodule Songmate.SpotifyPort do
           name: String.t()
         }
 
-  @spec fetch_listening_history(%{__struct__: Plug.Conn}) :: [
+  @spec listening_history(%{__struct__: Plug.Conn}) :: [
           artists: [artist],
           tracks: [track],
           genres: [genre]
         ]
-  def fetch_listening_history(conn) do
+
+  def listening_history(conn) do
     {artists, genres} = fetch_top_artists_and_genres(conn)
     tracks = fetch_top_tracks(conn)
 
@@ -30,8 +33,7 @@ defmodule Songmate.SpotifyPort do
 
   @spec fetch_top_tracks(%{__struct__: Plug.Conn}) :: [track]
   defp fetch_top_tracks(conn) do
-    {:ok, %{items: tracks}} =
-      Spotify.Personalization.top_tracks(conn, limit: 50, time_range: "medium_term")
+    {:ok, %{items: tracks}} = @spotify_port.top_tracks(conn, limit: 50, time_range: "medium_term")
 
     # There is an "artists" field for each track, but we don't parse that for now.
     Enum.map(tracks, fn track ->
@@ -47,7 +49,7 @@ defmodule Songmate.SpotifyPort do
   @spec fetch_top_artists_and_genres(%Plug.Conn{}) :: {[artist()], [genre]}
   defp fetch_top_artists_and_genres(conn) do
     {:ok, %{items: artists}} =
-      Spotify.Personalization.top_artists(conn, limit: 50, time_range: "medium_term")
+      @spotify_port.top_artists(conn, limit: 50, time_range: "medium_term")
 
     artist_records =
       Enum.map(artists, fn artist ->

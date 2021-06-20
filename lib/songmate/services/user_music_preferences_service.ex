@@ -2,14 +2,14 @@ defmodule Songmate.UserMusicPreferencesService do
   alias Songmate.Accounts.User
   alias Songmate.Accounts.{UserRepo, MusicPreferenceRepo}
   alias Songmate.Music.{ArtistRepo, TrackRepo, GenreRepo}
-  alias Songmate.SpotifyPort
+  alias Songmate.Importer.SpotifyService
 
   @moduledoc """
   We update user's music preferences once per week because
   (1) This data is not easily changed.
   (2) This operation is costly.
   """
-  @spotify_port Application.compile_env(:songmate, [:adapters, :spotify_port], SpotifyPort)
+
   @artist_repo Application.compile_env(:songmate, [:adapters, :artist_repo], ArtistRepo)
   @track_repo Application.compile_env(:songmate, [:adapters, :track_repo], TrackRepo)
   @genre_repo Application.compile_env(:songmate, [:adapters, :genre_repo], GenreRepo)
@@ -19,12 +19,17 @@ defmodule Songmate.UserMusicPreferencesService do
                      [:adapters, :music_preference_repo],
                      MusicPreferenceRepo
                    )
+  @importer_service Application.compile_env(
+                      :songmate,
+                      [:services, :import_spotify_service],
+                      SpotifyService
+                    )
 
   @spec import(%User{}, any) :: any
   def import(user, conn) do
     music_profile =
       conn
-      |> @spotify_port.fetch_listening_history()
+      |> @importer_service.listening_history()
       |> Enum.into(%{artists: [], tracks: [], genres: []})
 
     artist_prefs =
