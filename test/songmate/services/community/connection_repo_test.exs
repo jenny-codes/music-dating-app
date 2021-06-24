@@ -78,4 +78,31 @@ defmodule Songmate.ConnectionServiceTest do
       assert %Ecto.Changeset{} = ConnectionService.change_connection(connection)
     end
   end
+
+  def valid_user_attrs do
+    %{
+      name: "Bass Wannabe",
+      username: "hisongmate",
+      bio: "Some nights I stay up cashing in my bad luck",
+      avatar: "some-link-to-an-image",
+      credential: %{
+        provider: :spotify,
+        email: "hi@songmate.co",
+        provider_uid: "hisongmate"
+      }
+    }
+  end
+
+  def valid_2nd_user_attrs do
+    %{
+      name: "Spotify Rocks",
+      username: "spotify-rocks",
+      bio: "ugh",
+      credential: %{
+        provider: :spotify,
+        email: "spotify@rocks",
+        provider_uid: "spotify-rocks"
+      }
+    }
+  end
 end

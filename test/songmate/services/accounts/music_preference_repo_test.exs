@@ -1,5 +1,6 @@
 defmodule Songamte.MusicPreferenceServiceTest do
   use Songmate.DataCase, async: true
+  import Songmate.UserFactory
 
   alias Songmate.Repo
   alias Songmate.Accounts.MusicPreference
@@ -7,7 +8,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
 
   describe "list_music_preferences/1" do
     test "returns a list of MusicPreference by user ids" do
-      user = user_fixture()
+      user = create_user()
 
       valid_input = [
         %{
@@ -29,7 +30,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
 
   describe "batch_upsert_music_preferences_for_user/2" do
     test "batch insert records for user" do
-      user = user_fixture()
+      user = create_user()
 
       valid_input = [
         %{
@@ -46,7 +47,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
     end
 
     test "delete all previous records of the user first" do
-      user = user_fixture()
+      user = create_user()
 
       previous_record = [
         %{
@@ -73,7 +74,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
     end
 
     test "do nothing if input list is empty or nil" do
-      user = user_fixture()
+      user = create_user()
 
       record = [
         %{
@@ -96,7 +97,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
 
   describe "delete situation" do
     test "delete User deletes associated preferences" do
-      user = user_fixture()
+      user = create_user()
 
       record = [
         %{
@@ -114,7 +115,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
     end
 
     test "delete preferences does not delete associated user" do
-      user = user_fixture()
+      user = create_user()
 
       record = [
         %{

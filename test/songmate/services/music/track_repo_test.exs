@@ -1,9 +1,19 @@
 defmodule Songmate.MusicTest do
   use Songmate.DataCase, async: true
   import Songmate.CustomAssertions
+  import Songmate.MusicFactory
 
   alias Songmate.Music.TrackService
   alias Songmate.Music.Track
+
+  def valid_track_attrs do
+    %{
+      isrc: "USMRG0467010",
+      name: "Rebellion (Lies)",
+      popularity: 65,
+      spotify_id: "0xOeB16JDbBJBJKSdHbElT"
+    }
+  end
 
   describe "batch_get_or_create_tracks/2" do
     test "returns a list of Track records for every input item" do
@@ -56,7 +66,7 @@ defmodule Songmate.MusicTest do
 
     test "create_track/1 creates associated artists" do
       track =
-        track_fixture(%{
+        create_track(%{
           artists: [
             %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
           ]
@@ -75,17 +85,19 @@ defmodule Songmate.MusicTest do
     end
 
     test "update_track/2 with valid data updates the track" do
-      track = track_fixture()
+      track = create_track()
+      before_isrc = track.isrc
+      before_spotify_id = track.spotify_id
       assert {:ok, %Track{} = track} = TrackService.update_track(track, @update_attrs)
-      assert track.isrc == "USMRG0467010"
+      assert track.isrc == before_isrc
+      assert track.spotify_id == before_spotify_id
       assert track.name == "updated Rebellion"
       assert track.popularity == 90
-      assert track.spotify_id == "0xOeB16JDbBJBJKSdHbElT"
     end
 
     test "update_track/2 with artists updates the association" do
       track =
-        track_fixture(%{
+        create_track(%{
           artists: [
             %{name: "Arcade Fire", spotify_id: "3kjuyTCjPG1WMFCiyc5IuB"}
           ]
@@ -107,7 +119,7 @@ defmodule Songmate.MusicTest do
     end
 
     test "update_track/2 with invalid data returns error changeset" do
-      track = track_fixture()
+      track = create_track()
       assert {:error, %Ecto.Changeset{}} = TrackService.update_track(track, @invalid_attrs)
     end
   end

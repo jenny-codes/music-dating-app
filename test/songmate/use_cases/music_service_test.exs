@@ -1,12 +1,13 @@
 defmodule Songmate.MusicServiceTest do
   use Songmate.DataCase, async: true
   alias Songmate.MusicService
+  import Songmate.MusicFactory
 
   describe "batch_get_music_records/1" do
     test "get artist, track, genre records by id" do
-      artist = artist_fixture()
-      track = track_fixture()
-      genre = genre_fixture()
+      artist = create_artist()
+      track = create_track()
+      genre = create_genre()
 
       input = %{
         artist: [artist.id],

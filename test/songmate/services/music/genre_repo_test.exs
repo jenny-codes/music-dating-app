@@ -1,9 +1,14 @@
 defmodule Songmate.TrackServiceTest do
   use Songmate.DataCase, async: true
   import Songmate.CustomAssertions
+  import Songmate.MusicFactory
 
   alias Songmate.Music.GenreService
   alias Songmate.Music.Genre
+
+  def valid_genre_attrs do
+    %{name: "Modern Rock"}
+  end
 
   describe "batch_get_or_create_genres/2" do
     test "returns a list of Genre records for every input item" do
@@ -53,13 +58,13 @@ defmodule Songmate.TrackServiceTest do
     end
 
     test "update_genre/2 with valid data updates the genre" do
-      genre = genre_fixture()
+      genre = create_genre()
       assert {:ok, %Genre{} = genre} = GenreService.update_genre(genre, @update_attrs)
       assert genre.name == "some updated name"
     end
 
     test "update_genre/2 with invalid data returns error changeset" do
-      genre = genre_fixture()
+      genre = create_genre()
       assert {:error, %Ecto.Changeset{}} = GenreService.update_genre(genre, @invalid_attrs)
     end
   end

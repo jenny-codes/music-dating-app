@@ -1,9 +1,18 @@
 defmodule Songmate.ArtistServiceTest do
   use Songmate.DataCase, async: true
   import Songmate.CustomAssertions
+  import Songmate.MusicFactory
 
   alias Songmate.Music.ArtistService
   alias Songmate.Music.{Artist, Genre}
+
+  def valid_artist_attrs do
+    %{
+      name: "9m88",
+      popularity: 53,
+      spotify_id: "4PjY2961rc0MHE9zHYWEnH"
+    }
+  end
 
   describe "batch_get_or_create_artists/2" do
     test "returns a list of Artist records for every input item" do
@@ -57,7 +66,7 @@ defmodule Songmate.ArtistServiceTest do
 
     test "create_artist/1 creates associated genres" do
       artist =
-        artist_fixture(%{
+        create_artist(%{
           genres: [
             %{name: "Taiwanese Pop"}
           ]
@@ -74,7 +83,7 @@ defmodule Songmate.ArtistServiceTest do
     end
 
     test "update_artist/2 with valid data updates the artist" do
-      artist = artist_fixture()
+      artist = create_artist()
       assert {:ok, %Artist{} = artist} = ArtistService.update_artist(artist, @update_attrs)
       assert artist.name == "Updated 9m88"
       assert artist.popularity == 100
@@ -83,7 +92,7 @@ defmodule Songmate.ArtistServiceTest do
 
     test "update_artist/2 updates the associated genres" do
       artist =
-        artist_fixture(%{
+        create_artist(%{
           genres: [
             %{name: "Taiwanese Pop"}
           ]
@@ -97,7 +106,7 @@ defmodule Songmate.ArtistServiceTest do
     end
 
     test "update_artist/2 with invalid data returns error changeset" do
-      artist = artist_fixture()
+      artist = create_artist()
       assert {:error, %Ecto.Changeset{}} = ArtistService.update_artist(artist, @invalid_attrs)
     end
   end
