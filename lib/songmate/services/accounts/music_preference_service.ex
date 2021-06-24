@@ -10,6 +10,20 @@ defmodule Songmate.Accounts.MusicPreferenceService do
     Repo.all(from(pref in MusicPreference, where: pref.user_id in ^user_ids))
   end
 
+  def get_all_by_type(type, type_ids) do
+    Repo.all(
+      from(pref in MusicPreference,
+        where: pref.type == ^type and pref.type_id in ^type_ids
+      )
+    )
+  end
+
+  def create(attrs \\ %{}) do
+    %MusicPreference{}
+    |> MusicPreference.changeset(attrs)
+    |> Repo.insert()
+  end
+
   @spec batch_upsert_music_preferences_for_user([%{}] | nil, integer()) :: any
   def batch_upsert_music_preferences_for_user(nil, _user_id), do: nil
   def batch_upsert_music_preferences_for_user([], _user_id), do: nil

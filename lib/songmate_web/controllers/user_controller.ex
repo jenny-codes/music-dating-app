@@ -7,7 +7,6 @@ defmodule SongmateWeb.UserController do
     FindSharedPreference
   }
 
-  alias Songmate.MusicService
   alias Songmate.AccountService
 
   plug(SongmateWeb.SyncUserInfoPlug)
@@ -53,17 +52,15 @@ defmodule SongmateWeb.UserController do
   def explore(conn, _params) do
     user = conn.assigns.current_user
 
-    %{user: user, score: score, shared: shared} = FindTopMatch.call(user)
-    music_records = MusicService.batch_get_music_records(shared)
+    %{user: user, shared: shared} = FindTopMatch.call(user.id)
 
     render(
       conn,
       "explore.html",
-      shared_artists: Enum.map(music_records[:artist], & &1.name),
-      shared_tracks: Enum.map(music_records[:track], & &1.name),
-      shared_genres: Enum.map(music_records[:genre], & &1.name),
-      match_user: user,
-      score: score
+      shared_artists: Enum.map(shared[:artist], & &1.name),
+      shared_tracks: Enum.map(shared[:track], & &1.name),
+      shared_genres: Enum.map(shared[:genre], & &1.name),
+      match_user: user
     )
   end
 

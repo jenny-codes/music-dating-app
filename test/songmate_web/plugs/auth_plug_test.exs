@@ -3,10 +3,10 @@ defmodule SongmateWeb.AuthPlugTest do
   import Mox
   alias Songmate.Mock
   alias SongmateWeb.AuthPlug
-  alias Songmate.UserFactory
+  import Songmate.UserFactory
 
   test "does nothing if current_user is present" do
-    user = UserFactory.new()
+    user = create_user()
     expect(Mock.AuthService, :fetch_user_with_token, 0, fn _ -> nil end)
 
     conn =
@@ -19,7 +19,7 @@ defmodule SongmateWeb.AuthPlugTest do
   end
 
   test "fetch user with token if no current user" do
-    user = UserFactory.new()
+    user = create_user()
 
     expect(Mock.AuthService, :fetch_user_with_token, fn conn -> {conn, user} end)
 
