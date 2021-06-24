@@ -20,7 +20,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
 
       MusicPreferenceService.batch_upsert_music_preferences_for_user(valid_input, user.id)
 
-      result = MusicPreferenceService.list_music_preferences(user_ids: [user.id])
+      result = MusicPreferenceService.get_all_by_user([user.id])
 
       assert Enum.count(result) == 1
       assert List.first(result).user_id == user.id

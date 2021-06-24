@@ -3,10 +3,10 @@ defmodule Songmate.Accounts.MusicPreferenceService do
   alias Songmate.Repo
   alias Songmate.Accounts.MusicPreference
 
-  @callback list_music_preferences(user_ids: [non_neg_integer()]) :: [%MusicPreference{}]
+  @callback get_all_by_user([non_neg_integer()]) :: [%MusicPreference{}]
   @callback batch_upsert_music_preferences_for_user([%{}] | nil, integer()) :: any
 
-  def list_music_preferences(user_ids: user_ids) do
+  def get_all_by_user(user_ids) do
     Repo.all(from(pref in MusicPreference, where: pref.user_id in ^user_ids))
   end
 

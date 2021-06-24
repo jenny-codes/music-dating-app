@@ -7,7 +7,7 @@ defmodule Songmate.Fixtures.MusicPreferenceService do
   # Act
 
   @impl MusicPreferenceService
-  def list_music_preferences(user_ids: _user_ids) do
+  def get_all_by_user(_user_ids) do
     [
       %{type: :artist, type_id: 1},
       %{type: :artist, type_id: 1},
