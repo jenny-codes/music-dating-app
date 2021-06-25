@@ -1,16 +1,15 @@
 defmodule Songmate.ImportMusicPreferenceTest do
-  use ExUnit.Case, async: false
-  alias Songmate.Fixtures
+  use Songmate.DataCase, async: true
+  import Songmate.UserFactory
   alias Songmate.UseCase.ImportMusicPreference
 
   describe "call/2" do
-    test "will import user music record from Spotify" do
-      start_supervised!({Fixtures.UserService, %{}})
-      user = %{id: 3, preferences_updated_at: NaiveDateTime.local_now()}
+    test "import user music record and update" do
+      user = create_user(%{preferences_updated_at: nil})
 
       ImportMusicPreference.call(user, %{tracks: ["a track"]})
 
-      assert Fixtures.UserService.called_update_user(user)
+      assert user.preferences_updated_at
     end
   end
 end

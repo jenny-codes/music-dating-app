@@ -15,7 +15,6 @@ config :songmate, SongmateWeb.Endpoint,
   server: false
 
 config :songmate, :services,
-  user_service: Songmate.Fixtures.UserService,
   music_preference_service: Songmate.Fixtures.MusicPreferenceService,
   artist_service: Songmate.Fixtures.ArtistService,
   track_service: Songmate.Fixtures.TrackService,
