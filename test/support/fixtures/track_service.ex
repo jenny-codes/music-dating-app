@@ -3,7 +3,7 @@ defmodule Songmate.Fixtures.TrackService do
   @behaviour TrackService
 
   @impl TrackService
-  def batch_get_or_create_tracks(_tracks_attrs, order: true) do
+  def batch_create_tracks(_tracks_attrs, order: true) do
     []
   end
 

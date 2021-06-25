@@ -3,7 +3,7 @@ defmodule Songmate.Fixtures.GenreService do
   @behaviour GenreService
 
   @impl GenreService
-  def batch_get_or_create_genres(_genres_attrs, order: true) do
+  def batch_create_genres(_genres_attrs, order: true) do
     []
   end
 

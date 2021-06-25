@@ -207,5 +207,5 @@ user2_prefs = [
 ]
 
 
-MusicPreferenceService.batch_upsert_music_preferences_for_user(user1_prefs, user1.id)
-MusicPreferenceService.batch_upsert_music_preferences_for_user(user2_prefs, user2.id)
+MusicPreferenceService.batch_upsert_for_user(user1_prefs, user1.id)
+MusicPreferenceService.batch_upsert_for_user(user2_prefs, user2.id)

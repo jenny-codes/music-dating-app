@@ -35,21 +35,21 @@ defmodule Songmate.UseCase.ImportMusicPreference do
 
     artist_prefs =
       music_profile[:artists]
-      |> @artist_service.batch_get_or_create_artists(order: true)
+      |> @artist_service.batch_create_artists(order: true)
       |> build_music_prefs_for_user(user, :artist)
 
     track_prefs =
       music_profile[:tracks]
-      |> @track_service.batch_get_or_create_tracks(order: true)
+      |> @track_service.batch_create_tracks(order: true)
       |> build_music_prefs_for_user(user, :track)
 
     genre_prefs =
       music_profile[:genres]
-      |> @genre_service.batch_get_or_create_genres(order: true)
+      |> @genre_service.batch_create_genres(order: true)
       |> build_music_prefs_for_user(user, :genre)
 
     (artist_prefs ++ track_prefs ++ genre_prefs)
-    |> @music_pref_service.batch_upsert_music_preferences_for_user(user.id)
+    |> @music_pref_service.batch_upsert_for_user(user.id)
 
     UserService.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
   end

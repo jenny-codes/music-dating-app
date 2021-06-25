@@ -30,7 +30,7 @@ defmodule Songmate.UserFactory do
         user_id: user.id
       }
     end)
-    |> MusicPreferenceService.batch_upsert_music_preferences_for_user(user.id)
+    |> MusicPreferenceService.batch_upsert_for_user(user.id)
 
     user
   end

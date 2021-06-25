@@ -15,19 +15,19 @@ defmodule Songmate.MusicTest do
     }
   end
 
-  describe "batch_get_or_create_tracks/2" do
+  describe "batch_create_tracks/2" do
     test "returns a list of Track records for every input item" do
       existing_attrs = valid_track_attrs()
       TrackService.create_track(existing_attrs)
       new_attrs = %{name: "to be inserted", spotify_id: "dont really care"}
 
-      result = TrackService.batch_get_or_create_tracks([existing_attrs, new_attrs], order: true)
+      result = TrackService.batch_create_tracks([existing_attrs, new_attrs], order: true)
 
       assert [%Track{}, %Track{}] = result
     end
 
     test "when input is empty, returns empty" do
-      assert Enum.empty?(TrackService.batch_get_or_create_tracks([], order: true))
+      assert Enum.empty?(TrackService.batch_create_tracks([], order: true))
     end
 
     test "when order: true return the records in the same order as input" do
@@ -36,15 +36,15 @@ defmodule Songmate.MusicTest do
       attrs3 = %{name: "name3", spotify_id: "3"}
 
       first_input = [attrs1, attrs2, attrs3]
-      first_result = TrackService.batch_get_or_create_tracks(first_input, order: true)
+      first_result = TrackService.batch_create_tracks(first_input, order: true)
       assert_same_list_by(:spotify_id, first_input, first_result)
 
       second_input = [attrs2, attrs1, attrs3]
-      second_result = TrackService.batch_get_or_create_tracks(second_input, order: true)
+      second_result = TrackService.batch_create_tracks(second_input, order: true)
       assert_same_list_by(:spotify_id, second_input, second_result)
 
       third_input = [attrs3, attrs2, attrs1]
-      third_result = TrackService.batch_get_or_create_tracks(third_input, order: true)
+      third_result = TrackService.batch_create_tracks(third_input, order: true)
       assert_same_list_by(:spotify_id, third_input, third_result)
     end
   end

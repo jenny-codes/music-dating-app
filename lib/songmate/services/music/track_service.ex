@@ -3,12 +3,12 @@ defmodule Songmate.Music.TrackService do
   alias Songmate.Repo
   alias Songmate.Music.{Track, Artist}
 
-  @callback batch_get_or_create_tracks([%Track{}], order: boolean()) :: [Track.t()]
+  @callback batch_create_tracks([%Track{}], order: boolean()) :: [Track.t()]
   @callback get_tracks([integer()]) :: [Track.t()]
 
-  def batch_get_or_create_tracks([], _), do: []
+  def batch_create_tracks([], _), do: []
 
-  def batch_get_or_create_tracks(tracks, order: true) do
+  def batch_create_tracks(tracks, order: true) do
     Repo.insert_all(Track, tracks, on_conflict: :nothing)
     Repo.all_with_order(Track, :spotify_id, Enum.map(tracks, & &1.spotify_id))
   end

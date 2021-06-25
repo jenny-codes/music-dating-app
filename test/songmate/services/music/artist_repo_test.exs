@@ -14,19 +14,19 @@ defmodule Songmate.ArtistServiceTest do
     }
   end
 
-  describe "batch_get_or_create_artists/2" do
+  describe "batch_create_artists/2" do
     test "returns a list of Artist records for every input item" do
       existing_attrs = valid_artist_attrs()
       ArtistService.create_artist(existing_attrs)
       new_attrs = %{name: "to be inserted", spotify_id: "dont really care"}
 
-      result = ArtistService.batch_get_or_create_artists([existing_attrs, new_attrs], order: true)
+      result = ArtistService.batch_create_artists([existing_attrs, new_attrs], order: true)
 
       assert [%Artist{}, %Artist{}] = result
     end
 
     test "when input is empty, returns empty" do
-      assert Enum.empty?(ArtistService.batch_get_or_create_artists([], order: true))
+      assert Enum.empty?(ArtistService.batch_create_artists([], order: true))
     end
 
     test "when order: true return the records in the same order as input" do
@@ -35,15 +35,15 @@ defmodule Songmate.ArtistServiceTest do
       attrs3 = %{name: "name3", spotify_id: "3"}
 
       first_input = [attrs1, attrs2, attrs3]
-      first_result = ArtistService.batch_get_or_create_artists(first_input, order: true)
+      first_result = ArtistService.batch_create_artists(first_input, order: true)
       assert_same_list_by(:spotify_id, first_input, first_result)
 
       second_input = [attrs2, attrs1, attrs3]
-      second_result = ArtistService.batch_get_or_create_artists(second_input, order: true)
+      second_result = ArtistService.batch_create_artists(second_input, order: true)
       assert_same_list_by(:spotify_id, second_input, second_result)
 
       third_input = [attrs3, attrs2, attrs1]
-      third_result = ArtistService.batch_get_or_create_artists(third_input, order: true)
+      third_result = ArtistService.batch_create_artists(third_input, order: true)
       assert_same_list_by(:spotify_id, third_input, third_result)
     end
   end

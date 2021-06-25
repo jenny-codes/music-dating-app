@@ -3,7 +3,7 @@ defmodule Songmate.Fixtures.ArtistService do
   @behaviour ArtistService
 
   @impl ArtistService
-  def batch_get_or_create_artists(_artist_attrs, order: true) do
+  def batch_create_artists(_artist_attrs, order: true) do
     []
   end
 

@@ -3,12 +3,12 @@ defmodule Songmate.Music.GenreService do
   alias Songmate.Repo
   alias Songmate.Music.Genre
 
-  @callback batch_get_or_create_genres([%Genre{}], order: boolean()) :: [Genre.t()]
+  @callback batch_create_genres([%Genre{}], order: boolean()) :: [Genre.t()]
   @callback get_genres([integer()]) :: [Genre.t()]
 
-  def batch_get_or_create_genres([], _), do: []
+  def batch_create_genres([], _), do: []
 
-  def batch_get_or_create_genres(genres, order: true) do
+  def batch_create_genres(genres, order: true) do
     Repo.insert_all(Genre, genres, on_conflict: :nothing)
     Repo.all_with_order(Genre, :name, Enum.map(genres, & &1.name))
   end

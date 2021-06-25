@@ -18,5 +18,5 @@ defmodule Songmate.Fixtures.MusicPreferenceService do
   end
 
   @impl MusicPreferenceService
-  def batch_upsert_music_preferences_for_user(_prefs, _user_id), do: nil
+  def batch_upsert_for_user(_prefs, _user_id), do: nil
 end

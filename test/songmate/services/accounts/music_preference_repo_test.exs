@@ -19,7 +19,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
         }
       ]
 
-      MusicPreferenceService.batch_upsert_music_preferences_for_user(valid_input, user.id)
+      MusicPreferenceService.batch_upsert_for_user(valid_input, user.id)
 
       result = MusicPreferenceService.get_all_by_user([user.id])
 
@@ -28,7 +28,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
     end
   end
 
-  describe "batch_upsert_music_preferences_for_user/2" do
+  describe "batch_upsert_for_user/2" do
     test "batch insert records for user" do
       user = create_user()
 
@@ -41,7 +41,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
         }
       ]
 
-      MusicPreferenceService.batch_upsert_music_preferences_for_user(valid_input, user.id)
+      MusicPreferenceService.batch_upsert_for_user(valid_input, user.id)
 
       assert Repo.get_by(MusicPreference, user_id: user.id, type: :artist, type_id: 3, rank: 2)
     end
@@ -67,8 +67,8 @@ defmodule Songamte.MusicPreferenceServiceTest do
         }
       ]
 
-      MusicPreferenceService.batch_upsert_music_preferences_for_user(previous_record, user.id)
-      MusicPreferenceService.batch_upsert_music_preferences_for_user(new_record, user.id)
+      MusicPreferenceService.batch_upsert_for_user(previous_record, user.id)
+      MusicPreferenceService.batch_upsert_for_user(new_record, user.id)
 
       refute Repo.get_by(MusicPreference, user_id: user.id, type: :artist, type_id: 3, rank: 2)
     end
@@ -86,10 +86,10 @@ defmodule Songamte.MusicPreferenceServiceTest do
       ]
 
       # Establishing record
-      MusicPreferenceService.batch_upsert_music_preferences_for_user(record, user.id)
+      MusicPreferenceService.batch_upsert_for_user(record, user.id)
 
       # This shouldn't erase the existing record.
-      MusicPreferenceService.batch_upsert_music_preferences_for_user([], user.id)
+      MusicPreferenceService.batch_upsert_for_user([], user.id)
 
       assert Repo.get_by(MusicPreference, user_id: user.id, type: :artist, type_id: 3, rank: 2)
     end
@@ -108,7 +108,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
         }
       ]
 
-      MusicPreferenceService.batch_upsert_music_preferences_for_user(record, user.id)
+      MusicPreferenceService.batch_upsert_for_user(record, user.id)
       {:ok, _} = Repo.delete(user)
 
       refute Repo.exists?(from(pref in MusicPreference, where: pref.user_id == ^user.id))
@@ -126,7 +126,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
         }
       ]
 
-      MusicPreferenceService.batch_upsert_music_preferences_for_user(record, user.id)
+      MusicPreferenceService.batch_upsert_for_user(record, user.id)
 
       Repo.delete_all(MusicPreference)
 
