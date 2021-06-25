@@ -11,12 +11,12 @@
 # and so on) as they will fail if something goes wrong.
 
 alias Songmate.Accounts.{UserService, MusicPreferenceService}
-alias Songmate.Music.{ArtistService, TrackService}
+alias Songmate.MusicService
 
 # --------------------------------------------------------
 # Music.Artist
 
-ArtistService.create_artist(%{
+MusicService.create_artist(%{
   name: "fun.",
   popularity: 72,
   spotify_id: "5nCi3BB41mBaMH9gfr6Su0",
@@ -29,7 +29,7 @@ ArtistService.create_artist(%{
   ]
 })
 
-ArtistService.create_artist(%{
+MusicService.create_artist(%{
   name: "The National",
   popularity: 71,
   spotify_id: "2cCUtGK9sDU2EoElnk0GNB",
@@ -40,7 +40,7 @@ ArtistService.create_artist(%{
   ]
 })
 
-ArtistService.create_artist(%{
+MusicService.create_artist(%{
   name: "Vampire Weekend",
   popularity: 73,
   spotify_id: "5BvJzeQpmsdsFp4HGUYUEx",
@@ -51,7 +51,7 @@ ArtistService.create_artist(%{
   ]
 })
 
-ArtistService.create_artist(%{
+MusicService.create_artist(%{
   name: "Alt-J",
   popularity: 76,
   spotify_id: "3XHO7cRUPCLOr6jwp8vsx5",
@@ -61,7 +61,7 @@ ArtistService.create_artist(%{
   ]
 })
 
-ArtistService.create_artist(%{
+MusicService.create_artist(%{
   name: "Coldplay",
   popularity: 89,
   spotify_id: "4gzpq5DPGxSnKTe4SA8HAU",
@@ -74,7 +74,7 @@ ArtistService.create_artist(%{
 # --------------------------------------------------------
 # Music.Track
 
-TrackService.create_track(%{
+MusicService.create_track(%{
   isrc: "TWAE31801542",
   name: "小夜曲",
   popularity: 13,
@@ -84,7 +84,7 @@ TrackService.create_track(%{
   ]
 })
 
-TrackService.create_track(%{
+MusicService.create_track(%{
   isrc: "CNA791600507",
   name: "我们拥抱亲吻相爱的人",
   popularity: 12,
@@ -94,7 +94,7 @@ TrackService.create_track(%{
   ]
 })
 
-TrackService.create_track(%{
+MusicService.create_track(%{
   isrc: "USMRG0467010",
   name: "Rebellion (Lies)",
   popularity: 65,
@@ -104,7 +104,7 @@ TrackService.create_track(%{
   ]
 })
 
-TrackService.create_track(%{
+MusicService.create_track(%{
   isrc: "TWA471204005",
   name: "如何 - Through Our Lives",
   popularity: 33,
@@ -114,7 +114,7 @@ TrackService.create_track(%{
   ]
 })
 
-TrackService.create_track(%{
+MusicService.create_track(%{
   isrc: "GBAFL1000103",
   name: "England",
   popularity: 46,

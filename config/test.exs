@@ -16,9 +16,7 @@ config :songmate, SongmateWeb.Endpoint,
 
 config :songmate, :services,
   music_preference_service: Songmate.Fixtures.MusicPreferenceService,
-  artist_service: Songmate.Fixtures.ArtistService,
-  track_service: Songmate.Fixtures.TrackService,
-  genre_service: Songmate.Fixtures.GenreService,
+  music_service: Songmate.Fixtures.MusicService,
   auth_service: Songmate.Mock.AuthService,
   spotify_service: Songmate.Fixtures.SpotifyService
 

@@ -1,11 +1,9 @@
 defmodule Songmate.UseCase.FetchMusicPreference do
   alias Songmate.Accounts.MusicPreferenceService
-  alias Songmate.Music.{ArtistService, TrackService, GenreService}
+  alias Songmate.MusicService
   alias Songmate.Music.{Artist, Track, Genre}
 
-  @artist_service Application.compile_env(:songmate, [:services, :artist_service], ArtistService)
-  @track_service Application.compile_env(:songmate, [:services, :track_service], TrackService)
-  @genre_service Application.compile_env(:songmate, [:services, :genre_service], GenreService)
+  @music_service Application.compile_env(:songmate, [:services, :music_service], MusicService)
   @music_pref_service Application.compile_env(
                         :songmate,
                         [:services, :music_preference_service],
@@ -23,9 +21,9 @@ defmodule Songmate.UseCase.FetchMusicPreference do
     genre_ids = music_prefs[:genre] || []
 
     %{
-      artist: @artist_service.get_artists(artist_ids),
-      track: @track_service.get_tracks(track_ids),
-      genre: @genre_service.get_genres(genre_ids)
+      artist: @music_service.get_artists(artist_ids),
+      track: @music_service.get_tracks(track_ids),
+      genre: @music_service.get_genres(genre_ids)
     }
   end
 end

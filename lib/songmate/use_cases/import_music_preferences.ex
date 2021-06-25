@@ -1,7 +1,7 @@
 defmodule Songmate.UseCase.ImportMusicPreference do
   alias Songmate.Accounts.User
   alias Songmate.Accounts.{UserService, MusicPreferenceService}
-  alias Songmate.Music.{ArtistService, TrackService, GenreService}
+  alias Songmate.MusicService
   alias Songmate.Importer.SpotifyService
 
   @moduledoc """
@@ -12,9 +12,7 @@ defmodule Songmate.UseCase.ImportMusicPreference do
 
   @callback call(%User{}, any) :: any
 
-  @artist_service Application.compile_env(:songmate, [:services, :artist_service], ArtistService)
-  @track_service Application.compile_env(:songmate, [:services, :track_service], TrackService)
-  @genre_service Application.compile_env(:songmate, [:services, :genre_service], GenreService)
+  @music_service Application.compile_env(:songmate, [:services, :music_service], MusicService)
   @music_pref_service Application.compile_env(
                         :songmate,
                         [:services, :music_preference_service],
@@ -35,17 +33,17 @@ defmodule Songmate.UseCase.ImportMusicPreference do
 
     artist_prefs =
       music_profile[:artists]
-      |> @artist_service.batch_create_artists(order: true)
+      |> @music_service.batch_create_artists(order: true)
       |> build_music_prefs_for_user(user, :artist)
 
     track_prefs =
       music_profile[:tracks]
-      |> @track_service.batch_create_tracks(order: true)
+      |> @music_service.batch_create_tracks(order: true)
       |> build_music_prefs_for_user(user, :track)
 
     genre_prefs =
       music_profile[:genres]
-      |> @genre_service.batch_create_genres(order: true)
+      |> @music_service.batch_create_genres(order: true)
       |> build_music_prefs_for_user(user, :genre)
 
     (artist_prefs ++ track_prefs ++ genre_prefs)

@@ -1,9 +1,9 @@
-defmodule Songmate.ArtistServiceTest do
+defmodule Songmate.MusicServiceArtistTest do
   use Songmate.DataCase, async: true
   import Songmate.CustomAssertions
   import Songmate.MusicFactory
 
-  alias Songmate.Music.ArtistService
+  alias Songmate.MusicService
   alias Songmate.Music.{Artist, Genre}
 
   def valid_artist_attrs do
@@ -17,16 +17,16 @@ defmodule Songmate.ArtistServiceTest do
   describe "batch_create_artists/2" do
     test "returns a list of Artist records for every input item" do
       existing_attrs = valid_artist_attrs()
-      ArtistService.create_artist(existing_attrs)
+      MusicService.create_artist(existing_attrs)
       new_attrs = %{name: "to be inserted", spotify_id: "dont really care"}
 
-      result = ArtistService.batch_create_artists([existing_attrs, new_attrs], order: true)
+      result = MusicService.batch_create_artists([existing_attrs, new_attrs], order: true)
 
       assert [%Artist{}, %Artist{}] = result
     end
 
     test "when input is empty, returns empty" do
-      assert Enum.empty?(ArtistService.batch_create_artists([], order: true))
+      assert Enum.empty?(MusicService.batch_create_artists([], order: true))
     end
 
     test "when order: true return the records in the same order as input" do
@@ -35,15 +35,15 @@ defmodule Songmate.ArtistServiceTest do
       attrs3 = %{name: "name3", spotify_id: "3"}
 
       first_input = [attrs1, attrs2, attrs3]
-      first_result = ArtistService.batch_create_artists(first_input, order: true)
+      first_result = MusicService.batch_create_artists(first_input, order: true)
       assert_same_list_by(:spotify_id, first_input, first_result)
 
       second_input = [attrs2, attrs1, attrs3]
-      second_result = ArtistService.batch_create_artists(second_input, order: true)
+      second_result = MusicService.batch_create_artists(second_input, order: true)
       assert_same_list_by(:spotify_id, second_input, second_result)
 
       third_input = [attrs3, attrs2, attrs1]
-      third_result = ArtistService.batch_create_artists(third_input, order: true)
+      third_result = MusicService.batch_create_artists(third_input, order: true)
       assert_same_list_by(:spotify_id, third_input, third_result)
     end
   end
@@ -58,7 +58,7 @@ defmodule Songmate.ArtistServiceTest do
     @invalid_attrs %{name: nil, spotify_id: nil}
 
     test "create_artist/1 with valid data creates a artist" do
-      assert {:ok, %Artist{} = artist} = ArtistService.create_artist(valid_artist_attrs())
+      assert {:ok, %Artist{} = artist} = MusicService.create_artist(valid_artist_attrs())
       assert artist.name == "9m88"
       assert artist.popularity == 53
       assert artist.spotify_id == "4PjY2961rc0MHE9zHYWEnH"
@@ -79,12 +79,12 @@ defmodule Songmate.ArtistServiceTest do
     end
 
     test "create_artist/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = ArtistService.create_artist(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = MusicService.create_artist(@invalid_attrs)
     end
 
     test "update_artist/2 with valid data updates the artist" do
       artist = create_artist()
-      assert {:ok, %Artist{} = artist} = ArtistService.update_artist(artist, @update_attrs)
+      assert {:ok, %Artist{} = artist} = MusicService.update_artist(artist, @update_attrs)
       assert artist.name == "Updated 9m88"
       assert artist.popularity == 100
       assert artist.spotify_id == "4PjY2961rc0MHE9zHYWEnH"
@@ -98,7 +98,7 @@ defmodule Songmate.ArtistServiceTest do
           ]
         })
 
-      {:ok, updated_artist} = ArtistService.update_artist(artist, %{genres: [%{name: "Jazz"}]})
+      {:ok, updated_artist} = MusicService.update_artist(artist, %{genres: [%{name: "Jazz"}]})
 
       [genre] = updated_artist.genres
       assert genre.name == "Jazz"
@@ -107,7 +107,7 @@ defmodule Songmate.ArtistServiceTest do
 
     test "update_artist/2 with invalid data returns error changeset" do
       artist = create_artist()
-      assert {:error, %Ecto.Changeset{}} = ArtistService.update_artist(artist, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = MusicService.update_artist(artist, @invalid_attrs)
     end
   end
 end

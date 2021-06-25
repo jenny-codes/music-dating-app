@@ -1,14 +1,12 @@
 defmodule Songmate.UseCase.FindTopMatch do
   alias Songmate.Accounts.User
-  # alias Songmate.Music.{Artist, Track, Genre}
   alias Songmate.Accounts.UserService
   alias Songmate.Accounts.MusicPreferenceService
+  alias Songmate.MusicService
 
   @track_score 10
   @artist_score 5
   @genre_score 2
-
-  alias Songmate.Music.{ArtistService, TrackService, GenreService}
 
   @spec call(integer()) :: %{
           shared: %{artist: any, genre: any, track: any},
@@ -44,19 +42,19 @@ defmodule Songmate.UseCase.FindTopMatch do
       shared_artist_prefs
       |> Enum.filter(&(&1.user_id == match_user.id))
       |> Enum.map(& &1.type_id)
-      |> ArtistService.get_artists()
+      |> MusicService.get_artists()
 
     shared_tracks =
       shared_track_prefs
       |> Enum.filter(&(&1.user_id == match_user.id))
       |> Enum.map(& &1.type_id)
-      |> TrackService.get_tracks()
+      |> MusicService.get_tracks()
 
     shared_genres =
       shared_genre_prefs
       |> Enum.filter(&(&1.user_id == match_user.id))
       |> Enum.map(& &1.type_id)
-      |> GenreService.get_genres()
+      |> MusicService.get_genres()
 
     %{
       user: match_user,

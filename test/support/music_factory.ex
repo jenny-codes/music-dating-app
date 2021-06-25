@@ -1,5 +1,5 @@
 defmodule Songmate.MusicFactory do
-  alias Songmate.Music.{ArtistService, TrackService, GenreService}
+  alias Songmate.MusicService
 
   def create_artist(attrs \\ %{}) do
     salt = random_string()
@@ -11,7 +11,7 @@ defmodule Songmate.MusicFactory do
         popularity: 53,
         spotify_id: "spoid#{salt}"
       })
-      |> ArtistService.create_artist()
+      |> MusicService.create_artist()
 
     artist
   end
@@ -27,7 +27,7 @@ defmodule Songmate.MusicFactory do
         popularity: 100,
         spotify_id: "spoid#{salt}"
       })
-      |> TrackService.create_track()
+      |> MusicService.create_track()
 
     track
   end
@@ -38,7 +38,7 @@ defmodule Songmate.MusicFactory do
     {:ok, genre} =
       attrs
       |> Enum.into(%{name: "Genre#{salt}"})
-      |> GenreService.create_genre()
+      |> MusicService.create_genre()
 
     genre
   end

@@ -1,5 +1,5 @@
 defmodule Songmate.GenerateMatchDataTest do
-  use ExUnit.Case, async: true
+  use Songmate.DataCase, async: true
   alias Songmate.UseCase.GenerateMatchData
 
   describe "get_shared_preferences/2" do

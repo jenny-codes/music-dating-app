@@ -1,9 +1,9 @@
-defmodule Songmate.MusicTest do
+defmodule Songmate.MusicServiceTrackTest do
   use Songmate.DataCase, async: true
   import Songmate.CustomAssertions
   import Songmate.MusicFactory
 
-  alias Songmate.Music.TrackService
+  alias Songmate.MusicService
   alias Songmate.Music.Track
 
   def valid_track_attrs do
@@ -18,16 +18,16 @@ defmodule Songmate.MusicTest do
   describe "batch_create_tracks/2" do
     test "returns a list of Track records for every input item" do
       existing_attrs = valid_track_attrs()
-      TrackService.create_track(existing_attrs)
+      MusicService.create_track(existing_attrs)
       new_attrs = %{name: "to be inserted", spotify_id: "dont really care"}
 
-      result = TrackService.batch_create_tracks([existing_attrs, new_attrs], order: true)
+      result = MusicService.batch_create_tracks([existing_attrs, new_attrs], order: true)
 
       assert [%Track{}, %Track{}] = result
     end
 
     test "when input is empty, returns empty" do
-      assert Enum.empty?(TrackService.batch_create_tracks([], order: true))
+      assert Enum.empty?(MusicService.batch_create_tracks([], order: true))
     end
 
     test "when order: true return the records in the same order as input" do
@@ -36,15 +36,15 @@ defmodule Songmate.MusicTest do
       attrs3 = %{name: "name3", spotify_id: "3"}
 
       first_input = [attrs1, attrs2, attrs3]
-      first_result = TrackService.batch_create_tracks(first_input, order: true)
+      first_result = MusicService.batch_create_tracks(first_input, order: true)
       assert_same_list_by(:spotify_id, first_input, first_result)
 
       second_input = [attrs2, attrs1, attrs3]
-      second_result = TrackService.batch_create_tracks(second_input, order: true)
+      second_result = MusicService.batch_create_tracks(second_input, order: true)
       assert_same_list_by(:spotify_id, second_input, second_result)
 
       third_input = [attrs3, attrs2, attrs1]
-      third_result = TrackService.batch_create_tracks(third_input, order: true)
+      third_result = MusicService.batch_create_tracks(third_input, order: true)
       assert_same_list_by(:spotify_id, third_input, third_result)
     end
   end
@@ -57,7 +57,7 @@ defmodule Songmate.MusicTest do
     @invalid_attrs %{name: nil, potify_id: nil}
 
     test "create_track/1 with valid data creates a track" do
-      assert {:ok, %Track{} = track} = TrackService.create_track(valid_track_attrs())
+      assert {:ok, %Track{} = track} = MusicService.create_track(valid_track_attrs())
       assert track.isrc == "USMRG0467010"
       assert track.name == "Rebellion (Lies)"
       assert track.popularity == 65
@@ -81,14 +81,14 @@ defmodule Songmate.MusicTest do
     end
 
     test "create_track/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = TrackService.create_track(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = MusicService.create_track(@invalid_attrs)
     end
 
     test "update_track/2 with valid data updates the track" do
       track = create_track()
       before_isrc = track.isrc
       before_spotify_id = track.spotify_id
-      assert {:ok, %Track{} = track} = TrackService.update_track(track, @update_attrs)
+      assert {:ok, %Track{} = track} = MusicService.update_track(track, @update_attrs)
       assert track.isrc == before_isrc
       assert track.spotify_id == before_spotify_id
       assert track.name == "updated Rebellion"
@@ -104,7 +104,7 @@ defmodule Songmate.MusicTest do
         })
 
       assert {:ok, %Track{artists: [artist]}} =
-               TrackService.update_track(
+               MusicService.update_track(
                  track,
                  %{
                    artists: [
@@ -120,7 +120,7 @@ defmodule Songmate.MusicTest do
 
     test "update_track/2 with invalid data returns error changeset" do
       track = create_track()
-      assert {:error, %Ecto.Changeset{}} = TrackService.update_track(track, @invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = MusicService.update_track(track, @invalid_attrs)
     end
   end
 end

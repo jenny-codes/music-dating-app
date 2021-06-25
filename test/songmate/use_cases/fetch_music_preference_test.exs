@@ -1,5 +1,5 @@
 defmodule Songmate.FetchMusicPreferenceTest do
-  use ExUnit.Case, async: true
+  use Songmate.DataCase, async: true
   alias Songmate.UseCase.FetchMusicPreference
 
   test "returns a map with artist, track and genre" do

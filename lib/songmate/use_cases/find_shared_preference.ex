@@ -1,12 +1,9 @@
 defmodule Songmate.UseCase.FindSharedPreference do
   alias Songmate.Accounts.MusicPreferenceService
   alias Songmate.Music.{Artist, Track, Genre}
-  alias Songmate.Music.{ArtistService, TrackService, GenreService}
+  alias Songmate.MusicService
 
-  @artist_service Application.compile_env(:songmate, [:services, :artist_service], ArtistService)
-  @track_service Application.compile_env(:songmate, [:services, :track_service], TrackService)
-  @genre_service Application.compile_env(:songmate, [:services, :genre_service], GenreService)
-
+  @music_service Application.compile_env(:songmate, [:services, :music_service], MusicService)
   @music_pref_service Application.compile_env(
                         :songmate,
                         [:services, :music_preference_service],
@@ -20,13 +17,13 @@ defmodule Songmate.UseCase.FindSharedPreference do
       |> Enum.group_by(& &1.type, & &1.type_id)
 
     shared_artists =
-      (joined_prefs[:artist] || []) |> select_duplicates() |> @artist_service.get_artists()
+      (joined_prefs[:artist] || []) |> select_duplicates() |> @music_service.get_artists()
 
     shared_tracks =
-      (joined_prefs[:track] || []) |> select_duplicates() |> @track_service.get_tracks()
+      (joined_prefs[:track] || []) |> select_duplicates() |> @music_service.get_tracks()
 
     shared_genres =
-      (joined_prefs[:genre] || []) |> select_duplicates() |> @genre_service.get_genres()
+      (joined_prefs[:genre] || []) |> select_duplicates() |> @music_service.get_genres()
 
     %{
       artist: shared_artists,
