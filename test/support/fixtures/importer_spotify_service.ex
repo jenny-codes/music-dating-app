@@ -1,5 +1,5 @@
 defmodule Songmate.Fixtures.SpotifyService do
-  def listening_history(_conn) do
-    %{artists: [], tracks: [], genres: []}
+  def listening_history(data) do
+    data[:listening_history]
   end
 end

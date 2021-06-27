@@ -8,12 +8,6 @@ defmodule Songmate.UseCase.GenerateMatchData do
 
   @type music_type :: %{artist: [%Artist{}], track: [%Track{}], genre: [%Genre{}]}
 
-  @music_pref_service Application.compile_env(
-                        :songmate,
-                        [:services, :music_preference_service],
-                        MusicPreferenceService
-                      )
-
   @spec call(integer(), integer()) :: %{
           score: integer(),
           shared: music_type()
@@ -33,10 +27,10 @@ defmodule Songmate.UseCase.GenerateMatchData do
 
   @spec get_shared_preferences(integer(), integer()) :: music_type()
   def get_shared_preferences(user_id1, user_id2) do
-    @music_pref_service.get_all_by_user([user_id1, user_id2])
+    MusicPreferenceService.get_all_by_user([user_id1, user_id2])
     |> Enum.group_by(& &1.type, & &1.type_id)
     |> Enum.map(fn {type, type_ids} -> {type, select_duplicates(type_ids)} end)
-    |> Map.new()
+    |> Enum.into(%{artist: [], track: [], genre: []})
   end
 
   defp select_duplicates(list) do

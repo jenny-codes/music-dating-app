@@ -1,5 +1,4 @@
 defmodule Songmate.MusicService do
-  alias Songmate.MusicService
   alias Songmate.Music.{Artist, Track, Genre}
   import Ecto.Query, warn: false
   alias Songmate.Repo

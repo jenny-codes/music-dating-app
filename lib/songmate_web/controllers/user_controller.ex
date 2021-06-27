@@ -2,9 +2,9 @@ defmodule SongmateWeb.UserController do
   use SongmateWeb, :controller
 
   alias Songmate.UseCase.{
-    FetchMusicPreference,
+    GetUserMusicRecords,
     FindTopMatch,
-    FindSharedPreference
+    FindSharedMusic
   }
 
   alias Songmate.AccountService
@@ -12,7 +12,7 @@ defmodule SongmateWeb.UserController do
   plug(SongmateWeb.SyncUserInfoPlug)
 
   def index(conn, _params) do
-    music_records = FetchMusicPreference.call(conn.assigns.current_user.id)
+    music_records = GetUserMusicRecords.call(conn.assigns.current_user.id)
 
     render(
       conn,
@@ -35,7 +35,7 @@ defmodule SongmateWeb.UserController do
         redirect(conn, to: "/")
 
       target_user ->
-        shared = FindSharedPreference.call(current_user.id, target_user.id)
+        shared = FindSharedMusic.call(current_user.id, target_user.id)
 
         render(
           conn,

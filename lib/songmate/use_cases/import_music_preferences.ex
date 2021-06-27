@@ -11,13 +11,6 @@ defmodule Songmate.UseCase.ImportMusicPreference do
   """
 
   @callback call(%User{}, any) :: any
-
-  @music_service Application.compile_env(:songmate, [:services, :music_service], MusicService)
-  @music_pref_service Application.compile_env(
-                        :songmate,
-                        [:services, :music_preference_service],
-                        MusicPreferenceService
-                      )
   @importer_service Application.compile_env(
                       :songmate,
                       [:services, :spotify_service],
@@ -33,21 +26,21 @@ defmodule Songmate.UseCase.ImportMusicPreference do
 
     artist_prefs =
       music_profile[:artists]
-      |> @music_service.batch_create_artists(order: true)
+      |> MusicService.batch_create_artists(order: true)
       |> build_music_prefs_for_user(user, :artist)
 
     track_prefs =
       music_profile[:tracks]
-      |> @music_service.batch_create_tracks(order: true)
+      |> MusicService.batch_create_tracks(order: true)
       |> build_music_prefs_for_user(user, :track)
 
     genre_prefs =
       music_profile[:genres]
-      |> @music_service.batch_create_genres(order: true)
+      |> MusicService.batch_create_genres(order: true)
       |> build_music_prefs_for_user(user, :genre)
 
     (artist_prefs ++ track_prefs ++ genre_prefs)
-    |> @music_pref_service.batch_upsert_for_user(user.id)
+    |> MusicPreferenceService.batch_upsert_for_user(user.id)
 
     UserService.update_user(user, %{preferences_updated_at: NaiveDateTime.local_now()})
   end
