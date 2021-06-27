@@ -25,27 +25,23 @@ defmodule SongmateWeb.UserController do
 
   def peek(conn, params) do
     current_user = conn.assigns.current_user
-    target_user = AccountService.get_user_by(username: params["user"])
 
-    case target_user do
-      nil ->
-        redirect(conn, to: "/")
+    with target_username when not is_nil(target_username) <- params["user"],
+         {:ok, target_user} <- AccountService.get_user_by(username: target_username),
+         target_user when target_user.id != current_user.id <- target_user do
+      shared = FindSharedMusic.call(current_user.id, target_user.id)
 
-      ^current_user ->
-        redirect(conn, to: "/")
-
-      target_user ->
-        shared = FindSharedMusic.call(current_user.id, target_user.id)
-
-        render(
-          conn,
-          "peek.html",
-          current_user_name: current_user.name,
-          target_user_name: target_user.name,
-          shared_artists: Enum.map(shared[:artist], & &1.name),
-          shared_tracks: Enum.map(shared[:track], & &1.name),
-          shared_genres: Enum.map(shared[:genre], & &1.name)
-        )
+      render(
+        conn,
+        "peek.html",
+        current_user_name: current_user.name,
+        target_user_name: target_user.name,
+        shared_artists: Enum.map(shared[:artist], & &1.name),
+        shared_tracks: Enum.map(shared[:track], & &1.name),
+        shared_genres: Enum.map(shared[:genre], & &1.name)
+      )
+    else
+      _ -> redirect(conn, to: "/")
     end
   end
 

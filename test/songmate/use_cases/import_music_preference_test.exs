@@ -6,13 +6,8 @@ defmodule Songmate.ImportMusicPreferenceTest do
   test "import music record and update user" do
     user = create_user(%{preferences_updated_at: nil})
 
-    listening_history = %{
-      tracks: [%{spotify_id: "track"}],
-      artists: [%{spotify_id: "artist"}],
-      genres: [%{name: "genre"}]
-    }
-
-    ImportMusicPreference.call(user, %{listening_history: listening_history})
+    # For now we pass an empty map as conn
+    ImportMusicPreference.call(user, %{})
 
     user =
       Songmate.Accounts.UserService.get_user(user.id) |> Songmate.Repo.preload(:music_preferences)
@@ -22,21 +17,13 @@ defmodule Songmate.ImportMusicPreferenceTest do
   end
 
   test "store new music records into database" do
-    new_artist_attrs = %{spotify_id: "artist"}
-    new_track_attrs = %{spotify_id: "track"}
-    new_genre_attrs = %{name: "genre"}
     user = create_user(%{preferences_updated_at: nil})
 
-    listening_history = %{
-      artists: [new_artist_attrs],
-      tracks: [new_track_attrs],
-      genres: [new_genre_attrs]
-    }
+    # For now we pass an empty map as conn
+    ImportMusicPreference.call(user, %{})
 
-    ImportMusicPreference.call(user, %{listening_history: listening_history})
-
-    assert Songmate.Repo.get_by(Songmate.Music.Artist, new_artist_attrs)
-    assert Songmate.Repo.get_by(Songmate.Music.Track, new_track_attrs)
-    assert Songmate.Repo.get_by(Songmate.Music.Genre, new_genre_attrs)
+    assert Songmate.Repo.exists?(Songmate.Music.Artist)
+    assert Songmate.Repo.exists?(Songmate.Music.Track)
+    assert Songmate.Repo.exists?(Songmate.Music.Genre)
   end
 end

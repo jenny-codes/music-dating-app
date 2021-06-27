@@ -5,8 +5,6 @@ defmodule SongmateWeb.SyncUserInfoPlugTest do
   alias SongmateWeb.SyncUserInfoPlug
   import Songmate.UserFactory
 
-  setup :set_mox_from_context
-
   test "does nothing if last update was less than 1 week ago" do
     just_now = NaiveDateTime.local_now()
     user = create_user(%{preferences_updated_at: just_now})
@@ -14,7 +12,7 @@ defmodule SongmateWeb.SyncUserInfoPlugTest do
 
     build_conn()
     |> assign(:current_user, user)
-    |> SyncUserInfoPlug.call(%{})
+    |> SyncUserInfoPlug.call(importer: Mock.ImportMusicPreference)
 
     verify!()
     assert user.preferences_updated_at == just_now
@@ -26,7 +24,7 @@ defmodule SongmateWeb.SyncUserInfoPlugTest do
 
     build_conn()
     |> assign(:current_user, user)
-    |> SyncUserInfoPlug.call(%{})
+    |> SyncUserInfoPlug.call(importer: Mock.ImportMusicPreference)
 
     verify!()
   end
@@ -38,7 +36,7 @@ defmodule SongmateWeb.SyncUserInfoPlugTest do
 
     build_conn()
     |> assign(:current_user, user)
-    |> SyncUserInfoPlug.call(%{})
+    |> SyncUserInfoPlug.call(importer: Mock.ImportMusicPreference)
 
     verify!()
   end

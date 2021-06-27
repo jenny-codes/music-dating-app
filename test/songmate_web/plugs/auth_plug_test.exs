@@ -12,7 +12,7 @@ defmodule SongmateWeb.AuthPlugTest do
     conn =
       build_conn()
       |> assign(:current_user, user)
-      |> AuthPlug.call(%{})
+      |> AuthPlug.call(auth_service: Mock.AuthService)
 
     verify!()
     assert user.id == conn.assigns[:current_user].id
@@ -26,7 +26,7 @@ defmodule SongmateWeb.AuthPlugTest do
     conn =
       build_conn()
       |> init_test_session(%{})
-      |> AuthPlug.call(%{})
+      |> AuthPlug.call(auth_service: Mock.AuthService)
 
     verify!()
     assert user.id == conn.assigns[:current_user].id
@@ -38,7 +38,7 @@ defmodule SongmateWeb.AuthPlugTest do
     conn =
       build_conn()
       |> init_test_session(%{})
-      |> AuthPlug.call(%{})
+      |> AuthPlug.call(auth_service: Mock.AuthService)
 
     assert redirected_to(conn, 302) == "/authorize"
     verify!()

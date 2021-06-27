@@ -18,17 +18,17 @@ defmodule Songmate.Importer.SpotifyService do
           name: String.t()
         }
 
-  @spec listening_history(%{__struct__: Plug.Conn}) :: [
-          artists: [artist],
-          tracks: [track],
-          genres: [genre]
-        ]
+  @callback listening_history(%{__struct__: Plug.Conn}) :: %{
+              artists: [artist],
+              tracks: [track],
+              genres: [genre]
+            }
 
   def listening_history(conn) do
     {artists, genres} = fetch_top_artists_and_genres(conn)
     tracks = fetch_top_tracks(conn)
 
-    [artists: artists, tracks: tracks, genres: genres]
+    %{artists: artists, tracks: tracks, genres: genres}
   end
 
   @spec fetch_top_tracks(%{__struct__: Plug.Conn}) :: [track]

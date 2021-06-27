@@ -1,8 +1,6 @@
 <h1> hey <%= @current_user_name %>, see how you match with <%= @target_user_name %>! </h1>
 <h3> (based on your listening history in the past 6 months) </h3>
 
-<h2> Total score which has no meaning now whatsoever: <%= @score %> </h2>
-
 <div class="row">
   <div class="column">
     <h2>Shared tracks</h2>

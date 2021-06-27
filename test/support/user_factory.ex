@@ -10,7 +10,8 @@ defmodule Songmate.UserFactory do
       attrs
       |> Enum.into(%{
         name: "name#{salt}",
-        username: "username#{salt}"
+        username: "username#{salt}",
+        preferences_updated_at: NaiveDateTime.local_now()
       })
       |> UserService.create_user()
 
