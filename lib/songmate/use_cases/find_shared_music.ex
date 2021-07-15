@@ -5,24 +5,19 @@ defmodule Songmate.UseCase.FindSharedMusic do
 
   @spec call(any, any) :: %{artist: [Artist.t()], genre: [Genre.t()], track: [Track.t()]}
   def call(user1, user2) do
-    joined_prefs =
-      MusicPreferenceService.get_all_by_user([user1, user2])
-      |> Enum.group_by(& &1.type, & &1.type_id)
-
-    shared_artists =
-      (joined_prefs[:artist] || []) |> select_duplicates() |> MusicService.get_artists()
-
-    shared_tracks =
-      (joined_prefs[:track] || []) |> select_duplicates() |> MusicService.get_tracks()
-
-    shared_genres =
-      (joined_prefs[:genre] || []) |> select_duplicates() |> MusicService.get_genres()
+    joined_prefs = MusicPreferenceService.get_all_by_user([user1, user2])
 
     %{
-      artist: shared_artists,
-      track: shared_tracks,
-      genre: shared_genres
+      artist: select_shared(:artist, joined_prefs),
+      track: select_shared(:track, joined_prefs),
+      genre: select_shared(:genre, joined_prefs)
     }
+  end
+
+  defp select_shared(type, prefs) do
+    (prefs[type] || [])
+    |> select_duplicates()
+    |> then(&MusicService.get(type, &1))
   end
 
   defp select_duplicates(list) do

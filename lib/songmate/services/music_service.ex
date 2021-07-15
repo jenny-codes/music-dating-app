@@ -19,6 +19,18 @@ defmodule Songmate.MusicService do
     end
   end
 
+  def get(:artist, ids) do
+    get_artists(ids)
+  end
+
+  def get(:track, ids) do
+    get_tracks(ids)
+  end
+
+  def get(:genre, ids) do
+    get_genres(ids)
+  end
+
   @callback batch_create_artists([%Artist{}], order: boolean()) :: [Artist.t()]
   @callback get_artists([integer()]) :: [Artist.t()]
 

@@ -5,9 +5,7 @@ defmodule Songmate.UseCase.GetUserMusicRecords do
 
   @spec call(integer()) :: %{artist: [Artist.t()], track: [Track.t()], genre: [Genre.t()]}
   def call(user_id) do
-    music_prefs =
-      MusicPreferenceService.get_all_by_user([user_id])
-      |> Enum.group_by(& &1.type, & &1.type_id)
+    music_prefs = MusicPreferenceService.get_all_by_user([user_id])
 
     artist_ids = music_prefs[:artist] || []
     track_ids = music_prefs[:track] || []

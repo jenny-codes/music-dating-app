@@ -7,7 +7,8 @@ defmodule Songmate.Accounts.MusicPreferenceService do
   @callback batch_upsert_for_user([%{}] | nil, integer()) :: any
 
   def get_all_by_user(user_ids) do
-    Repo.all(from(pref in MusicPreference, where: pref.user_id in ^user_ids))
+    prefs = Repo.all(from(pref in MusicPreference, where: pref.user_id in ^user_ids))
+    Enum.group_by(prefs, & &1.type, & &1.type_id)
   end
 
   def get_all_by_type(type, type_ids) do

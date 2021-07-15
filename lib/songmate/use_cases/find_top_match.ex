@@ -13,10 +13,10 @@ defmodule Songmate.UseCase.FindTopMatch do
           user: %User{}
         }
   def call(user_id) do
+    user_music_prefs = MusicPreferenceService.get_all_by_user([user_id])
+
     shared =
-      MusicPreferenceService.get_all_by_user([user_id])
-      |> Enum.group_by(& &1.type, & &1.type_id)
-      |> Enum.map(fn {type, type_ids} ->
+      Enum.map(user_music_prefs, fn {type, type_ids} ->
         shared =
           MusicPreferenceService.get_all_by_type(type, type_ids)
           |> Enum.reject(&(&1.user_id == user_id))
@@ -26,36 +26,30 @@ defmodule Songmate.UseCase.FindTopMatch do
       |> Enum.into(%{artist: [], track: [], genre: []})
 
     {user_with_highest_points, _points} =
-      Map.new()
-      |> add_match_points(:artist, Enum.map(shared[:artist], & &1.user_id))
-      |> add_match_points(:track, Enum.map(shared[:track], & &1.user_id))
-      |> add_match_points(:genre, Enum.map(shared[:genre], & &1.user_id))
+      shared
+      |> Enum.reduce(%{}, fn {type, prefs}, acc ->
+        add_match_points(acc, type, Enum.map(prefs, & &1.user_id))
+      end)
       |> Enum.max_by(fn {_user_id, points} -> points end)
 
     match_user = UserService.get_user(user_with_highest_points)
 
-    shared_artists =
-      shared[:artist]
-      |> Enum.filter(&(&1.user_id == match_user.id))
-      |> Enum.map(& &1.type_id)
-      |> MusicService.get_artists()
-
-    shared_tracks =
-      shared[:track]
-      |> Enum.filter(&(&1.user_id == match_user.id))
-      |> Enum.map(& &1.type_id)
-      |> MusicService.get_tracks()
-
-    shared_genres =
-      shared[:genre]
-      |> Enum.filter(&(&1.user_id == match_user.id))
-      |> Enum.map(& &1.type_id)
-      |> MusicService.get_genres()
-
     %{
       user: match_user,
-      shared: %{artist: shared_artists, track: shared_tracks, genre: shared_genres}
+      shared: %{
+        artist: get_shared_music(:artist, shared, match_user.id),
+        track: get_shared_music(:track, shared, match_user.id),
+        genre: get_shared_music(:genre, shared, match_user.id)
+      }
     }
+  end
+
+  defp get_shared_music(type, list, match_user_id) do
+    list
+    |> Map.get(type)
+    |> Enum.filter(&(&1.user_id == match_user_id))
+    |> Enum.map(& &1.type_id)
+    |> then(&MusicService.get(:artist, &1))
   end
 
   defp add_match_points(record, type, user_ids) do

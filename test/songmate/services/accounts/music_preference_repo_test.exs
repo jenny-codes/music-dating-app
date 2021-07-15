@@ -6,7 +6,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
   alias Songmate.Accounts.MusicPreference
   alias Songmate.Accounts.MusicPreferenceService
 
-  describe "list_music_preferences/1" do
+  describe "get_all_by_user/1" do
     test "returns a list of MusicPreference by user ids" do
       user = create_user()
 
@@ -23,8 +23,7 @@ defmodule Songamte.MusicPreferenceServiceTest do
 
       result = MusicPreferenceService.get_all_by_user([user.id])
 
-      assert Enum.count(result) == 1
-      assert List.first(result).user_id == user.id
+      assert result == %{artist: [3]}
     end
   end
 
