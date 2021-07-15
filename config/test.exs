@@ -17,4 +17,4 @@ config :songmate, SongmateWeb.Endpoint,
 config :songmate, :services, spotify_service: Songmate.Fixtures.SpotifyService
 
 # Print only warnings and errors during test
-config :logger, level: :info
+config :logger, level: :warn
